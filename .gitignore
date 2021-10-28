@@ -1,3 +1,4 @@
+#master document
 /doc/master.aux
 /doc/master.fdb_latexmk
 /doc/master.fls
@@ -5,7 +6,15 @@
 /doc/master.out
 /doc/master.synctex.gz
 /doc/master.toc
-/doc/kapitel1.aux
-/doc/kapitel2.aux
+/doc/master.lof
+/doc/master.lot
+#form
 /doc/formblatt_summary.aux
 /doc/formblatt_para12apo.aux
+#chapters
+/doc/kapitel1.aux
+/doc/kapitel2.aux
+/doc/kapitel3.aux
+/doc/kapitel4.aux
+/doc/kapitel5.aux
+/doc/kapitel6.aux
