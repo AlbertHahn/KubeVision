@@ -2,7 +2,6 @@
 Die ausgeschriebene Form meiner Abschlussarbeit als LateX und PDF-File.
 
 ## Quellen
-verwendete Quellen.
 
 ### Bücher
 #### Microservices for the Enterprise
