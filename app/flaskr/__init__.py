@@ -1,7 +1,14 @@
 import os
+from socket import SocketIO
 
 from flask import Flask, render_template, Response
+import eventlet
+import socketio
 
+sio = socketio.Server()
+app = socketio.WSGIApp(sio, static_files={
+    '/': {'content_type': 'text/html', 'filename': 'index.html'}
+})
 
 def create_app(test_config=None):
     # create and configure the app
@@ -38,3 +45,8 @@ def create_app(test_config=None):
         return render_template('index.html')
 
     return app
+
+if __name__ == '__main__':
+    print("started")
+    app = create_app()
+    eventlet.wsgi.server(eventlet.listen(('', 5000)), app)

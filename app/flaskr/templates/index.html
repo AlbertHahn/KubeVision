@@ -2,9 +2,26 @@
 <html lang="en">
 <head>
     <title>Flask app</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
     </head>
   <body>
-  <img src="{{ url_for('face.video_feed') }}" />
+    
+    <div class="video-options">
+      <select name="" id="" class="custom-select">
+          <option value="">Select camera</option>
+      </select>
+  </div>
+
+  <div class="center">
+    <video autoplay="true" id="videoElement">
+    
+    </video>
+  </div>
+
+    <div class="center">
+      <!--<img src="{{ url_for('face.video_feed') }}" />-->
+    </div>
   </body>
+  <script text=text/javascript src="{{ url_for('static', filename='js/camera-option.js') }}"></script>
 </html>

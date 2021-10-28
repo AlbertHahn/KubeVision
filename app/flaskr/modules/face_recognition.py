@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-import pickle
 
 class face_recognition:
 
@@ -25,4 +24,4 @@ class face_recognition:
         ret, jpeg = cv2.imencode('.jpg', image)
 
         frame = jpeg.tobytes()
-        return frame
+        return success, frame
