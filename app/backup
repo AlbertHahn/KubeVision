@@ -1,0 +1,29 @@
+from flask import Flask
+from flask_socketio import SocketIO
+#from socketserver import socketserver
+#from socket_server import socket_server
+
+from apps.mainpage.views import mainpage
+
+socketio = SocketIO(cors_allowed_origins='*')
+
+def create_app():
+    # create and configure the app
+    app = Flask(__name__)
+
+    # SocketIO extension
+
+    socketio.init_app(app)
+
+    app.register_blueprint(mainpage)
+
+    return app
+
+
+if __name__ == "__main__":
+    socketio.run(create_app)
+
+
+@socketio.on('my event')
+def handle_my_custom_event(json):
+    print('received json: ' + str(json))

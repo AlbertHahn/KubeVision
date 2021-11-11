@@ -1,14 +1,21 @@
 const cameraOptions = document.querySelector('.custom-select');
 var video = document.querySelector("#videoElement");
-
-/*var socket = io("http://127.0.0.1:5000/")
-
-socket.on('connect', function(){
-  console.log("Connected...!", socket.connected)
-});*/
-
-
 let streamStarted = false;
+
+var canvas = document.getElementById("preview");
+var context = canvas.getContext("2d")
+
+canvas.width = 900;
+canvas.height = 700;
+
+context.width = canvas.width;
+context.height = canvas.height;
+
+var socket = io("ws://127.0.0.1:5000");
+socket.on('connect', function() {
+    socket.emit('my event', {data: 'I\'m connected jssss!'});
+});
+
 
 const constraints = {
   video: {
@@ -29,6 +36,9 @@ if (navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(function (stream) {
         video.srcObject = stream;
+        setInterval(function(){
+          Draw(video, context);
+        },10)
       })
       .catch(function (err0r) {
         console.log("Something went wrong!");
@@ -70,3 +80,8 @@ if (navigator.mediaDevices.getUserMedia) {
   };*/
 
   getCameraSelection();
+
+  function Draw(video,context){
+    context.drawImage(video,0,0,context.width,context.height);
+    socket.emit('stream',canvas.toDataURL('image/webp'));
+}
