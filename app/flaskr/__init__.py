@@ -1,17 +1,16 @@
 import os
-from socket import SocketIO
+import socketio
+import eventlet
+
+from flask_socketio import SocketIO
 
 from flask import Flask, render_template, Response
-import eventlet
-import socketio
 
-sio = socketio.Server()
-app = socketio.WSGIApp(sio, static_files={
-    '/': {'content_type': 'text/html', 'filename': 'index.html'}
-})
+socketio = SocketIO(cors_allowed_origins="*")
 
 def create_app(test_config=None):
     # create and configure the app
+    #sio = socketio.Server()
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -31,22 +30,16 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import db
-    db.init_app(app)
-
-    from .auth import auth
-    app.register_blueprint(auth.bp)
-
     from . import face
     app.register_blueprint(face.bp)
+
+    from .custom_socket import custom_socket
+    app.register_blueprint(custom_socket)
 
     @app.route('/')
     def index():
         return render_template('index.html')
 
-    return app
+    socketio.init_app(app, cors_allowed_origins="*")
 
-if __name__ == '__main__':
-    print("started")
-    app = create_app()
-    eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
+    return app

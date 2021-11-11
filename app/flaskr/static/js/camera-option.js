@@ -1,11 +1,11 @@
 const cameraOptions = document.querySelector('.custom-select');
 var video = document.querySelector("#videoElement");
 
-var socket = io("http://localhost:5000/")
+/*var socket = io("http://127.0.0.1:5000/")
 
 socket.on('connect', function(){
   console.log("Connected...!", socket.connected)
-});
+});*/
 
 
 let streamStarted = false;
