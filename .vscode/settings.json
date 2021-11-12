@@ -1,6 +1,8 @@
 {
     "python.analysis.extraPaths": [
         "./app",
-        "./microservice/flaskapp"
+        "./microservice/flaskapp",
+        "./microservice/app",
+        "./microservices/app"
     ]
 }
