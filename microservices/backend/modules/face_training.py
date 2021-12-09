@@ -1,4 +1,4 @@
-"""import os
+import os
 import numpy as np
 import cv2
 from PIL import Image
@@ -25,4 +25,4 @@ class face_training:
                 if file.endswith("png") or file.endswith("jpg"):
                     path = os.path.join(root, file)
                     label = os.path.basename(root).replace(" ", "-").lower()
-                    print(label, path)"""
+                    print(label, path)

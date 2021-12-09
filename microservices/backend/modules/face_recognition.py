@@ -1,4 +1,4 @@
-"""import numpy as np
+import numpy as np
 import cv2
 
 class face_recognition:
@@ -24,4 +24,4 @@ class face_recognition:
         ret, jpeg = cv2.imencode('.jpg', image)
 
         frame = jpeg.tobytes()
-        return success, frame"""
+        return success, frame

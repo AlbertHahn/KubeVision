@@ -38,13 +38,13 @@ app.register_blueprint(mainpage)
 
 #socketio.init_app(app)
 
-sio = socketio.Server(async_mode='gevent_uwsgi',cors_allowed_origins='*')
+#sio = socketio.Server(async_mode='gevent_uwsgi',cors_allowed_origins='*')
 
-from apps.socket_communication.views import socket_communication
-app.register_blueprint(socket_communication)
+#from apps.socket_communication.views import socket_communication
+#app.register_blueprint(socket_communication)
 
 
-app = socketio.WSGIApp(sio, app)
+#app = socketio.WSGIApp(sio, app)
 
 
 
