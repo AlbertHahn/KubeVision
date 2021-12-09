@@ -11,9 +11,10 @@ canvas.height = 700;
 context.width = canvas.width;
 context.height = canvas.height;
 
-var socket = io("http://127.0.0.1:5000");
+var socket = io("http://0.0.0.0:5000");
 socket.on('connect', function() {
     socket.emit('my event', {data: 'I\'m connected jssss!'});
+    console.log("send msg")
 });
 
 

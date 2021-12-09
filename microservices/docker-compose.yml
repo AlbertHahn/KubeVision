@@ -7,7 +7,10 @@ services:
     container_name: flask
     restart: always
     expose:
-      - 8080
+      - 8000
+    ports:
+      - "8000:8000"
+    command: gunicorn -w 1 -b 0.0.0.0:8000 run:app
 
   nginx:
     build: ./nginx
@@ -15,3 +18,15 @@ services:
     restart: always
     ports:
       - "80:80"
+    depends_on:
+      - flask
+
+  flask-opencv:
+    build: ./backend
+    container_name: flask-opencv
+    restart: always
+    expose:
+      - 5000
+    ports:
+      - "5000:5000"
+    command: gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -b 0.0.0.0:5000 run:app

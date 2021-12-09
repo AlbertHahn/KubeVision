@@ -3,6 +3,7 @@
         "./app",
         "./microservice/flaskapp",
         "./microservice/app",
-        "./microservices/app"
+        "./microservices/app",
+        "./microservices/backend"
     ]
 }

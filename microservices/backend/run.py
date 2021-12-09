@@ -1,48 +1,46 @@
 import os
-from flask import Flask, render_template
+from flask import Flask
 import socketio
+from gevent import pywsgi
+#import eventlet
+#from flask_socketio import SocketIO
 
-from flask_uwsgi_websocket import GeventWebSocket
-
-from modules import face_recognition
+"""from modules import face_recognition
 from modules import face_training
 
 face_rec = face_recognition()
-face_train = face_training()
-
-websocket = GeventWebSocket()
-
+face_train = face_training()"""
 app = Flask(__name__)
 
+#socketio = SocketIO(app)
 
-websocket.init_app(app)
+sio = socketio.Server(async_mode='gevent',cors_allowed_origins='*')
 
-clients = []
+from modules.socket_communication.views import socket_communication
+app.register_blueprint(socket_communication)
 
-# sample websocket endpoing
-@websocket.route('/echo')
-def echo(ws):
-    clients.append(ws)
-    while True:
-        msg = ws.receive()
-        ws.send(msg)
-
-
-"""sio = socketio.Server(async_mode='gevent_uwsgi',cors_allowed_origins='*')
 
 app = socketio.WSGIApp(sio, app)
 
-@sio.on('my event')
+"""@sio.on('my event')
 def handle_my_custom_event(json, data):
     print('received json: ' + str(json) + str(data))
+
+
 
 @sio.on('stream')
 def handle_my_custom_event(json):
     print('received json: ' + str(json))"""
 
 
+"""
+@socketio.on('message')
+def handle_my_custom_event(json, data):
+    print('received json: ' + str(json) + str(data))"""
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    #socketio.run(app, cors_allowed_origins='*')
+    pywsgi.WSGIServer(('', 5000), app).serve_forever()
 
 
 

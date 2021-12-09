@@ -10,5 +10,7 @@ ADD . /app
 # Install the dependencies
 RUN pip install -r requirements.txt
 
+ENV PYTHONUNBUFFERED 1
+
 # run the command to start uWSGI
-CMD ["uwsgi", "app.ini"]
+#CMD ["gunicorn", "-b" , "0.0.0.0:8000" ,"run:app"]

@@ -11,4 +11,10 @@ ADD . /app
 RUN pip install -r requirements.txt
 
 # run the command to start uWSGI
-CMD ["uwsgi", "app.ini"]
+#CMD ["uwsgi", "app.ini"]
+
+ENV PYTHONUNBUFFERED 1
+
+RUN ["chmod", "+x", "/app/entry.sh"]
+
+#ENTRYPOINT [ "./entry.sh" ]
