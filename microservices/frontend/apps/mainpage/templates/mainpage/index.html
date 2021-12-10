@@ -1,16 +1,21 @@
 {% extends "layouts/app.html" %}
 
 {% block content %}
+
+<canvas style="display:none;" id="preview"></canvas>
+
+<div id="startButton" class="button">
+  Start
+</div>
+
 <div class="video-options">
-  <select name="" id="" class="custom-select">
+  <select name="" class="custom-select">
       <option value="">Select camera</option>
   </select>
 </div>
 
-<div class="center">
-<video autoplay="true" id="videoElement">
+<video id="video" width="1200" height="800" autoplay></video><br>
 
-</video>
-</div>
-<h3>its mainpage bp</h3>
+<div id="log"></div>
+
 {% endblock %}
