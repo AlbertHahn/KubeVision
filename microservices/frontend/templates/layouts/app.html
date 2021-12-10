@@ -2,16 +2,19 @@
 <html lang="en">
   <head>
     <title>Flask app</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">  
+    {% include 'dependencies/css-dep.html' %}
   </head>
   <body>
-    <canvas style="display:none;" id="preview"></canvas>
-    {% block content %}
-    {% endblock %}
-    <div class="center">
-    </div>
+    {% include 'layouts/nav.html' %}
+
+    <div class="navoverlay py-5"></div>
+
+    <!-- train templates-->
+    {% block video %}    {% endblock %}
+    {% block js %}    {% endblock %}
+    <!-- home templates-->
+    {% block home %}    {% endblock %}
+
+    {% include 'dependencies/js-dep.html' %}
   </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
-  <script text=text/javascript src="{{ url_for('static', filename='js/socketio.js') }}"></script>
-  <script text=text/javascript src="{{ url_for('static', filename='js/camera.js') }}"></script>
 </html>

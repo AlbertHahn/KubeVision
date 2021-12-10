@@ -5,8 +5,11 @@ from flask import Flask
 
 app = Flask(__name__)
 
-from apps.mainpage.views import mainpage
-app.register_blueprint(mainpage)
+from blueprints.train.views import train
+app.register_blueprint(train)
+
+from blueprints.home.views import home
+app.register_blueprint(home)
 
 
 

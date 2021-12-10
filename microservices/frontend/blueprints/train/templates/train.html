@@ -1,0 +1,37 @@
+{% extends "layouts/app.html" %}
+
+{% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+<script text=text/javascript src="{{ url_for('static', filename='js/socketio.js') }}"></script>
+<script text=text/javascript src="{{ url_for('static', filename='js/camera.js') }}"></script>
+{% endblock %}
+
+{% block video %}
+<section class="py-3">
+  <div class="container" data-aos="fade-right">
+    <div class="row text-center ">
+      <div class="col-md-9">
+
+        <canvas style="display:none;" id="preview"></canvas>
+
+        <div class="embed-responsive embed-responsive-4by3">
+          <video id="video" width="1200px" height="800px" autoplay>
+            <p style="color: black;">Camera</p>
+          </video>
+        </div>
+
+      </div>
+
+      {% include 'socket.html' %}
+
+
+   </div>
+     <!-- END ROW -->
+
+     <div id="log"></div>
+
+  </div>
+  <!-- END CONTAINER -->
+</section>
+<!-- END SECTION -->
+{% endblock %}

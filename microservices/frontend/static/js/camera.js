@@ -18,7 +18,7 @@ function log(msg) {
 function startStream(CameraID){
     navigator.mediaDevices.getUserMedia({
         video: {
-          width: 1200,
+          width: 1024,
           height: 800,
           frameRate: 30,
           deviceId: {exact: CameraID}
@@ -34,11 +34,12 @@ function startStream(CameraID){
         .catch(err => log(err.name + ": " + err.message));
 }
 
-document.getElementById("startButton").addEventListener("click", function() {
-    let clickedDevice = matchDevice(cameraOptions.options[cameraOptions.selectedIndex].value)
-    startStream(clickedDevice[0]);
+/*document.getElementById("startButton").addEventListener("click", function() {
 
-}, false);
+  //let clickedDevice = matchDevice(cameraOptions.options[cameraOptions.selectedIndex].value)
+  //startStream(clickedDevice[0]);
+
+}, false);*/
 
 
 
@@ -59,6 +60,11 @@ function updateDeviceList() {
       }
 
     });
+
+    let clickedDevice = matchDevice(cameraOptions.options[cameraOptions.selectedIndex].value)
+    startStream(clickedDevice[0]);
+
+
   });
 }
 
@@ -102,3 +108,4 @@ updateDeviceList();
 /*setInterval(function(){
     Draw(videoElement, context);
   },10)*/
+
