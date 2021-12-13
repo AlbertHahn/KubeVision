@@ -2,6 +2,11 @@ let paragraphServer = document.getElementById("ServerStatus");
 let socketServer = "http://0.0.0.0:5000"
 
 function emitVideo(canvas){
+
+    var socket = io(socketServer,{ autoConnect: false});
+
+    socket.connect();
+
     socket.emit('stream',canvas.toDataURL('image/webp'));
 }
 

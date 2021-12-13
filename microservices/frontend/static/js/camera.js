@@ -95,13 +95,21 @@ cameraOptions.addEventListener('change', function() {
 });
 
 function Draw(video,context){
-    context.drawImage(video,0,0,context.width,context.height);
+    context.drawImage(video,0,0,canvas.width,canvas.height);
+    //canvas.toDataURL('image/png')
+    //photo.setAttribute('src', data);
     emitVideo(canvas)
 }
 
 navigator.mediaDevices.ondevicechange = function(event) {
   updateDeviceList();
 }
+
+document.getElementById("picButton").addEventListener("click", function() {
+
+    Draw(videoElement, context)
+
+}, false);
 
 updateDeviceList();
 
