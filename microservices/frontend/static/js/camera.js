@@ -34,14 +34,6 @@ function startStream(CameraID){
         .catch(err => log(err.name + ": " + err.message));
 }
 
-/*document.getElementById("startButton").addEventListener("click", function() {
-
-  //let clickedDevice = matchDevice(cameraOptions.options[cameraOptions.selectedIndex].value)
-  //startStream(clickedDevice[0]);
-
-}, false);*/
-
-
 
 function updateDeviceList() {
   navigator.mediaDevices.enumerateDevices()
@@ -96,9 +88,6 @@ cameraOptions.addEventListener('change', function() {
 
 function Draw(video,context){
     context.drawImage(video,0,0,canvas.width,canvas.height);
-    //canvas.toDataURL('image/png')
-    //photo.setAttribute('src', data);
-    emitVideo(canvas)
 }
 
 navigator.mediaDevices.ondevicechange = function(event) {
@@ -107,13 +96,38 @@ navigator.mediaDevices.ondevicechange = function(event) {
 
 document.getElementById("picButton").addEventListener("click", function() {
 
-    Draw(videoElement, context)
+sendFramesPerSecond(1000, 50000)
+
+}, false);
+
+document.getElementById("loginButton").addEventListener("click", function() {
+
+  Draw(videoElement, context)
+  sendLoginFrame(canvas)
 
 }, false);
 
 updateDeviceList();
 
-/*setInterval(function(){
-    Draw(videoElement, context);
-  },10)*/
+function sendFramesPerSecond(intervalTime, maxTime){
+
+  let counter= 0;
+  var connectionAlive;
+
+  let timerID = setInterval(() => {          
+      counter += 1;
+      Draw(videoElement, context)
+      connectionAlive = sendFrames(canvas, counter)
+      console.log("connection?: " + connectionAlive)
+      if(!connectionAlive){
+        clearInterval(timerID);
+      } 
+      console.log(counter)
+  }, intervalTime)
+  
+  setTimeout(() => { 
+      clearInterval(timerID);
+  }, maxTime);
+
+}
 
