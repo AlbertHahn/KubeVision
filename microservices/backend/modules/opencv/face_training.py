@@ -2,7 +2,6 @@ import os
 import numpy as np
 import cv2
 from PIL import Image
-import pickle
 
 class face_training:
 
@@ -15,7 +14,7 @@ class face_training:
         image_dir = os.path.join(BASE_DIR, "images")
 
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-        recognizer = cv2.face.LBPHFaceRecognizer_create()     
+        recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 16,grid_x = 8,grid_y = 8)     
 
         current_id = 0
         label_ids = {}
@@ -32,6 +31,7 @@ class face_training:
 
                     if not label in label_ids:
                         label_ids[label] = current_id
+                        print(label)
                         current_id += 1
                     id_ = label_ids[label]
 
@@ -43,11 +43,10 @@ class face_training:
 
                     for (x, y, w, h) in faces:
                         roi = image_array[y:y+h, x:x+w ]
+                        
                         x_labels.append(roi)
                         y_labels.append(id_)
 
-        
-        pickle.dump(label_ids, open("modules/opencv/pickles/face-labels.pickle", "wb"))
 
         recognizer.train(x_labels, np.array(y_labels))
         recognizer.write("modules/opencv/recognizer/face-data.yml")

@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app 
 ADD . /app
 
+RUN apt-get update
+RUN apt-get install ffmpeg libsm6 libxext6  -y
+
 # Install the dependencies
 RUN pip install --upgrade pip setuptools wheel
 RUN pip install -r requirements.txt
@@ -18,4 +21,4 @@ ENV PYTHONUNBUFFERED 1
 
 RUN ["chmod", "+x", "/app/entry.sh"]
 
-ENTRYPOINT [ "./entry.sh" ]
+#ENTRYPOINT [ "./entry.sh" ]

@@ -5,7 +5,7 @@ let username;
 
 
 //Needs to be async for error catching
-function sendFrames(canvas, counter){
+function sendFrames(canvas, counter, event){
 
 
     var socket = io(socketServer,{ autoConnect: false});
@@ -14,7 +14,7 @@ function sendFrames(canvas, counter){
     username = "Albert"
 
     socket.on('connect', function() {
-        socket.emit('stream',username + "," + counter + "," + canvas.toDataURL('image/webp'))
+        socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'))
         console.log(socket.connected);
     });
 

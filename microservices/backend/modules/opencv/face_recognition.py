@@ -3,6 +3,8 @@ import cv2
 import base64
 import os
 
+# https://docs.opencv.org/3.4/df/d25/classcv_1_1face_1_1LBPHFaceRecognizer.html
+# Docs for the recognizer
 
 class face_recognition:
 
@@ -12,24 +14,23 @@ class face_recognition:
     def detect_face(self, image):
 
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")    
-        recognizer = cv2.face.LBPHFaceRecognizer_create()   
+        recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 8,grid_x = 8,grid_y = 8)   
         recognizer.read("modules/opencv/recognizer/face-data.yml")   
 
         frame_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        frame_gray = cv2.equalizeHist(frame_gray)
+        #frame_gray = cv2.equalizeHist(frame_gray)
 
         faces = face_cascade.detectMultiScale(frame_gray, scaleFactor=1.5, minNeighbors=5)
 
 
-
         for (x, y, w, h) in faces:
-            image = cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            #image = cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
             print("looping")
             roi_gray = frame_gray[y:y+h, x:x+w] #(ycord_start, ycord_end)
 
             id_, conf = recognizer.predict(roi_gray)
             print(str(id_) + " / " +str(conf))
-            if conf>=10 and conf <= 100:
+            if conf>=0 and conf <= 100:
                 print("predicted: " + str(id_))
                 cv2.imwrite('modules/opencv/predicted/' + str(id_) + '_' + str(int(conf))  + '.webp', image)
 
@@ -50,6 +51,7 @@ class face_recognition:
         buf_decode = base64.b64decode(encoded_data)
         buf_arr = np.fromstring(buf_decode, dtype=np.uint8)
         img_decoded = cv2.imdecode(buf_arr, cv2.IMREAD_COLOR)   
+        #cv2.imwrite('modules/opencv/incoming/test.webp', img_decoded)
         return img_decoded
 
     def createDir(self, buf_str):

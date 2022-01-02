@@ -22,11 +22,6 @@ function startStream(CameraID){
           height: 800,
           frameRate: 30,
           deviceId: {exact: CameraID}
-        },
-        audio: {
-          sampleRate: 44100,
-          sampleSize: 16,
-          volume: 0.25
         }
       }).then(stream => {
           videoElement.srcObject = stream; 
@@ -96,7 +91,7 @@ navigator.mediaDevices.ondevicechange = function(event) {
 
 document.getElementById("picButton").addEventListener("click", function() {
 
-sendFramesPerSecond(1000, 50000)
+sendFramesPerSecond(1000, 50000, 'stream')
 
 }, false);
 
@@ -105,11 +100,13 @@ document.getElementById("loginButton").addEventListener("click", function() {
   Draw(videoElement, context)
   sendLoginFrame(canvas)
 
+  //sendFramesPerSecond(1000, 50000, 'predict')
+
 }, false);
 
 updateDeviceList();
 
-function sendFramesPerSecond(intervalTime, maxTime){
+function sendFramesPerSecond(intervalTime, maxTime, event){
 
   let counter= 0;
   var connectionAlive;
@@ -117,7 +114,7 @@ function sendFramesPerSecond(intervalTime, maxTime){
   let timerID = setInterval(() => {          
       counter += 1;
       Draw(videoElement, context)
-      connectionAlive = sendFrames(canvas, counter)
+      connectionAlive = sendFrames(canvas, counter, event)
       console.log("connection?: " + connectionAlive)
       if(!connectionAlive){
         clearInterval(timerID);
