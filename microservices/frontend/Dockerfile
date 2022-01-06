@@ -12,5 +12,7 @@ RUN pip install -r requirements.txt
 
 ENV PYTHONUNBUFFERED 1
 
+EXPOSE 8000
+
 # run the command to start uWSGI
-#CMD ["gunicorn", "-b" , "0.0.0.0:8000" ,"run:app"]
+CMD ["gunicorn", "-b" , ":8000" ,"run:app"]

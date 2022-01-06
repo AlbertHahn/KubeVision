@@ -14,7 +14,7 @@ class face_recognition:
     def detect_face(self, image):
 
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")    
-        recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 8,grid_x = 8,grid_y = 8)   
+        recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 16,grid_x = 8,grid_y = 8)   
         recognizer.read("modules/opencv/recognizer/face-data.yml")   
 
         frame_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

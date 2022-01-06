@@ -4,7 +4,7 @@ services:
 
   flask:
     build: ./frontend
-    image: flask:local
+    image: albird/flask:latest
     container_name: flask
     restart: always
     expose:
@@ -15,7 +15,7 @@ services:
 
   nginx:
     build: ./nginx
-    image: nginx:local
+    image: albird/nginx:latest
     container_name: nginx
     restart: always
     ports:
@@ -25,7 +25,7 @@ services:
 
   flask-opencv:
     build: ./backend
-    image: flask-opencv:local
+    image: albird/flask-opencv:latest
     container_name: flask-opencv
     restart: always
     expose:
@@ -34,14 +34,14 @@ services:
       - "5000:5000"
     command: gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -b 0.0.0.0:5000 run:app
 
-  mongo:
-    image: mongo
-    container_name: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./mongo-volume:/data/db
+  #mongo:
+  #  image: mongo
+  #  container_name: mongo
+  #  restart: always
+  #  environment:
+  #    MONGO_INITDB_ROOT_USERNAME: root
+  #    MONGO_INITDB_ROOT_PASSWORD: example
+  #  ports:
+  #    - "27017:27017"
+  #  volumes:
+  #    - ./mongo-volume:/data/db
