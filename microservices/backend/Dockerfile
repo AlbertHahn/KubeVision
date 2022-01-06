@@ -19,6 +19,8 @@ RUN pip install -r requirements.txt
 
 ENV PYTHONUNBUFFERED 1
 
+EXPOSE 5000
+
 RUN ["chmod", "+x", "/app/entry.sh"]
 
-#ENTRYPOINT [ "./entry.sh" ]
+ENTRYPOINT [ "./entry.sh" ]
