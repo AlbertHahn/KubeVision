@@ -2,7 +2,7 @@ namespace: default
 
 frontend:
   name: flask
-  replicas: 3
+  replicas: 1
 
   image:
     name: albird/flask
@@ -28,7 +28,7 @@ nginx:
 
 backend:
   name: flask-opencv
-  replicas: 3
+  replicas: 1
 
   image:
     name: albird/flask-opencv

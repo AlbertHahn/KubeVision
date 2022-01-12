@@ -1,14 +1,14 @@
 let paragraphServer = document.getElementById("ServerStatus");
-let socketServer = "http://0.0.0.0:5000"
+//let socketServer = "http://0.0.0.0:5000"
+let socketServer = "https://labs.albert-hahn-apply.com"
 let username;
-
 
 
 //Needs to be async for error catching
 function sendFrames(canvas, counter, event){
 
 
-    var socket = io(socketServer,{ autoConnect: false});
+    var socket = io(socketServer,{ autoConnect: false}, { transports: ["websocket"] });
     socket.connect();
 
     username = "Albert"

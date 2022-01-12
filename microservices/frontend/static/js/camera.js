@@ -10,6 +10,17 @@ var canvas = document.getElementById("preview");
 var context = canvas.getContext("2d")
 
 
+/*navigator.permissions.query({name:'camera'}).then(function(result) {
+  alert(result.state);
+  if (result.state === 'granted') {
+      console.log("granz")
+  } else if (result.state === 'prompt') {
+    console.log("propmt")
+  } else if (result.state === 'denied') {
+    console.log("denied")
+  }
+});*/
+
 function log(msg) {
     logElement.innerHTML += msg + "<br>";
   }
@@ -17,9 +28,11 @@ function log(msg) {
 
 function startStream(CameraID){
     navigator.mediaDevices.getUserMedia({
+        audio: false,
         video: {
-          width: 1024,
-          height: 800,
+          
+          width: { min: 1024, ideal: 1280, max: 1920 },
+          height: { min: 576, ideal: 720, max: 1080 },
           frameRate: 30,
           deviceId: {exact: CameraID}
         }
@@ -28,6 +41,7 @@ function startStream(CameraID){
         })
         .catch(err => log(err.name + ": " + err.message));
 }
+
 
 
 function updateDeviceList() {
@@ -41,6 +55,7 @@ function updateDeviceList() {
       if (device.kind === "videoinput") {
         elem.innerHTML = device.label;
         elem.value = device.label;
+ 
         cameraOptions.appendChild(elem)
       } else if (device.type === "audioinput") {
         console.log("audio")
@@ -48,6 +63,7 @@ function updateDeviceList() {
 
     });
 
+    console.log("works")
     let clickedDevice = matchDevice(cameraOptions.options[cameraOptions.selectedIndex].value)
     startStream(clickedDevice[0]);
 
