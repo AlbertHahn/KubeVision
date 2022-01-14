@@ -20,10 +20,12 @@ class face_training:
         label_ids = {}
         y_labels = []
         x_labels = []
+        counter= 0
 
         print("Training data if available...")
 
         for root, dirs, files in os.walk(image_dir):
+            counter=0
             for file in files:
                 if file.endswith("webp") or file.endswith("jpg"):
                     path = os.path.join(root, file)
@@ -43,9 +45,10 @@ class face_training:
 
                     for (x, y, w, h) in faces:
                         roi = image_array[y:y+h, x:x+w ]
-                        
+                        cv2.imwrite('modules/opencv/predicted/test/' + str(id_) + '_' + str(counter) + '.webp', roi)
                         x_labels.append(roi)
                         y_labels.append(id_)
+                        counter += 1
 
 
         recognizer.train(x_labels, np.array(y_labels))

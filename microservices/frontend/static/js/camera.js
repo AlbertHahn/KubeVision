@@ -9,6 +9,8 @@ var currentDevices;
 var canvas = document.getElementById("preview");
 var context = canvas.getContext("2d")
 
+//canvas.width = 1200
+//canvas.height = 1200
 
 /*navigator.permissions.query({name:'camera'}).then(function(result) {
   alert(result.state);
@@ -31,13 +33,15 @@ function startStream(CameraID){
         audio: false,
         video: {
           
-          width: { min: 1024, ideal: 1280, max: 1920 },
-          height: { min: 576, ideal: 720, max: 1080 },
+          //width: { min: 1024, ideal: 1280, max: 1920 },
+          //height: { min: 576, ideal: 720, max: 1080 },
+          width: 1200,
+          height: 1200,
           frameRate: 30,
           deviceId: {exact: CameraID}
         }
       }).then(stream => {
-          videoElement.srcObject = stream; 
+          videoElement.srcObject = stream;           
         })
         .catch(err => log(err.name + ": " + err.message));
 }
@@ -98,7 +102,7 @@ cameraOptions.addEventListener('change', function() {
 });
 
 function Draw(video,context){
-    context.drawImage(video,0,0,canvas.width,canvas.height);
+    context.drawImage(video,0,0,videoElement.width,videoElement.height);
 }
 
 navigator.mediaDevices.ondevicechange = function(event) {
@@ -143,4 +147,3 @@ function sendFramesPerSecond(intervalTime, maxTime, event){
   }, maxTime);
 
 }
-
