@@ -1,7 +1,43 @@
 \chapter{Einleitung}
-Eine Microservice Architektur ist ein Verbund aus Softwarekomponenten, welcher aus einzelnen microservices besteht
-und unabhängig, automatisch und selbstständig einsetzbar ist.
 \section{Motivation}
+Die Krones AG bietet Anlagen für die Getränkeindustrie als auch 
+Nahrungsmittelhersteller, von der Prozesstechnik bis hin zur IT-Lösung. 
+Die Komplettlinie beeinhaltet auch das bereitstellen von Software auf den einzelnen Produktionsanlagen. 
+Hierfür werden eine Vielzahl von Produktionslinienanwendungen auf den Anlagen installiert und verwaltet.
+Ein riesiger Aufwand der Fehleranfälligkeiten wie fehlende Treiber, Bibliotheken
+und anderer Abhängigkeiten mit sich bringt.
+Eigene Server müssen für die Kommunikation der Anlagen verbaut und gewartet werden,
+was zusätzlich Ressourcen benötigt und automatisch die Kosten für die Inbetriebnahme einer solchen
+Linien erhöhen.
+Deshalb wird für die Weiterentwicklung der zukünftigen Bereitstellung von Produktionsanlagensoftware
+mithilfe eines Proof of Concept (PoC), die Möglichkeiten einer wartungsfreien Infrastruktur
+durch ein continuous delivery System evaluiert. Dies verläuft in Zusammenarbeit mit dem
+Kooperationspartner und Softwarteunternehmen SUSE GmbH, welches das wartungsfreie Betriebssystem
+SUSE Linux Enterprise Micro und die multi-cluster Orchestrierungsplattform Rancher anbietet.
+
+Als Grundlage hierfür wird das Open-Source-System Kubernetes untersucht, welches zur Automatisierung, Skalierung
+und Verwaltung von containerisierten Anwendungen dient. Künftige Produktionsanlagen sollen mittels zusätzlichen Edge Devices
+als Knotenpunkte in einem Kubernetes Cluster fungieren, Ressourcen teilen, untereinander kommunizieren und Softwarepakete unkompliziert bereitstellen.
+Die Integration der kleinen Linux Rechner ermöglichen den Variablen Einsatz von Hardwareressourcen beim Kunden, der je nach Anspruch Knotenpunkte erweitern kann.
+Dabei soll es für die einzelnen Anwendungen möglich sein, sowohl auf cloudbasierten als auch auf on-premise Hardware zur Verfügung gestellt zu werden.
+Ein hybrides Kubernetes Cluster ermöglicht es somit lokale Rechenleistung oder öffentliche Cloudressourcen in der selben Softwareumgebung zu nutzen.
+
+Die Vorteile von Kubernetes und dem stetigen Paradigmenwechsel der Softwarelandschaft im Cloudbereich, welcher
+den Wechsel von monolithischen Architektur zu einer mehr flexibleren microservice Architektur
+bevorzugt, sind das Hauptmotiv der Auswertung neuer agiler Distributionsmöglichkeiten.
+Namenhafte Unternehmen wie Netflix, Amazon und Uber entwickeln und verwenden
+bereits robuste und komplexe microservices die containerisiert auf Plattformen
+verwaltet werden \cite{microservice}. 
+%Absatz nochmal durchgehen
+Die Anlage (Linatronic AI) der Krones AG nutzt Deep-Learning-Technologie,
+welche in der Linie mittels Vollinspektion Schäden, Dichtflächen oder Seitenwanddicken
+erkennt, um Prozesse zu optimieren. Allgemein sind Machine learning Anwendungen durch ihre Komplexität
+und vielzahl an Abhängigkeiten schwierig zu entwickeln und bereitzustellen. 
+Eine passende Plattform für Anwendungsfälle mit Bezug zur künstlichen Intelligenz
+muss eine Vielzahl an Services anbieten. Verwaltung von Ressourcen wie Speicher,
+Rechenleistung und Verbindungsgeschwindigkeit für die Datenübertragung \cite{mlops}. 
+
 \section{Zielsetzung}
-\section{Aufbau der Arbeit}
-%\subsubsection{Ein Unterabschnitt}
+Ziel dieser Arbeit ist die Entwicklung einer Microservice
+Architektur in einem hybriden Kubernetes Cluster. 
+
