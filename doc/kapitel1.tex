@@ -1,52 +1,60 @@
 \chapter{Einleitung}
-\section{Motivation}
 Die Krones AG bietet Anlagen für die Getränkeindustrie als auch 
 Nahrungsmittelhersteller, von der Prozesstechnik bis hin zur IT-Lösung. 
 Die Komplettlinie beeinhaltet auch das bereitstellen von Software auf den einzelnen Produktionsanlagen. 
-Hierfür werden eine Vielzahl von Produktionslinienanwendungen auf den Anlagen installiert und verwaltet.
-Ein riesiger Aufwand der Fehleranfälligkeiten wie fehlende Treiber, Bibliotheken
+Hierfür werden eine Vielzahl von Produktionslinienanwendungen auf den Anlagen installiert, gewartet
+und verwaltet. Ein riesiger Aufwand der Fehleranfälligkeiten wie fehlende Frameworks, Bibliotheken
 und anderer Abhängigkeiten mit sich bringt.
 Eigene Server müssen für die Kommunikation der Anlagen verbaut und gewartet werden,
-was zusätzlich Ressourcen benötigt und automatisch die Kosten für die Inbetriebnahme einer solchen
-Linien erhöhen.
-Deshalb wird für die Weiterentwicklung der zukünftigen Bereitstellung von Produktionsanlagensoftware
-mithilfe eines Proof of Concept (PoC), die Möglichkeiten einer wartungsfreien Infrastruktur
+was zusätzlich Ressourcen beansprucht und automatisch die Kosten für die Inbetriebnahme einer solchen
+Linien erhöhen. Die Weiterentwicklung der zukünftigen Bereitstellung von Produktionsanlagensoftware
+erfolgt mithilfe eines Proof of Concept (PoC), welcher die Möglichkeiten einer wartungsfreien Infrastruktur
 durch ein continuous delivery System evaluiert. Dies verläuft in Zusammenarbeit mit dem
 Kooperationspartner und Softwarteunternehmen SUSE GmbH, welches das wartungsfreie Betriebssystem
 SUSE Linux Enterprise Micro und die multi-cluster Orchestrierungsplattform Rancher anbietet.
 
-Als Grundlage hierfür wird das Open-Source-System Kubernetes untersucht, welches zur Automatisierung, Skalierung
-und Verwaltung von containerisierten Anwendungen dient. Künftige Produktionsanlagen sollen mittels zusätzlichen Edge Devices
+Als Grundlage hierfür dient das Open-Source-System Kubernetes, welches zur Automatisierung, Skalierung
+und Verwaltung von containerisierten Anwendungen bestimmt ist. Künftige Produktionsanlagen sollen mittels zusätzlichen Edge Devices
 als Knotenpunkte in einem Kubernetes Cluster fungieren, Ressourcen teilen, untereinander kommunizieren und Softwarepakete unkompliziert bereitstellen.
-Die Integration der kleinen Linux Rechner ermöglichen den Variablen Einsatz von Hardwareressourcen beim Kunden, der je nach Anspruch Knotenpunkte erweitern kann.
+Die Integration der kompakten Linux Rechner ermöglichen den Variablen Einsatz von Hardwareressourcen beim Kunden, der je nach Leistungsanspruch Knotenpunkte erweitern kann.
 Dabei soll es für die einzelnen Anwendungen möglich sein, sowohl auf cloudbasierten als auch auf on-premise Hardware zur Verfügung gestellt zu werden.
 Ein hybrides Kubernetes Cluster ermöglicht es somit lokale Rechenleistung oder öffentliche Cloudressourcen in der selben Softwareumgebung zu nutzen.
-
+\section{Motivation}
 Die Vorteile von Kubernetes und dem stetigen Paradigmenwechsel der Softwarelandschaft im Cloudbereich, welcher
 den Wechsel von monolithischen Architektur zu einer mehr flexibleren microservice Architektur
 bevorzugt, sind das Hauptmotiv der Auswertung neuer agiler Distributionsmöglichkeiten.
+Die Containerisierung von Anwendungen ermöglichen erst die Aufteilung großer Projekte
+in kleine unabängige Services die mittels Orchestrierungsplattformen sinnvoll gebündelt werden können.
 Namenhafte Unternehmen wie Netflix, Amazon und Uber entwickeln und verwenden
-bereits robuste und komplexe microservices die containerisiert auf Plattformen
+bereits robuste und komplexe Microservices die containerisiert auf Plattformen
 verwaltet werden \cite{microservice}. 
 %Absatz nochmal durchgehen
 
-Durch die Flexibiltät einer solchen infrastuktur ist es möglich Anwendungsfälle
-für die industrie zu testen. Die Anlage Linatronic AI der Krones AG nutzt Deep-Learning-Technologie
-in der Linie mittels Vollinspektion Schäden, Dichtflächen oder Seitenwanddicken
-erkennt, um Prozesse zu optimieren. Allgemein sind Machine learning Anwendungen durch ihre Komplexität
+Durch die Flexibiltät einer solchen infrastuktur ist es möglich Anwendungsfälle im Bereich
+der künstlichen Intelligenz
+für die industrie zu testen. Die Anlage Linatronic AI der Krones AG nutzt bereits Deep-Learning-Technologie,
+um in der Linie mittels Vollinspektion Schäden, Dichtflächen oder Seitenwanddicken
+zu erkennen und Prozesse zu optimieren \cite{linatronic}. Allgemein sind Anwendungen mit künstlicher Intelligenz durch ihre Komplexität
 und vielzahl an Abhängigkeiten schwierig zu entwickeln und bereitzustellen. 
 Eine passende Plattform für Anwendungsfälle mit Bezug zur künstlichen Intelligenz
 muss eine Vielzahl an Services anbieten. Verwaltung von Ressourcen wie Speicher,
-Rechenleistung und Verbindungsgeschwindigkeit für die Datenübertragung \cite{mlops}. 
+Rechenleistung und Verbindungsgeschwindigkeit für die Datenübertragung, 
+bei der Ausführung einzelner Phasen von der Datenverarbeitung bis hin zur Evaluierung und Entwicklung
+\cite{mlops}. 
 
 \section{Zielsetzung}
 Ziel dieser Arbeit ist die Entwicklung einer Microservice
 Architektur in einem hybriden Kubernetes Cluster. Das Endresultat
-soll eine Anwendung werden die mittels Weboberfläche ein Login-Verfahren
-über einen backend Service ermöglichen der als Authentifierzungsverfahren
-Gesichtserkennung verwendet, diese Daten sollen verarbeitet und persistent 
+soll eine Anwendung werden die mittels einer Weboberfläche, welche über eine Domain erreichbar ist,
+ein Login-Verfahren mittels einem backend Service ermöglichen der ein Authentifierzungsverfahren
+per Gesichtserkennung verwendet. 
+Diese Daten sollen schließlich verarbeitet und persistent 
 gespeichert werden, um bei erneuten Aufruf der Website bestehen zu bleiben.
+Die Konzeption der Anwendung findet containerisiert auf mehreren Software und Hardware Layern
+statt. Beispielhaft an der Auswahl von Ressourcen zur Auswertung von Gesichtsdaten, dabei
+steht die Option zwischen einem \glqq Fast\grqq{} oder \glqq Performance\grqq{} Modus zur Verfügung,
+welcher entweder einen Knotenpunkt mit Grafikprozessor auswählt oder einer herkömmlichen Prozessoreinheit.
 Das ganze System wird auf einem Kubernetes Cluster bereitgestellt und verwaltet.
-
-
+Ein Ingress Controller dient dabei als Loadbalancer und verteilt die Last beim 
+Aufrufen der Website und der Kommunikation zwischen backend Service.
 
