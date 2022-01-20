@@ -51,10 +51,9 @@ per Gesichtserkennung verwendet.
 Diese Daten sollen schließlich verarbeitet und persistent 
 gespeichert werden, um bei erneuten Aufruf der Website bestehen zu bleiben.
 Die Konzeption der Anwendung findet containerisiert auf mehreren Software und Hardware Layern
-statt. Beispielhaft an der Auswahl von Ressourcen zur Auswertung von Gesichtsdaten, dabei
-steht die Option zwischen einem \glqq Fast\grqq{} oder \glqq Performance\grqq{} Modus zur Verfügung,
-welcher entweder einen Knotenpunkt mit Grafikprozessor auswählt oder einer herkömmlichen Prozessoreinheit.
+statt. 
 Das ganze System wird auf einem Kubernetes Cluster bereitgestellt und verwaltet.
+Das bereitstellen von einem Service kann bei Vorkonfiguration auf on-premise oder cloudbasierten Ressourcen 
 Ein Ingress Controller dient dabei als Loadbalancer und verteilt die Last beim 
 Aufrufen der Website und der Kommunikation zwischen backend Service.
 
