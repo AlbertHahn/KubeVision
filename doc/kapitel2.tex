@@ -1,7 +1,8 @@
 \chapter{Theoretische Grundlagen}
 Dieses Kapitel erläutert die Grundlagen die zum 
-Verständnis dieser Arbeit notwendig sind. Zuerst werden bereits bestehende Technologien wie 
-Docker und Kubernetes erklärt, dabei wird bausteinartig auf das Thema Microservices hingeführt.
+Verständnis dieser Arbeit notwendig sind. 
+Angefangen mit der Erklärung für Technologien
+Docker und Kubernetes, hinzu Microservices.
 
 %TEXT!!!!
 
@@ -81,29 +82,152 @@ basierenden Container gelöscht sind \cite{dockerstoragedriver}.
 
 \subsubsection{Dockerfile}
 Zur Erstellung eines Docker Images wird ein Dockerfile benötigt, dies beeinhaltet alle Anweisungen
-zum Aufbau der einzelnen Schichten.
+zum Aufbau der einzelnen Schichten. 
+Diese Aufrufe erstellen die Schichten eines Images \cite{dockerbestpracticedockerfile}.
+\begin{itemize}
+    \item \textbf{FROM} erstellen einer Schicht von einem base-image. 
+    \item \textbf{COPY} hinzufügen von Dateien aus dem derzeitigen Verzeichnis. 
+    \item \textbf{RUN} bauen der Anwendung mit make. 
+\end{itemize}
+Diese hingegen fügen nur Metadaten hinzu \cite{dockerbestpracticedockerfile}.
+\begin{itemize}
+    \item \textbf{EXPOSE} informiert Docker an welchem Port der Container innerhalb seines Netzwerks lauscht.
+    \item \textbf{ENTRYPOINT} ermöglicht es einen Container als ausführbare Datei zu starten.
+    \item \textbf{CMD} Befehl beim ausführen des Containers.
+\end{itemize}
+
 
 \subsection{Containervirtualisierung}
-Ein Container ist eine laufende Instanz eines Images.
-
-
-
-Dieses Konzept kommt dem einen oder anderen Leser vielleicht schon bekannt vor,
-vergleichbar ist dieses Konzept mit dem einer VM.
-Images ermöglichen ähnlich wie VM templates,das erstellen von mehreren Instanzen durch eine Vorkonfiguration.
+Aus dem Wissen des letzten Abschnitts lässt sich Schlussfolgern, dass
+ein Container eine laufende Instanz eines Images ist.
+Vergleichbar ist dieses Konzept mit dem einer virtuellen Maschine (VM).
+Denn Images ermöglichen ähnlich wie VM templates, die Erstellung von mehreren Instanzen durch eine Vorkonfiguration.
 Mit dem großen Unterschied, dass die Einrichtung von VMs müheseliger ist und weitaus mehr Ressourcen
-beansprucht, da sie ein ganzes Betriebssystem ausführt. Containertechnologien bauen hingegen nur auf 
+beansprucht, da sie ein ganzes Betriebssystem ausführt \cite{hypervisorcontainer}. Containertechnologien bauen hingegen nur auf 
 bestimmte Funktionalitäten des Kernels auf und sparen damit an Rechenleistung (vgl. Abbildung~\ref{fig:containervm}).
+
+Durch die Vorteile eines geteilten Kernels und dessen Betriebssystem abhängigkeiten,
+erzielen Virtualisierungen basierend auf Container eine höhere Anzahl an 
+virtuellen Instanzen. Images sind auch um einiges kleiner als hypervisor-basierende
+Ansätze \cite{hypervisorcontainer}.
 
 \begin{figure}
     \centering
     \includegraphics[width=1.0\columnwidth]{images/Container-VM.png}
-    \caption{Container gegen virtuelle Maschinen \protect}
+    \caption{Virtualisierungsmöglichkeiten \protect}
     \label{fig:containervm}
 \end{figure}
 
+Die Einsparung von Ressourcen und dem einfachen bereitstellen auf Hostsysteme,
+prädestinieren containerisierte Anwendungen für die Verwendung von Microservices
+auf Container Plattformen wie Kubernetes.
+
+
 \section{Kubernetes}
-\subsection{Architektur}
+
+Dieser Abschnitt befasst sich zunächst mit den einzelnen Komponenten der Kubernetes Architektur.
+Hinleitend werden spezielle Themen wie k3s, Hybrid Cloud und Rancher näher erläutert.
+Kubernetes ermöglicht die Orchestrierung von containerisierten Arbeitslasten
+und Services. Seit 2014 hat Google das Open-Source-Projekt zur Verfügung
+gestellt und baut auf 15 Jahre Erfahrungen mit Produktions-Workloads \cite{kubernetes}.
+
+\subsubsection{Namensgebung}
+\glqq Der Name Kubernetes stammt aus dem Griechischen, bedeutet Steuermann oder Pilot, [...]
+K8s ist eine Abkürzung, die durch Ersetzen der 8 Buchstaben \glqq ubernete\grqq{} mit \glqq 8\grqq{} abgeleitet wird\grqq{} \cite{kubernetes}.
+
+\subsection{Cluster}
+Die Zusammensetzung der beschriebenen Kubernetes Komponenten ergeben ein Kubernetes Cluster (vgl. Abbildung~\ref{fig:cluster}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\columnwidth]{images/components-of-kubernetes.png}
+    \caption{Komponenten eines Kubernetes Cluster \cite{kubernetesnodekomponenten}}
+    \label{fig:cluster}
+\end{figure}
+
+\subsubsection{Master-Komponenten}
+Master-Komponenten sind für die Steuerungsebene des Clusters zuständig,
+dabei entscheidet und reagiert dieser auf globaler Ebene auf eintreffende Clustereignisse \cite{kuberneteskomponenten}.
+Die nächsten Unterabschnitte beschreiben diese näher:
+
+\subsubsection{\textit{API Server}}
+Der API Server operiert über REST und bietet eine Schnittstelle zu Diensten
+inner- und außerhalb der Master-Komponenten \cite{kuberneteskomponenten}.
+
+\subsubsection{\textit{etcd}}
+etcd ist der primäre Datenspeicher von Kubernetes und sichert alle Zustände eines
+Cluster \cite{kuberneteskomponenten}.
+
+\subsubsection{\textit{Scheduler}}
+Der Scheduler ist zuständig für die Verteilung und Ausführung von Pods auf Nodes \cite{kuberneteskomponenten}.
+
+\subsubsection{\textit{Controller Manager}}
+Der Controller Manager reagiert auf Ausfälle von Nodes, erhält die korrekte
+Anzahl von Replikationen eines Pods und verbindet Services miteinander \cite{kuberneteskomponenten}.
+
+\subsubsection{Node}
+Eine Node ist eine Hardware Einheit, die je nach Kubernetes Einrichtung eine
+VM, physische Maschine oder eine Instanz in einer privaten oder öffentlichen Cloud darstellen kann \cite{kubernetesnodes}.
+Dieser umfasst folgende Komponenten:
+
+\subsubsection{\textit{Container Laufzeit}}
+Da der Abschnitt zum Thema Docker alles umfassende zur Container Laufzeit bereits beschrieben hat,
+hier ein kleiner Eintrag zum Thema Docker und Kubernetes.
+Seit 2020 läuft Docker als Auslaufmodell für die unterliegende Container Laufzeit, nach Version 1.20 von Kubernetes aus.
+Diese Änderung betrifft, aber nur bestimmte Arbeitsabläufe, die diese Arbeit nicht beeinträchtigen und sollte
+nur Vollständigkeitshalber erwähnt sein \cite{kubernetesdocker}.
+
+\subsubsection{\textit{Kubelet}}
+Kubelet fungiert als \glqq node agent\grqq{} und registriert die Node mit dem
+API-Server eines Clusters, dabei stellt es sicher das Container innerhalb eines Pods
+funktionieren \cite{kubernetesnodes}.
+
+\subsubsection{\textit{Kube-Proxy}}
+Ein Kube-Proxy ist ein Netzwerk Proxy und verwaltet die Netzwerkrechte auf Nodes.
+Diese Rechte erlauben die Kommunikation zwischen Pods inner- und außerhalb des Clusters \cite{kubernetesnodes}.
+
+\subsection{Pods}
+Ein Pod stellt die kleinste Einheit eines Kubernetes Clusters dar und ist eine Gruppe von mindestens einem Container.
+Dieser erlaubt die gemeinsame Nutzung von Speicher- und Netzwerkressourcen mit Anweisungen zur Ausführung der Container \cite{kubernetespods}.
+
+\subsection{Deployment}
+Ein Deployment ist ein Ressourcenobjekt, dass mit einem Deployment Controller den gewünschten Zustand einer Anwendung aufrechterhält.
+Diese Spezifikation sind in Form von YAML-Dateien definiert (vgl. Beispiel~\ref{lst:deployment}).
+Desweiteren eine kurze Aufschlüsselung der einzelnen Instruktionen \cite{kubernetesobjects}.
+\begin{itemize}
+    \item \textbf{apiVersion}: definiert die einzelnen workload API Untergruppen und die Version.
+    \item \textbf{kind}: bestimmt das zu erstellende Kubernetes Objekt.
+    \item \textbf{metadata}: deklariert einzigartige Bestimmungsmerkmale.
+    \item \textbf{spec}: gewünschte Ausgangszustand des Objekts.
+\end{itemize}
+
+\begin{lstlisting}[caption={Deployment.yaml \cite{kubernetesdeployment} },captionpos=b,label={lst:deployment},language=yaml]
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: nginx-deployment
+      labels:
+        app: nginx
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: nginx
+      template:
+        metadata:
+          labels:
+            app: nginx
+        spec:
+          containers:
+          - name: nginx
+            image: nginx:1.14.2
+            ports:
+            - containerPort: 80
+    \end{lstlisting}
+
+\subsection{Service}
+\subsection{Ingress}
+
 \subsection{Lightweight Kubernetes}
 \subsection{Hybrid Cloud}
 \subsection{Rancher}
@@ -112,9 +236,6 @@ bestimmte Funktionalitäten des Kernels auf und sparen damit an Rechenleistung (
 \subsection{Aufbau}
 \subsection{Entwicklung}
 \subsection{Dezentrale Datenmanagement}
-
-
-
 
 
 %\subsubsection{Ein Unterabschnitt}

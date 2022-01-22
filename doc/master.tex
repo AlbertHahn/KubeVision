@@ -67,15 +67,94 @@
 
 \usepackage{graphicx}							% Einbinden von Graphiken
 \usepackage[svgnames,table,hyperref]{xcolor} 	% Verwendung von Farben
+\usepackage{svg}
+\usepackage{amsmath}
 \usepackage{tikz}								% Erstellen von Grafiken
 \usetikzlibrary{positioning,arrows,plotmarks} % TikZ-Bibliotheken
 %\usepackage{pgfplots}                           % Darstellung von Plots, Funktionen, Graphen usw.
 
+
+
 %
 % Weitere Pakete
 %
-%\usepackage{listings}			% Darstellung von Quellcode
+%YAML https://www.latex4technics.com/?note=187E
+\usepackage{listings}
+\usepackage{color}
+\renewcommand{\lstlistingname}{Quellcode}
+
+\definecolor{vscodeblue}{RGB}{81,147,202}
+\definecolor{vscodered}{RGB}{194,137,113}
+
+\newcommand\YAMLcolonstyle{\color{vscodeblue}\mdseries}
+\newcommand\YAMLkeystyle{\color{vscodeblue}\bfseries}
+\newcommand\YAMLvaluestyle{\color{vscodered}\mdseries}
+\newcommand\YAMLframestyle{\color{black}\mdseries}
+
+\makeatletter
+
+% here is a macro expanding to the name of the language
+% (handy if you decide to change it further down the road)
+\newcommand\language@yaml{yaml}
+
+\expandafter\expandafter\expandafter\lstdefinelanguage
+\expandafter{\language@yaml}
+{
+  frame = single,
+  numbers=left,
+  stepnumber=1,
+  rulecolor=\YAMLframestyle,
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{darkgray}\bfseries,
+  basicstyle=\small\YAMLkeystyle,                                 % assuming a key comes first
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\YAMLvaluestyle\ttfamily,
+  moredelim=[l][\color{orange}]{\&},
+  moredelim=[l][\color{magenta}]{*},
+  moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
+  morestring=[b]',
+  morestring=[b]",
+  literate =    {---}{{\ProcessThreeDashes}}3
+                {>}{{\textcolor{red}\textgreater}}1     
+                {|}{{\textcolor{red}\textbar}}1 
+                {\ -\ }{{\mdseries\ -\ }}3,
+}
+
+% switch to key style at EOL
+\lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+\makeatother
+
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+%YAML---------
+
 %\lstset{language=Python, basicstyle=\ttfamily, numbers=none}
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+
 %
 %\usepackage[european, siunitx]{circuitikz}	% Darstellung von Schaltungen
 %
@@ -111,7 +190,7 @@ dessen wird die Umsetzbarkeit und Relevanz von cloudbasierten Microservices im
 Bereich der künstlichen Intelligenz auf einer zukünftigen Produktionsanlage untersucht.
 }
 \newcommand*{\IhreSchluesselwoerter}{}
-
+\newcommand{\secref}[1]{\autoref{#1}. \nameref{#1}}
 
 \usepackage[bookmarks, raiselinks, pageanchor, % PDF-Einstellungen
             hyperindex, colorlinks,
@@ -189,13 +268,32 @@ Bereich der künstlichen Intelligenz auf einer zukünftigen Produktionsanlage un
     \bibitem{linatronic} Krones Linatronic 735,” Krones.com. [Online].
     Available: https://www.krones.com/de/produkte/maschinen/leerflaschen-inspektionsmaschine-linatronic-735.php. [Accessed: 16-Jan-2022].
     \bibitem{mlops} Y. Zhou, Y. Yu and B. Ding, "Towards MLOps: A Case Study of ML Pipeline Platform," 2020 International Conference on Artificial Intelligence and Computer Engineering (ICAICE), 2020, pp. 494-500, doi: 10.1109/ICAICE51518.2020.00102.
-    \bibitem{dockergetstarted} Docker overview,” Docs.docker.com. [Online].
+    \bibitem{dockergetstarted} Docker Overview,” Docs.docker.com. [Online].
     Available: https://docs.docker.com/get-started/overview/. [Accessed: 20-Jan-2022].
     \bibitem{dockerdeep}N. Poulton, “Docker,” in Docker Deep Dive: Zero to Docker in a single book: Nigel Poulton, 2020, pp. 12–13. 
     \bibitem{dockerstoragedriver} About storage drivers,” Docs.docker.com. [Online].
     Available: https://docs.docker.com/storage/storagedriver/. [Accessed: 20-Jan-2022].
+    \bibitem{dockerbestpracticedockerfile} Best practices for writing Dockerfiles,” Docs.docker.com. [Online]. 
+    Available: https://docs.docker.com/develop/develop-images/dockerfile\_best-practices/.[Accessed: 20-Jan-2022].
+    \bibitem{hypervisorcontainer} R. Morabito, J. Kjällman and M. Komu, "Hypervisors vs. Lightweight Virtualization: A Performance Comparison," 2015 IEEE International Conference on Cloud Engineering, 2015, pp. 386-393, doi: 10.1109/IC2E.2015.74.
+    \bibitem{kubernetes} Was ist Kubernetes?,” https://kubernetes.io/. [Online]. 
+    Available: https://kubernetes.io/.[Accessed: 20-Jan-2022].
+    \bibitem{kubernetesdocker} Don't Panic: Kubernetes and Docker,” https://kubernetes.io/. [Online]. 
+    Available: https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/.[Accessed: 20-Jan-2022].
+    \bibitem{kuberneteskomponenten} Kubernetes Komponenten,” https://kubernetes.io/. [Online]. 
+    Available: https://kubernetes.io/de/docs/concepts/overview/components/.[Accessed: 21-Jan-2022].
+    \bibitem{kubernetesnodekomponenten} Kubernetes Components,” https://kubernetes.io/. [Online]. 
+    Available: https://kubernetes.io/docs/concepts/overview/components/node-components.[Accessed: 21-Jan-2022].
+    \bibitem{kubernetesnodes} Nodes,” https://kubernetes.io/. [Online]. 
+    Available: https://kubernetes.io/de/docs/concepts/architecture/nodes/.[Accessed: 21-Jan-2022].
+    \bibitem{kubernetespods} Pods,” https://kubernetes.io/. [Online]. 
+    Available: https://kubernetes.io/de/docs/concepts/workloads/pods/.[Accessed: 21-Jan-2022].
+    \bibitem{kubernetesobjects} Understanding Kubernetes Objects,” https://kubernetes.io/. [Online]. 
+    Available: https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/.[Accessed: 21-Jan-2022].  
+    \bibitem{kubernetesdeployment} Creating a Deployment,” https://kubernetes.io/. [Online]. 
+    Available: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/.[Accessed: 21-Jan-2022].
 
-    %\bibitem{quelle1} Schreiberling, Tim: ,,Bestseller-Buch'', 1.~Auflage, S.~13ff, Renner-Verlag, Musterstadt, 2011.
+
   \end{thebibliography}
   \newpage
   
