@@ -109,11 +109,11 @@ navigator.mediaDevices.ondevicechange = function(event) {
   updateDeviceList();
 }
 
-document.getElementById("picButton").addEventListener("click", function() {
+/*document.getElementById("picButton").addEventListener("click", function() {
 
 sendFramesPerSecond(1000, 50000, 'stream')
 
-}, false);
+}, false);*/
 
 document.getElementById("loginButton").addEventListener("click", function() {
 

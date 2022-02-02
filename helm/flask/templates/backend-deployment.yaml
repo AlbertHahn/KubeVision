@@ -13,9 +13,24 @@ spec:
       labels:
         server: {{ .Values.backend.name }}
     spec:
+      volumes:
+        - name: {{ .Values.persistence.volumeName }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.claimName }}
       containers:
         - name: {{ .Values.backend.name }}
           image: {{ .Values.backend.image.name }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.backend.image.port }}
+
+          volumeMounts:
+            - mountPath: /app/modules/opencv/images
+              name: {{ .Values.persistence.volumeName }}
+
+      nodeSelector:
+        hardware: {{ .Values.backend.nodeSelector.hardware }}
+      {{- with .Values.backend.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

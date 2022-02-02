@@ -1,10 +1,7 @@
-#uWSGI==2.0.20
+# List of Python dependencies
 Flask==2.0.2
 Flask-SocketIO==5.1.1
-#eventlet==0.32.0
 gevent==21.1.2
-#simple-websocket==0.4.0
-#opencv-python==4.5.3.56
 opencv-contrib-python==4.5.3.56
 numpy==1.21.2
 Pillow==8.3.2

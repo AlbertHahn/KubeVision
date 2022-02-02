@@ -19,3 +19,5 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.frontend.image.port }}
+      nodeSelector:
+        hardware: {{ .Values.frontend.nodeSelector.hardware }}

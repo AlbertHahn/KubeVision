@@ -1,6 +1,6 @@
 from . import home, render_template
 
-@home.route("/home")
+@home.route("/")
 def show_home():
     return render_template('home.html')
 

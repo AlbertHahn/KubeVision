@@ -138,6 +138,7 @@ K8s ist eine Abkürzung, die durch Ersetzen der 8 Buchstaben \glqq ubernete\grqq
 \subsection{Cluster}
 Die Zusammensetzung der beschriebenen Kubernetes Komponenten ergeben ein Kubernetes Cluster (vgl. Abbildung~\ref{fig:cluster}).
 
+
 \begin{figure}
     \centering
     \includegraphics[width=1.0\columnwidth]{images/components-of-kubernetes.png}
@@ -145,8 +146,8 @@ Die Zusammensetzung der beschriebenen Kubernetes Komponenten ergeben ein Kuberne
     \label{fig:cluster}
 \end{figure}
 
-\subsubsection{Master-Komponenten}
-Master-Komponenten sind für die Steuerungsebene des Clusters zuständig,
+\subsubsection{Master Node}
+Master-Nodes sind für die Steuerungsebene des Clusters zuständig,
 dabei entscheidet und reagiert dieser auf globaler Ebene auf eintreffende Clustereignisse \cite{kuberneteskomponenten}.
 Die nächsten Unterabschnitte beschreiben diese näher:
 
@@ -184,7 +185,7 @@ funktionieren \cite{kubernetesnodes}.
 
 \subsubsection{\textit{Kube-Proxy}}
 Ein Kube-Proxy ist ein Netzwerk Proxy und verwaltet die Netzwerkrechte auf Nodes.
-Diese Rechte erlauben die Kommunikation zwischen Pods inner- und außerhalb des Clusters \cite{kubernetesnodes}.
+Diese erlauben die Kommunikation zwischen Pods inner- und außerhalb des Clusters \cite{kubernetesnodes}.
 
 \subsection{Pods}
 Ein Pod stellt die kleinste Einheit eines Kubernetes Clusters dar und ist eine Gruppe von mindestens einem Container.
@@ -225,10 +226,56 @@ Desweiteren eine kurze Aufschlüsselung der einzelnen Instruktionen \cite{kubern
             - containerPort: 80
     \end{lstlisting}
 
+\subsubsection{Deployments und Pods}
+Das Einbinden von Pods in Deployments ermöglicht Kubernetes das beziehen von 
+wertvollen Metadaten für die Verwaltung von Skalierbarkeit,
+Rollouts, Rollbacks und Selbstheilungsprozesse \cite{kubernetesnigeldeployments}. Der höhere Grad an Abstraktion
+dient auch zur Aufteilung von Microservice Stacks, zum Beispiel dem aufteilen
+von Frontend und Backend Pods in eigene Deployment Zyklen.
+
 \subsection{Service}
+Ein Service ist für die Zuweisung von Netzwerkdiensten einer logischen Gruppe Pods zuständig.
+Services dienen als Abstraktion von Pods und ermöglichen die Replizierung und Entfernung
+von Pods ohne Beeinträchtigung der laufenden Anwendung \cite{kubernetesservice}.
+
+Pods beanspruchen Netzwerkressourcen, wie IP-Adresse und DNS-Name 
+innerhalb ihres Clusters. Der Ausfall oder die Zerstörung eines Pods führt zu Beeinträchtigung der Kommunikation
+zwischen Anwendungen. Services können dies präventiv verhindern, da sie mit
+selector und labeler eine Kommunikation zwischen zwei Kubernetes Objekten etablieren.
+(vgl. Beispiel~\ref{lst:service}).
+
+\begin{lstlisting}[caption={service.yaml \cite{kubernetesservice} },captionpos=b,label={lst:service},language=yaml]
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: my-service
+    spec:
+      selector:
+        app: MyApp
+      ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 9376
+    \end{lstlisting}
+
 \subsection{Ingress}
 
 \subsection{Lightweight Kubernetes}
+Ligthweight Kubernetes auch K3s genannt ist eine Kubernetes Distribution von
+Rancher. Der größte Unterschied der Distribution ist die einnehmende größe 
+auf Hostsystemen mit nur 40MB ist auch Platz auf kleineren Geräten.
+Der Verwendungszweck von k3s liegt in IoT und Edge-Devices.
+
+\subsubsection{Unterschiede von k3s}
+Die Kommunikation zwischen Master Node und Worker Node findet in k3s, über einen
+Tunnel Proxy auf der Worker Node statt, welche weiter an den Supervisor der Master Node
+weitergeleitet wird. Desweiteren hat auch die Master Node eine Container Laufzeit "containerd".
+Eine weitere Änderung ist die Verwendung von Kine anstelle von etcd als key-value Speicher.
+
+
+Kine is an etcdshim that translates etcd API to sqlite, Postgres, Mysql, and dqlite
+https://github.com/k3s-io/kine?utm_sq=gbxckymhh6
+
 \subsection{Hybrid Cloud}
 \subsection{Rancher}
 

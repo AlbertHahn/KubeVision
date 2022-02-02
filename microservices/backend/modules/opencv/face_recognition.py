@@ -9,6 +9,9 @@ from PIL import Image
 # Docs for the recognizer
 
 class face_recognition:
+    """
+    
+    """
 
     def __init__(self):
         self

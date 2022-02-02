@@ -9,6 +9,9 @@ class face_training:
         self
 
     def train(self):
+        """
+        Function for training the LBPHFaceRecognizer Model of OpenCV
+        """
 
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         image_dir = os.path.join(BASE_DIR, "images")

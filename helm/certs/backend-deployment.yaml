@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.backend.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      server: {{ .Values.backend.name }}
+  template:
+    metadata:
+      labels:
+        server: {{ .Values.backend.name }}
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: deploy-secret
+      containers:
+      - name: {{ .Values.backend.name }}
+        image: {{ .Values.backend.image.name }}:{{ .Values.frontend.image.tag }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.backend.image.port }}
+        - containerPort: 443
+        volumeMounts:
+        - mountPath: /etc/ssl
+          name: secret-volume

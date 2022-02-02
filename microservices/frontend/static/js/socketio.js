@@ -1,6 +1,6 @@
 let paragraphServer = document.getElementById("ServerStatus");
-//let socketServer = "http://0.0.0.0:5000"
-let socketServer = "https://labs.albert-hahn-apply.com"
+let socketServer = "http://0.0.0.0:5000"
+//let socketServer = "https://labs.albert-hahn-apply.com"
 let username;
 
 
@@ -10,23 +10,87 @@ function sendFrames(canvas, counter, event){
 
     var socket = io(socketServer,{ autoConnect: false}, { transports: ["websocket"] });
     socket.connect();
+    var alive = true;
 
     username = "Albert"
 
-    socket.on('connect', function() {
+    /*socket.on('connect', function() {
         socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'))
         console.log(socket.connected);
+    });*/
+
+    socket.on('connect', function() {
+        socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'), (response) => {
+            alive = true;
+            console.log(response.status); // ok
+
+          });
     });
+
 
     socket.on('connect_error', function() {
         console.log('Connect_error');
         paragraphServer.innerText = "Error connecting to server"
         socket.disconnect();
+        connectionAlive = false;
     });
 
-    return true;
+    return alive;
 }
 
+function sendingtesting(intervalTime, maxTime, event){
+
+    let counter= 0;
+    var connectionAlive;
+  
+    let timerID = setInterval(() => {          
+        counter += 1;
+        Draw(videoElement, context)
+
+
+        var socket = io(socketServer,{ autoConnect: false}, { transports: ["websocket"] });
+        socket.connect();
+    
+        username = "Albert"
+    
+        /*socket.on('connect', function() {
+            socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'))
+            console.log(socket.connected);
+        });*/
+    
+        socket.on('connect', function() {
+            socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'), (response) => {
+                console.log(response.status); // ok
+              });
+        });
+    
+    
+        socket.on('connect_error', function() {
+            console.log('Connect_error');
+            paragraphServer.innerText = "Error connecting to server"
+            socket.disconnect();
+            clearInterval(timerID);
+        });
+
+        /*console.log("connection?: " + connectionAlive)
+        if(!connectionAlive){
+          clearInterval(timerID);
+        } */
+        console.log(counter)
+    }, intervalTime)
+    
+    setTimeout(() => { 
+        clearInterval(timerID);
+    }, maxTime);
+  
+  }
+
+
+  document.getElementById("picButton").addEventListener("click", function() {
+
+    sendingtesting(1000, 50000, 'stream')
+    
+    }, false);
 
 
 function establishSocketConnection(socketServer){

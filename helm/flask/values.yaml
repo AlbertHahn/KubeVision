@@ -8,23 +8,13 @@ frontend:
     name: albird/flask
     tag: latest
     port: 8000
+
+  nodeSelector:
+    hardware: cloud
   
   service:
     name: flask
     type: ClusterIP
-
-nginx:
-  name: app-nginx
-  replicas: 1
-
-  image:
-    name: albird/nginx
-    tag: latest
-    port: 80
-
-  service:
-    name: nginx-loadbalancer-service
-    type: LoadBalancer
 
 backend:
   name: flask-opencv
@@ -34,7 +24,25 @@ backend:
     name: albird/flask-opencv
     tag: latest
     port: 5000
+
+  nodeSelector:
+    hardware: premise
+
+  tolerations:
+    - key: "hardware"
+      operator: "Equal"
+      value: "cpu"
+      effect: "NoSchedule"
   
   service:
     name: flask-opencv
     type: ClusterIP
+
+skipuninstall: false
+persistence:
+  claimName: opencv-images-claimdata
+  volumeName: opencv-images-volume
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  storage: 4Gi
