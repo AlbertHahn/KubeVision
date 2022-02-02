@@ -16,12 +16,12 @@ def my_message(sid, data):
 
 @sio.on('stream')
 def handle_my_custom_event(sid, data):
-    rec = face_recognition
-    rec.encode_webp(rec(), data)
+    rec = face_recognition()
+    rec.encode_webp(data)
     return {'status': 'ok'}
 
 @sio.on('predict')
 def predicted_or_not(sid, data):
-    rec = face_recognition
-    rec.detect_face(rec(), rec.encode_login(rec(), data))
+    rec = face_recognition()
+    rec.detect_face(rec.encode_login(data))
     
