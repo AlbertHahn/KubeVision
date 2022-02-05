@@ -5,6 +5,7 @@
         "./microservice/app",
         "./microservices/app",
         "./microservices/backend",
-        "./microservices/frontend"
+        "./microservices/frontend",
+        "./microservices/auth"
     ]
 }
