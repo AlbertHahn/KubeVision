@@ -14,9 +14,9 @@ spec:
         server: {{ .Values.backend.name }}
     spec:
       volumes:
-        - name: {{ .Values.persistence.volumeName }}
+        - name: {{ .Values.opencvolume.persistence.volumeName }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.claimName }}
+            claimName: {{ .Values.opencvolume.persistence.claimName }}
       containers:
         - name: {{ .Values.backend.name }}
           image: {{ .Values.backend.image.name }}:{{ .Values.backend.image.tag }}
@@ -26,7 +26,7 @@ spec:
 
           volumeMounts:
             - mountPath: /app/modules/opencv/images
-              name: {{ .Values.persistence.volumeName }}
+              name: {{ .Values.opencvolume.persistence.volumeName }}
 
       nodeSelector:
         hardware: {{ .Values.backend.nodeSelector.hardware }}

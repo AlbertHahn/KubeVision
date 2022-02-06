@@ -1,20 +1,19 @@
 from flask.helpers import url_for
 from werkzeug.utils import redirect
 from . import train, render_template, request, session
+import os
+
+websocketServer = os.environ['websocketServer']
+
 
 @train.route("/train")
 def train_home():
-    name = request.cookies.get('session_user')
-    
-    #if name == None:
-    #    return redirect(url_for("home.show_home"))
-
-    #return render_template('train.html', message=name)
 
     if "session_user" not in request.cookies:
         return redirect(url_for("home.show_home"))
     else:
-        return render_template('train.html', message=name)
+        name = request.cookies.get('session_user')
+        return render_template('train.html', message=name, websocketServer=websocketServer)
 
     
 

@@ -12,7 +12,7 @@ def index():
 def my_message(sid, data):
     train = face_training()
     train.train()
-    print('message ', data)
+    print('Training Completed')
 
 @sio.on('stream')
 def handle_my_custom_event(sid, data):

@@ -1,8 +1,10 @@
 let paragraphServer = document.getElementById("ServerStatus");
-let socketServer = "http://0.0.0.0:5000"
+//let socketServer = "http://0.0.0.0:5000"
 //let socketServer = "https://labs.albert-hahn-apply.com"
-let username;
+//var socketServer = '{{ websocketServer }}'
 
+console.log(socketServer)
+console.log(username)
 
 //Needs to be async for error catching
 function sendFrames(canvas, counter, event){
@@ -11,8 +13,6 @@ function sendFrames(canvas, counter, event){
     var socket = io(socketServer,{ autoConnect: false}, { transports: ["websocket"] });
     socket.connect();
     var alive = true;
-
-    username = "Albert"
 
     /*socket.on('connect', function() {
         socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'))
@@ -50,8 +50,6 @@ function sendingtesting(intervalTime, maxTime, event){
 
         var socket = io(socketServer,{ autoConnect: false}, { transports: ["websocket"] });
         socket.connect();
-    
-        username = "Albert"
     
         /*socket.on('connect', function() {
             socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'))

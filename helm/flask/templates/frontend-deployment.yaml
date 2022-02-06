@@ -19,5 +19,10 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.frontend.image.port }}
+          env:
+          - name: loginEndpoint
+            value: /auth/login
+          - name: registerEndpoint
+            value: /auth/register
       nodeSelector:
         hardware: {{ .Values.frontend.nodeSelector.hardware }}

@@ -2,6 +2,7 @@ import os
 import numpy as np
 import cv2
 from PIL import Image
+from pymongo import MongoClient
 
 class face_training:
 
@@ -26,6 +27,7 @@ class face_training:
         counter= 0
 
         print("Training data if available...")
+        records = self.establish_connection()
 
         for root, dirs, files in os.walk(image_dir):
             counter=0
@@ -33,6 +35,11 @@ class face_training:
                 if file.endswith("webp") or file.endswith("jpg"):
                     path = os.path.join(root, file)
                     label = os.path.basename(root).replace(" ", "-").lower()
+
+                    #user_exists = records.find_one({"name": label})
+                    #print("exist?" + user_exists)
+                    #mongoId = user_exists.get('_id')
+                    #print(mongoId)
 
                     if not label in label_ids:
                         label_ids[label] = current_id
@@ -56,3 +63,15 @@ class face_training:
 
         recognizer.train(x_labels, np.array(y_labels))
         recognizer.write("modules/opencv/recognizer/face-data.yml")
+
+    def establish_connection(self):
+        client = MongoClient("mongodb://admin:password@localhost:27017/")
+
+        # print the version of MongoDB server if connection successful
+        print ("server version:", client.server_info()["version"])
+
+        # get the database_names from the MongoClient()
+        database_names = client.list_database_names()
+
+        db = client.get_database('total_records')
+        return db.register

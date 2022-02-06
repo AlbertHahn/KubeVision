@@ -20,8 +20,10 @@
       <div class="col-md-6 card" style="width: 14rem;">
         <div class="card-body mx-auto">
           <h5 class="card-title">Welcome</h5>
+          {% if authObj  %}
+          <form action='{{ authObj.login }}' method="POST">
+            {% endif %}
 
-          <form action="http://localhost:5001/auth/login" method="POST">
             <div class="form-group">
               <label for="Fullname">Full name</label>
               <input name="fullname" class="form-control" id="inputFullName" aria-describedby="emailHelp" placeholder="Enter full name">
@@ -36,27 +38,14 @@
             <div class="form-group my-2">
             <button type="submit" id="startButton" type="button" class="btn btn-primary btn-lg btn-block">Login</button>
           </div>
-            
-
           </form>
 
-          <form action="http://localhost:5001/auth/register" method="POST">
-            <div class="form-group">
-              <label for="Fullname">Full name</label>
-              <input name="fullname" class="form-control" id="inputFullName" aria-describedby="emailHelp" placeholder="Enter full name">
-              <small id="fullName" class="form-text text-muted">Please enter your full name(First name and Last name)</small>
-        </div>
-
-        <div class="form-group">
-          <label for="InputPassword">Password</label>
-          <input type="password" name="password1" class="form-control" id="InputPassword" placeholder="Password">
-        </div>
-
+          <form action="/register">
             <div class="form-group my-2">
-            <button type="submit" id="startButton" type="button" class="btn btn-primary btn-lg btn-block">Register</button>
-          </div>
-            
-          </form>
+              <button type="submit" value="Register" type="button" class="btn btn-primary btn-lg btn-block">Register</button>
+            </div>
+        </form>
+
         </div>
       </div>
 
@@ -69,10 +58,5 @@
   <!-- END CONTAINER -->
 </section>
 <!-- END SECTION -->
-
-
-
-
-
 
 {% endblock %}

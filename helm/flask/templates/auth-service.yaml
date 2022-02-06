@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.auth.service.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  type: {{ .Values.auth.service.type }}
+  ports:
+    - port: {{ .Values.auth.image.port }}
+      targetPort: {{ .Values.auth.image.port }}
+      protocol: TCP
+      name: http
+  selector:
+    server: {{ .Values.auth.name }}

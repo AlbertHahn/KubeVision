@@ -1,18 +1,34 @@
 from . import home, render_template, request, redirect, url_for
-from .forms import LoginForm
+import os
 
+loginEndpoint = os.environ['loginEndpoint']
+registerEndpoint = os.environ['registerEndpoint']
+
+authObj = {'login':loginEndpoint, 'register':registerEndpoint}
 
 @home.route("/")
 def show_home():
+    if "session_error" not in request.cookies:
+        return render_template('home.html', authObj=authObj)
+    else:
+        error = request.cookies.get('session_error')
+        return render_template('home.html', message=error, authObj=authObj)
+
+@home.route("/register")
+def show_register():
+    if "session_error" not in request.cookies:
+        return render_template('register.html', authObj=authObj)
+    else:
+        error = request.cookies.get('session_error')
+        return render_template('register.html', message=error, authObj=authObj)
+
+
+@home.route("/profile")
+def show_profile():
 
     error = request.cookies.get('session_error')
 
     if error == None:
-        return render_template('home.html')
+        return render_template('home.html', authObj=authObj)
 
-    return render_template('home.html', message=error)
-    
-
-"""@mainpage.app_errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404"""
+    return render_template('home.html', message=error, authObj=authObj)

@@ -6,10 +6,7 @@ def successful_redirect_user(endpoint, user):
     response.set_cookie('session_user', user)
     return response
 
-def error_entry_exists():
-    endpoint = 'http://localhost:5000'
-    errorMsg = "Username Already Exists!"
-
+def error_entry_exists(endpoint, errorMsg):
     response = redirect(endpoint)
     response.set_cookie('session_error', errorMsg)
     return response

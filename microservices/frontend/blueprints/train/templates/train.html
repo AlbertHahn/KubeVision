@@ -2,7 +2,12 @@
 
 {% block js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
-<script text=text/javascript src="{{ url_for('static', filename='js/socketio.js') }}"></script>
+<script type="text/javascript">
+  var socketServer = '{{ websocketServer }}'
+  var username = '{{ message }}'
+</script>
+<script text=text/javascript src="{{ url_for('static', filename='js/socketio.js') }}">
+</script>
 <script text=text/javascript src="{{ url_for('static', filename='js/camera.js') }}"></script>
 {% endblock %}
 
@@ -10,7 +15,7 @@
 
 
 {% if message  %}
-    <div class="alert alert-secondary" role="alert">
+    <div class="alert alert-secondary text-center" role="alert">
         <p>{{ message }}</p>
     </div>
 {% endif %}

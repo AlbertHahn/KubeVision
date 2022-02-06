@@ -38,11 +38,37 @@ backend:
     name: flask-opencv
     type: ClusterIP
 
-skipuninstall: false
-persistence:
-  claimName: opencv-images-claimdata
-  volumeName: opencv-images-volume
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: local-path
-  storage: 4Gi
+auth:
+  name: flask-auth
+  replicas: 1
+
+  image:
+    name: albird/flask-auth
+    tag: latest
+    port: 5001
+
+  nodeSelector:
+    hardware: cloud
+
+  service:
+    name: flask-auth
+    type: ClusterIP
+
+opencvolume:
+  skipuninstall: true
+  persistence:
+    claimName: opencv-images-claimdata
+    volumeName: opencv-images-volume
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: local-path
+    storage: 4Gi
+
+mongodbvolume:
+  persistence:
+    claimName: pvc
+    volumeName: pv
+    accessModes:
+      - ReadWriteOnce 
+    storageClassName: local-path
+    storage: 4Gi

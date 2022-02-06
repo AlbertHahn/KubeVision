@@ -1,16 +1,18 @@
-from requests.sessions import Session
 from . import auth, render_template, request, url_for, redirect, session, flash
+import os
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 from .helper import successful_redirect_user, error_entry_exists
 
-DOMAIN = '0.0.0.0'
-PORT = 27017
+homeEndpoint = os.environ['homeEndpoint']
+trainEndpoint = os.environ['trainEndpoint']
+mongoEndpoint = os.environ['mongoEndpoint']
 
 # try to instantiate a client instance
-client = MongoClient("mongodb://localhost:27017/",
-username="admin", password="password")
+#client = MongoClient("mongodb://admin:password@mongodbservice:27017/?authSource=admin")
+client = MongoClient(str(mongoEndpoint))
 
 # print the version of MongoDB server if connection successful
 print ("server version:", client.server_info()["version"])
@@ -26,17 +28,20 @@ def login():
 
     user = request.form.get("fullname")
     password = request.form.get("password1")
+    user_exists = records.find_one({"name": user})
 
-    user_data = records.find_one({"user": user})
-    hash_user_password = records.find_one({"password": password})
-    
-    check_password_hash(hash_user_password, password)
+    errorMsg = "Username or Password not found!"
 
-    if user_data and check_password_hash:
- 
-        response = redirect('http://localhost:5000/train')
-        response.set_cookie('session_user', user)
-        return response
+    if user_exists:
+        hash_user_password = user_exists.get('password')
+
+        if  check_password_hash(hash_user_password, password):
+            response = redirect(trainEndpoint)
+            response.set_cookie('session_user', user)
+            return response
+        else:
+            return error_entry_exists(homeEndpoint, errorMsg)
+    return error_entry_exists(homeEndpoint, errorMsg)
 
 @auth.route('/auth/register', methods=['GET', 'POST'])
 def register():
@@ -46,49 +51,21 @@ def register():
 
     user_exists = records.find_one({"name": user})
     if user_exists:
-        return error_entry_exists()
+        errorMsg = "Username exists!"
+        return error_entry_exists(homeEndpoint, errorMsg)
     else:
         hash = generate_password_hash(password)
         insert_user = {'name': user, 'password': hash}
         records.insert_one(insert_user)
 
-        return successful_redirect_user('http://localhost:5000/train', user)
+        return successful_redirect_user(trainEndpoint, user)
 
-@auth.route('/logout', methods=['GET', 'POST'])
+@auth.route('/auth/logout', methods=['GET', 'POST'])
 def logout():
 
     if "session_user" in request.cookies:
-        response = redirect('http://localhost:5000/')
+        response = redirect(homeEndpoint)
         response.delete_cookie('session_user')
         return response
     else:
-        return redirect('http://localhost:5000/')
-
-
-
-"""
-        user = request.form.get("fullname")
-        email = request.form.get("email")
-        
-        password1 = request.form.get("password1")
-        password2 = request.form.get("password2")
-        
-        user_found = records.find_one({"name": user})
-        email_found = records.find_one({"email": email})
-        if user_found:
-            message = 'There already is a user by that name'
-            return render_template('index.html', message=message)
-        if email_found:
-            message = 'This email already exists in database'
-            return render_template('index.html', message=message)
-        if password1 != password2:
-            message = 'Passwords should match!'
-            return render_template('index.html', message=message)
-        else:
-            hashed = bcrypt.hashpw(password2.encode('utf-8'), bcrypt.gensalt())
-            user_input = {'name': user, 'email': email, 'password': hashed}
-            records.insert_one(user_input)
-            
-            user_data = records.find_one({"email": email})
-            new_email = user_data['email']
-"""
+        return redirect(homeEndpoint)

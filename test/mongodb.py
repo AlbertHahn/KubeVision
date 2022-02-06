@@ -11,8 +11,10 @@ PORT = 27017
 # use a try-except indentation to catch MongoClient() errors
 try:
     # try to instantiate a client instance
-    client = MongoClient("mongodb://localhost:27017/",
-    username="root", password="example")
+    #client = MongoClient("mongodb://localhost:27017/",
+    #username="admin", password="password")
+
+    client = MongoClient("mongodb://admin:password@localhost:27017/")
 
     # print the version of MongoDB server if connection successful
     print ("server version:", client.server_info()["version"])

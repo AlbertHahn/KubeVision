@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.auth.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.auth.replicas }}
+  selector:
+    matchLabels:
+      server: {{ .Values.auth.name }}
+  template:
+    metadata:
+      labels:
+        server: {{ .Values.auth.name }}
+    spec:
+      containers:
+        - name: {{ .Values.auth.name }}
+          image: {{ .Values.auth.image.name }}:{{ .Values.auth.image.tag }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.auth.image.port }}
+          env:
+          - name: homeEndpoint
+            value: /
+          - name: trainEndpoint
+            value: /train
+          - name: mongoEndpoint
+            value: "mongodb://admin:password@mongodbservice:27017/?authSource=admin"
