@@ -24,5 +24,9 @@ spec:
             value: /auth/login
           - name: registerEndpoint
             value: /auth/register
+          - name: websocketServer
+            value: https://labs.albert-hahn-apply.com
+          - name: profileEndpoint
+            value: /profile
       nodeSelector:
         hardware: {{ .Values.frontend.nodeSelector.hardware }}

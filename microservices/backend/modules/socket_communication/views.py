@@ -13,6 +13,7 @@ def my_message(sid, data):
     train = face_training()
     train.train()
     print('Training Completed')
+    return {'status': 'Training Completed'}
 
 @sio.on('stream')
 def handle_my_custom_event(sid, data):
@@ -23,5 +24,7 @@ def handle_my_custom_event(sid, data):
 @sio.on('predict')
 def predicted_or_not(sid, data):
     rec = face_recognition()
-    rec.detect_face(rec.encode_login(data))
+    picture = rec.encode_login(data)
+    name = rec.detect_face(picture)
+    return {'status': name}
     

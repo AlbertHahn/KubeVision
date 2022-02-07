@@ -7,6 +7,11 @@ services:
     image: albird/flask:latest
     container_name: flask
     restart: always
+    environment:
+      loginEndpoint: http://localhost:5001/auth/login
+      registerEndpoint: http://localhost:5001/auth/register
+      websocketServer: http://localhost:5000
+      profileEndpoint: http://localhost:8000/profile
     expose:
       - 8000
     ports:
@@ -34,14 +39,30 @@ services:
       - "5000:5000"
     command: gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -b 0.0.0.0:5000 run:app
 
-  #mongo:
-  #  image: mongo
-  #  container_name: mongo
-  #  restart: always
-  #  environment:
-  #    MONGO_INITDB_ROOT_USERNAME: root
-  #    MONGO_INITDB_ROOT_PASSWORD: example
-  #  ports:
-  #    - "27017:27017"
-  #  volumes:
-  #    - ./mongo-volume:/data/db
+  flask-auth:
+    build: ./auth
+    image: albird/flask-auth:latest
+    container_name: flask
+    restart: always
+    environment:
+      homeEndpoint: http://localhost:8000/
+      trainEndpoint: http://localhost:8000/train 
+      profileEndpoint: http://localhost:8000/profile 
+      mongoEndpoint: mongodb://admin:password@localhost:27017
+    expose:
+      - 5001
+    ports:
+      - "5001:5001"
+    command: gunicorn -w 1 -b 0.0.0.0:5001 run:app
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-volume:/data/db

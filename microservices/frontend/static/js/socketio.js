@@ -1,42 +1,14 @@
 let paragraphServer = document.getElementById("ServerStatus");
+let progress= document.getElementById("progress")
 //let socketServer = "http://0.0.0.0:5000"
 //let socketServer = "https://labs.albert-hahn-apply.com"
 //var socketServer = '{{ websocketServer }}'
 
+var picButton = document.getElementById("picButton")
+
 console.log(socketServer)
 console.log(username)
 
-//Needs to be async for error catching
-function sendFrames(canvas, counter, event){
-
-
-    var socket = io(socketServer,{ autoConnect: false}, { transports: ["websocket"] });
-    socket.connect();
-    var alive = true;
-
-    /*socket.on('connect', function() {
-        socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'))
-        console.log(socket.connected);
-    });*/
-
-    socket.on('connect', function() {
-        socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'), (response) => {
-            alive = true;
-            console.log(response.status); // ok
-
-          });
-    });
-
-
-    socket.on('connect_error', function() {
-        console.log('Connect_error');
-        paragraphServer.innerText = "Error connecting to server"
-        socket.disconnect();
-        connectionAlive = false;
-    });
-
-    return alive;
-}
 
 function sendingtesting(intervalTime, maxTime, event){
 
@@ -47,94 +19,92 @@ function sendingtesting(intervalTime, maxTime, event){
         counter += 1;
         Draw(videoElement, context)
 
+        //progress.innerText = counter+ "/" + (maxTime/1000);
+        progress.innerText = counter+ "/" + (maxTime/intervalTime);
 
         var socket = io(socketServer,{ autoConnect: false}, { transports: ["websocket"] });
         socket.connect();
     
-        /*socket.on('connect', function() {
-            socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'))
-            console.log(socket.connected);
-        });*/
-    
         socket.on('connect', function() {
             socket.emit(event,username + "," + counter + "," + canvas.toDataURL('image/webp'), (response) => {
                 console.log(response.status); // ok
+
+                if ((response.status != "unknown") && (response.status != "ok"))
+                {
+                    document.cookie = "session_user="+response.status;
+                    console.log("Cookie set to: "+"session_user="+response.status)
+                    socket.disconnect();
+                    location.href = profileEndpoint;
+
+                }
+
               });
         });
     
     
         socket.on('connect_error', function() {
             console.log('Connect_error');
-            paragraphServer.innerText = "Error connecting to server"
+            progress.innerText = "Error connecting to server"
             socket.disconnect();
             clearInterval(timerID);
         });
 
-        /*console.log("connection?: " + connectionAlive)
-        if(!connectionAlive){
-          clearInterval(timerID);
-        } */
         console.log(counter)
     }, intervalTime)
     
     setTimeout(() => { 
         clearInterval(timerID);
+        if (event == 'stream')
+        {
+            startTraining(socketServer, 'traindata')
+        }
     }, maxTime);
+
+
   
   }
 
 
-  document.getElementById("picButton").addEventListener("click", function() {
+  function startTraining(socketServer, event){
+
+    var socket = io(socketServer,{ autoConnect: false});
+
+    socket.connect();
+
+    socket.on('connect', function() {
+        socket.emit(event, {data: 'Client: Init training mode'}, (response) => {
+            console.log(response.status); // ok
+            progress.innerText = response.status;
+          });
+    });
+
+    socket.on('connect_error', function() {
+        console.log('Error connecting to server');
+        socket.disconnect();
+        progress.innerText = "Error connecting to server"
+    });
+
+
+}
+
+
+
+  if(picButton){
+picButton.addEventListener("click", function() {
 
     sendingtesting(1000, 50000, 'stream')
     
     }, false);
+  }
 
 
-function establishSocketConnection(socketServer){
+  if(loginButton){
+loginButton.addEventListener("click", function() {
 
-    var socket = io(socketServer,{ autoConnect: false});
+    sendingtesting(2500, 50000, 'predict')
 
-    socket.connect();
-
-    socket.on('connect', function() {
-        socket.emit('traindata', {data: 'Client: Init training mode'});
-        paragraphServer.innerText = "Server connection successful"
-        socket.disconnect();
-    });
-
-    socket.on('connect_error', function() {
-        console.log('Error connecting to server');
-        socket.disconnect();
-        paragraphServer.innerText = "Error connecting to server"
-    });
+  }, false);
+  }
 
 
-}
-
-document.getElementById("startButton").addEventListener("click", function() {
-
-    establishSocketConnection(socketServer)
-
-}, false);
-
-
-function sendLoginFrame(canvas){
-
-    var socket = io(socketServer,{ autoConnect: false});
-    socket.connect();
-
-    username = "Albert"
-
-    socket.on('connect', function() {
-        socket.emit('predict',username + "," + 0 + "," + canvas.toDataURL('image/webp'))
-        socket.disconnect();
-    });
-
-    socket.on('connect_error', function() {
-        console.log('Error connecting to server');
-        socket.disconnect();
-        paragraphServer.innerText = "Error connecting to server"
-    });
-}
 

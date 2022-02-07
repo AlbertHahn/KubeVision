@@ -1,0 +1,49 @@
+{% extends "layouts/app.html" %}
+
+{% block profile %}
+<!-- 
+  Parts from the Bootstrap documentation!
+  https://getbootstrap.com/docs/4.0/components/forms/ 
+-->
+
+<div class="alert alert-secondary py-5" id="panel">
+    <div class="text-center align-items-center">
+      {% if message  %}
+      <p class="text-center"> 
+        Welcome <strong>{{ message }} </strong>!
+        This is your profile Hub!
+      </p>
+      {% endif %}
+    </div>
+  </div>
+
+
+
+  <section class="py-5">
+    <div class="container h-100" data-aos="fade-right">
+      <div class="row text-center align-items-center justify-content-center col-sm-12 my-auto">
+  
+        <div class="col-md-6 card" style="width: 14rem;">
+          <div class="card-body mx-auto">
+            <h5 class="card-title">Start "2-factor authentication" via face!</h5>
+  
+            <form action="/train">
+              <div class="form-group my-2">
+                <button type="submit" value="train" type="button" class="btn btn-primary btn-lg btn-block">train</button>
+              </div>
+          </form>
+  
+          </div>
+        </div>
+  
+     </div>
+       <!-- END ROW -->
+  
+       <div id="log"></div>
+  
+    </div>
+    <!-- END CONTAINER -->
+  </section>
+  <!-- END SECTION -->
+
+{% endblock %}

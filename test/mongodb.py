@@ -22,15 +22,16 @@ try:
     # get the database_names from the MongoClient()
     database_names = client.list_database_names()
 
-    mydb = client["mydatabase"]
-    mycol = mydb["customers"]
+    #mydb = client["mydatabase"]
+    #mycol = mydb["customers"]
 
     #mydict = { "name": "John", "address": "Highway 37" }
 
     #x = mycol.insert_one(mydict)
-    x = mycol.find_one()
+    #x = mycol.find_one()
 
-    print(x)
+    #print(x)
+
 
 except errors.ServerSelectionTimeoutError as err:
     # set the client and DB name list to 'None' and `[]` if exception

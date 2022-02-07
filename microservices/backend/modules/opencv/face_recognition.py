@@ -4,7 +4,7 @@ import cv2
 import base64
 import os
 from PIL import Image
-
+from .mongodb import mongodb
 # https://docs.opencv.org/3.4/df/d25/classcv_1_1face_1_1LBPHFaceRecognizer.html
 # Docs for the recognizer
 
@@ -19,8 +19,10 @@ class face_recognition:
     def detect_face(self, image):
 
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")    
-        recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 16,grid_x = 8,grid_y = 8)   
+        recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 12, grid_x = 8,grid_y = 8)   
         recognizer.read("modules/opencv/recognizer/face-data.yml")   
+
+        user = "unknown"
 
         frame_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         #frame_gray = cv2.equalizeHist(frame_gray)
@@ -36,15 +38,26 @@ class face_recognition:
             #image = cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
             roi_gray = frame_gray[y:y+h, x:x+w] #(ycord_start, ycord_end)
             id_, conf = recognizer.predict(roi_gray)
+
+            mongo = mongodb()
+
+            print("gefunden"+ str(id_))
+
+            records = mongo.erstablish_connnection()
+            id_exists = records.find_one({"faceid": id_})
+            print("exist?" + str(id_exists.get('name')))
+            mongoName = id_exists.get('name')
+
             cv2.imwrite('modules/opencv/predicted/not.webp', roi_gray)
-            print(str(id_) + " / " +str(conf))
+            print(str(mongoName) + " detected conf: " +str(conf))
 
-            if conf>=0 and conf <= 100:
+            if conf>=0 and conf <= 60:
                 print("predicted: " + str(id_))
-                cv2.imwrite('modules/opencv/predicted/' + str(id_) + '_' + str(int(conf))  + '.webp', image)
+                cv2.imwrite('modules/opencv/predicted/' + str(mongoName) + '_' + str(int(conf))  + '.webp', image)
+                user = mongoName
 
 
-        return image
+        return user
 
     def prepareImage(self , image):
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")

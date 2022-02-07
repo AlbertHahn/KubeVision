@@ -4,7 +4,9 @@ from . import train, render_template, request, session
 import os
 
 websocketServer = os.environ['websocketServer']
+profileEndpoint = os.environ['profileEndpoint']
 
+socketioEndpoints = {'websocketServer':websocketServer, 'profileEndpoint':profileEndpoint}
 
 @train.route("/train")
 def train_home():
@@ -13,7 +15,11 @@ def train_home():
         return redirect(url_for("home.show_home"))
     else:
         name = request.cookies.get('session_user')
-        return render_template('train.html', message=name, websocketServer=websocketServer)
+        return render_template('train.html', message=name, socketioEndpoints=socketioEndpoints)
+
+@train.route("/facelogin")
+def face_login():
+    return render_template('facelogin.html', socketioEndpoints=socketioEndpoints)
 
     
 

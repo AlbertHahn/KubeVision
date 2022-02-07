@@ -25,10 +25,8 @@ def show_register():
 
 @home.route("/profile")
 def show_profile():
-
-    error = request.cookies.get('session_error')
-
-    if error == None:
+    if "session_user" not in request.cookies:
         return render_template('home.html', authObj=authObj)
-
-    return render_template('home.html', message=error, authObj=authObj)
+    else:
+        name = request.cookies.get('session_user')
+        return render_template('profile.html', message=name)

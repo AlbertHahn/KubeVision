@@ -12,17 +12,14 @@
 <script text=text/javascript src="{{ url_for('static', filename='js/camera.js') }}"></script>
 {% endblock %}
 
-{% block video %}
+{% block facelogin %}
 
 <div class="alert alert-secondary py-5" id="panel">
   <div class="text-center align-items-center">
-    {% if message  %}
     <p class="text-center"> 
-      Welcome <strong>{{ message }} </strong>!
-      Time for 2-factor authentication, click the button below to start the procedure.
-      <strong> Take off your glasses or headset, please. Otherwise the server won't recognize you! </strong>
+        Welcome, if you already signed in and activated face recognition
+        You can log in with your face!
     </p>
-    {% endif %}
     <p class="text-center" id="progress">Server connection unknown ...</p>
   </div>
 </div>
@@ -62,7 +59,7 @@
                 </p>
             </div>
         
-            <button id="picButton" type="button" class="btn btn-primary btn-lg btn-block">Start</button>
+            <button id="loginButton" type="button" class="btn btn-primary btn-lg btn-block">Login</button>
         
         </div>
         </div>

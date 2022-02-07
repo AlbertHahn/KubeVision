@@ -27,6 +27,9 @@ spec:
           volumeMounts:
             - mountPath: /app/modules/opencv/images
               name: {{ .Values.opencvolume.persistence.volumeName }}
+          env:
+          - name: mongoEndpoint
+            value: "mongodb://admin:password@mongodbservice:27017/?authSource=admin"
 
       nodeSelector:
         hardware: {{ .Values.backend.nodeSelector.hardware }}

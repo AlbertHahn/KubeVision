@@ -9,6 +9,7 @@ var currentDevices;
 var canvas = document.getElementById("preview");
 var context = canvas.getContext("2d")
 
+
 //canvas.width = 1200
 //canvas.height = 1200
 
@@ -115,14 +116,9 @@ sendFramesPerSecond(1000, 50000, 'stream')
 
 }, false);*/
 
-document.getElementById("loginButton").addEventListener("click", function() {
 
-  Draw(videoElement, context)
-  sendLoginFrame(canvas)
 
-  //sendFramesPerSecond(1000, 50000, 'predict')
 
-}, false);
 
 updateDeviceList();
 

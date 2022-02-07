@@ -2,7 +2,7 @@ import os
 import numpy as np
 import cv2
 from PIL import Image
-from pymongo import MongoClient
+from .mongodb import mongodb
 
 class face_training:
 
@@ -18,7 +18,7 @@ class face_training:
         image_dir = os.path.join(BASE_DIR, "images")
 
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-        recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 16,grid_x = 8,grid_y = 8)     
+        recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 12,grid_x = 8,grid_y = 8)     
 
         current_id = 0
         label_ids = {}
@@ -26,26 +26,49 @@ class face_training:
         x_labels = []
         counter= 0
 
+        mongo = mongodb()
+
         print("Training data if available...")
-        records = self.establish_connection()
+        records = mongo.erstablish_connnection()
 
         for root, dirs, files in os.walk(image_dir):
             counter=0
             for file in files:
                 if file.endswith("webp") or file.endswith("jpg"):
                     path = os.path.join(root, file)
-                    label = os.path.basename(root).replace(" ", "-").lower()
+                    label = os.path.basename(root).replace(" ", "-")
 
-                    #user_exists = records.find_one({"name": label})
-                    #print("exist?" + user_exists)
-                    #mongoId = user_exists.get('_id')
-                    #print(mongoId)
+                    """if not label in label_ids:
+
+                        print("users:" + label)
+
+                        user_exists = records.find_one({"name": label})
+                        print("exist?" + str(user_exists))
+                        mongoId = user_exists.get('_id')
+                        print(mongoId)
+
+                        label_ids[label] = mongoId    
+
+
+
+                        current_id += 1
+                    mongoId = label_ids[label]"""
 
                     if not label in label_ids:
+
+                        user_exists = records.find_one({"name": label})
+                        print("exist?" + str(user_exists))
+                        mongoId = user_exists.get('_id')
+                        print(mongoId)
+
+                        records.update_one({"_id": mongoId}, {"$set": {"faceid": current_id}})
+                        print("label:" + str(label))
                         label_ids[label] = current_id
-                        print(label)
+                        print("labels_id:" + str(label_ids[label]))
                         current_id += 1
+
                     id_ = label_ids[label]
+                    #print("id_:" + str(id_))
 
                     pil_image = Image.open(path).convert("L")
                     size = (550, 550)
@@ -64,14 +87,3 @@ class face_training:
         recognizer.train(x_labels, np.array(y_labels))
         recognizer.write("modules/opencv/recognizer/face-data.yml")
 
-    def establish_connection(self):
-        client = MongoClient("mongodb://admin:password@localhost:27017/")
-
-        # print the version of MongoDB server if connection successful
-        print ("server version:", client.server_info()["version"])
-
-        # get the database_names from the MongoClient()
-        database_names = client.list_database_names()
-
-        db = client.get_database('total_records')
-        return db.register

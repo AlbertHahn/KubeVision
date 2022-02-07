@@ -24,5 +24,7 @@ spec:
             value: /
           - name: trainEndpoint
             value: /train
+          - name: profileEndpoint
+            value: /profile
           - name: mongoEndpoint
             value: "mongodb://admin:password@mongodbservice:27017/?authSource=admin"

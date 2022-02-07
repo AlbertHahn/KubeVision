@@ -8,6 +8,7 @@ from .helper import successful_redirect_user, error_entry_exists
 
 homeEndpoint = os.environ['homeEndpoint']
 trainEndpoint = os.environ['trainEndpoint']
+profileEndpoint = os.environ['profileEndpoint']
 mongoEndpoint = os.environ['mongoEndpoint']
 
 # try to instantiate a client instance
@@ -36,7 +37,7 @@ def login():
         hash_user_password = user_exists.get('password')
 
         if  check_password_hash(hash_user_password, password):
-            response = redirect(trainEndpoint)
+            response = redirect(profileEndpoint)
             response.set_cookie('session_user', user)
             return response
         else:
@@ -58,7 +59,7 @@ def register():
         insert_user = {'name': user, 'password': hash}
         records.insert_one(insert_user)
 
-        return successful_redirect_user(trainEndpoint, user)
+        return successful_redirect_user(profileEndpoint, user)
 
 @auth.route('/auth/logout', methods=['GET', 'POST'])
 def logout():
