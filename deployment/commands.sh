@@ -5,7 +5,7 @@ kubectl label nodes microservice2 hardware=premise
 kubectl taint nodes microservice2 hardware=cpu:NoSchedule
 
 mongo --host mongodbservice --port 27017 -u admin -p password --authenticationDatabase admin
-
+mongo --host localhost --port 27017 -u admin -p password --authenticationDatabase admin
 MongoClient("mongodb://admin:password@mongodbservice:27017/?authSource=admin")
 
 use admin

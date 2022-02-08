@@ -193,7 +193,7 @@ Dieser erlaubt die gemeinsame Nutzung von Speicher- und Netzwerkressourcen mit A
 
 \subsection{Deployment}
 Ein Deployment ist ein Ressourcenobjekt, dass mit einem Deployment Controller den gewünschten Zustand einer Anwendung aufrechterhält.
-Diese Spezifikation sind in Form von YAML-Dateien definiert (vgl. Beispiel~\ref{lst:deployment}).
+Diese Spezifikationen sind in Form von YAML-Dateien definiert (vgl. Beispiel~\ref{lst:deployment}).
 Desweiteren eine kurze Aufschlüsselung der einzelnen Instruktionen \cite{kubernetesobjects}.
 \begin{itemize}
     \item \textbf{apiVersion}: definiert die einzelnen workload API Untergruppen und die Version.
@@ -202,7 +202,7 @@ Desweiteren eine kurze Aufschlüsselung der einzelnen Instruktionen \cite{kubern
     \item \textbf{spec}: gewünschte Ausgangszustand des Objekts.
 \end{itemize}
 
-\begin{lstlisting}[caption={Deployment.yaml \cite{kubernetesdeployment} },captionpos=b,label={lst:deployment},language=yaml]
+\begin{lstlisting}[caption={deployment.yaml \cite{kubernetesdeployment} },captionpos=b,label={lst:deployment},language=yaml]
     apiVersion: apps/v1
     kind: Deployment
     metadata:
@@ -214,10 +214,6 @@ Desweiteren eine kurze Aufschlüsselung der einzelnen Instruktionen \cite{kubern
       selector:
         matchLabels:
           app: nginx
-      template:
-        metadata:
-          labels:
-            app: nginx
         spec:
           containers:
           - name: nginx
@@ -240,44 +236,114 @@ von Pods ohne Beeinträchtigung der laufenden Anwendung \cite{kubernetesservice}
 
 Pods beanspruchen Netzwerkressourcen, wie IP-Adresse und DNS-Name 
 innerhalb ihres Clusters. Der Ausfall oder die Zerstörung eines Pods führt zu Beeinträchtigung der Kommunikation
-zwischen Anwendungen. Services können dies präventiv verhindern, da sie mit
+zwischen Anwendungen. Services können dies präventiv verhindern, indem sie mit
 selector und labeler eine Kommunikation zwischen zwei Kubernetes Objekten etablieren.
-(vgl. Beispiel~\ref{lst:service}).
+Das Beispiel zeigt eine solche Konfiguration (vgl. Beispiel~\ref{lst:service}). 
+Die einzelnen Spezifikationen werden folgendermaßen definiert \cite{kubernetesservice}:
 
-\begin{lstlisting}[caption={service.yaml \cite{kubernetesservice} },captionpos=b,label={lst:service},language=yaml]
+\begin{itemize}
+  \item \textbf{selector}: definiert die Abbildung auf ein Label.
+  \item \textbf{app}: führt den Service für Pods mit dem vorgegebenen Label aus.
+  \item \textbf{ports}: Netzkonfiguration zwischen Service und Pod.
+  \item \textbf{targetPort}: Port auf dem die Anwendung im Pod lauscht.
+  \item \textbf{port}: Port auf dem der Service lauscht.
+\end{itemize}
+
+\begin{lstlisting}[caption={zum deutlicheren Verständnis mit dem deployment.yaml, leicht abgewandelte service.yaml \cite{kubernetesservice} },captionpos=b,label={lst:service},language=yaml]
     apiVersion: v1
     kind: Service
     metadata:
       name: my-service
     spec:
       selector:
-        app: MyApp
+        app: nginx
       ports:
         - protocol: TCP
           port: 80
           targetPort: 9376
     \end{lstlisting}
 
+Bei der Erstellung eines Services wird ein REST Objekt erstellt, dass mithilfe eines Controller kontinuierlich 
+nach Pods mit dem passenden Selector sucht, welcher jegliche Updates als POST-Anfragen schickt.
+
+
 \subsection{Ingress}
+
+Ein Ingress ist ein Kubernetes Ressourcenobjekt, dass die Verfügbarkeit von internen Services auf öffentliche Endpunkte ermöglicht.
+Diese Routen werden mittels HTTP oder HTTPS freigegeben und können in Form einer URL verwendet werden \cite{kubernetesingress}.
+Die Anforderung für die Implementierung eines Ingress ist der Ingress-Controller, eine Vielzahl an Optionen dafür wird in der 
+Dokumentation aufgelistet \cite{kubernetesingresscontroller}. Für die Realisierung des Prototyps kommt ein NGINX Ingress Controller in Einsatz, weshalb
+dieser näher erläutert wird.
+
+\subsubsection{NGINX Ingress Controller}
+Der Ingress Controller ist für die Umsetzung einer vorgegebenen Objektspezifikation zuständig \cite{kubernetesingress}.
+Die übliche Verwendung eines Controllers beeinhaltet die Lastenverteilung durch weiterleiten des Datenverkehrs an Services. 
+Diese Kommunikation findet, wie auch bei dem NGINX Ingress Controller \cite{kubernetesingresscontrollerlayer} in der Anwendungsschicht des OSI-Schichtenmodells statt und ermöglicht, dadurch die 
+Lastenverteilung von öffentlichen Endpunkten zu internen Pods in einem Cluster \cite{kubernetesingressibm}.
+Wie in alle anderen Kubernetes Objekten auch werden vordefinierte Aufgaben des Ingress Controller durch YAML-Dateien abgebildet (vgl. Beispiel~\ref{lst:ingress}).
+Im folgenden wichtige Optionen die etwas genauer erklärt werden:
+
+\begin{itemize}
+  \item \textbf{ingressClassName}: definiert den Ingress Controller.
+  \item \textbf{rules}: die Zusammsetzung der einzelnen HTTP Regeln.
+  \item \textbf{host}: definiert das Ziel des eintreffenden Datenverkehrs.
+  \item \textbf{paths}: gibt die Endpunkte des verbundenen Service an.
+  \item \textbf{backend}: leitet die Anfragen an den Service mit der richtigen Port Zuweisung weiter.
+\end{itemize}
+
+\begin{lstlisting}[caption={ingress.yaml \cite{kubernetesingress} },captionpos=b,label={lst:ingress},language=yaml]
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: minimal-ingress
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+  spec:
+    ingressClassName: nginx
+    rules:
+    - http:
+        paths:
+        - path: /testpath
+          pathType: Prefix
+          backend:
+            service:
+              name: test
+              port:
+                number: 80
+  \end{lstlisting}
 
 \subsection{Lightweight Kubernetes}
 Ligthweight Kubernetes auch K3s genannt ist eine Kubernetes Distribution von
 Rancher. Der größte Unterschied der Distribution ist die einnehmende größe 
-auf Hostsystemen mit nur 40MB ist auch Platz auf kleineren Geräten.
-Der Verwendungszweck von k3s liegt in IoT und Edge-Devices.
+auf Hostsystemen mit einer einzelnen Binärdatei von nur 40MB ist auch Platz auf kleineren Geräten.
+Der hauptsächliche Verwendungszweck von k3s liegt in IoT und Edge-Devices, da viele Treiber ersetzt wurden \cite{k3s}.
+Trotz dieser Reduzierung, bleiben die Kernfunktionalitäten von Kubernetes erhalten und werden 
+so weit wie möglich parallel auf dem neusten Stand gehalten \cite{k3sgit}.
 
 \subsubsection{Unterschiede von k3s}
 Die Kommunikation zwischen Master Node und Worker Node findet in k3s, über einen
 Tunnel Proxy auf der Worker Node statt, welche weiter an den Supervisor der Master Node
-weitergeleitet wird. Desweiteren hat auch die Master Node eine Container Laufzeit "containerd".
-Eine weitere Änderung ist die Verwendung von Kine anstelle von etcd als key-value Speicher.
+weitergeleitet wird. Desweiteren verfügt auch die Master Node über Kubelet und Kubeproxy (vgl. Beispiel~\ref{fig:k3sarchitektur}).
+Einige Besonderheiten von k3s zu k8s:
 
+\subsubsection{\textit{Kine}}
+ist eine Abstraktionsschicht von etcd, welche sqlite, Postgress, Mysql und dqlite übersetzt \cite{k3sgit}.
 
-Kine is an etcdshim that translates etcd API to sqlite, Postgres, Mysql, and dqlite
-https://github.com/k3s-io/kine?utm_sq=gbxckymhh6
+\subsubsection{\textit{Flannel}}
+verwendet Flannel als überlagerndes Netzwerkmodell \cite{flannel}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=1.0\columnwidth]{images/k3s.png}
+  \caption{k3s Architektur \cite{k3s}}
+  \label{fig:k3sarchitektur}
+\end{figure}
+
+\subsection{Rancher}
+Die zuständige Firma hinter k3s ist das Softwareunternehmen Rancher.
 
 \subsection{Hybrid Cloud}
-\subsection{Rancher}
+
 
 \section{Microservice}
 \subsection{Aufbau}

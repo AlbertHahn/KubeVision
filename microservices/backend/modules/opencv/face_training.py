@@ -38,22 +38,6 @@ class face_training:
                     path = os.path.join(root, file)
                     label = os.path.basename(root).replace(" ", "-")
 
-                    """if not label in label_ids:
-
-                        print("users:" + label)
-
-                        user_exists = records.find_one({"name": label})
-                        print("exist?" + str(user_exists))
-                        mongoId = user_exists.get('_id')
-                        print(mongoId)
-
-                        label_ids[label] = mongoId    
-
-
-
-                        current_id += 1
-                    mongoId = label_ids[label]"""
-
                     if not label in label_ids:
 
                         user_exists = records.find_one({"name": label})
@@ -68,7 +52,6 @@ class face_training:
                         current_id += 1
 
                     id_ = label_ids[label]
-                    #print("id_:" + str(id_))
 
                     pil_image = Image.open(path).convert("L")
                     size = (550, 550)
