@@ -6,12 +6,12 @@ Docker und Kubernetes, hinzu Microservices.
 
 %TEXT!!!!
 
-\section{Docker}
+\section{Docker} \label{Docker}
 
 In diesem Abschnitt wird die Technologie \glqq Docker\grqq{} näher erläutert und
 nicht das Unternehmen \glqq Docker, Inc.\grqq{}, dass für die maßgebliche Entwicklung dessen verantwortlich ist.
 Angefangen mit der Terminologie, zum deutlicheren Verständnis der nächsten Abschnitte.
-Forgesetzt mit der aufsteigenden Erklärung der Architektur bis zum Aufbau eines Containers.
+Fortgesetzt mit der aufsteigenden Erklärung der Architektur bis zum Aufbau eines Containers.
 
 %\subsection{Terminologie}
 %\begin{itemize}
@@ -172,11 +172,10 @@ VM, physische Maschine oder eine Instanz in einer privaten oder öffentlichen Cl
 Dieser umfasst folgende Komponenten:
 
 \subsubsection{\textit{Container Laufzeit}}
-Da der Abschnitt zum Thema Docker alles umfassende zur Container Laufzeit bereits beschrieben hat,
-hier ein kleiner Eintrag zum Thema Docker und Kubernetes.
-Seit 2020 läuft Docker als Auslaufmodell für die unterliegende Container Laufzeit, nach Version 1.20 von Kubernetes aus.
-Diese Änderung betrifft, aber nur bestimmte Arbeitsabläufe, die diese Arbeit nicht beeinträchtigen und sollte
-nur Vollständigkeitshalber erwähnt sein \cite{kubernetesdocker}.
+Der Abschnitt \hyperref[Docker]{2.1} beschreibt bereits alles zu diesem Thema.
+Ergänzend dazu die Information, dass seit 2020 containerd als Auslaufmodell für die unterliegende Container Laufzeit, 
+für die Kubernetes Versionen nach v1.20 auslaufen. Dies beeinträchtigt die spätere Implementierung dieser Arbeit aber nicht,
+da k3s containerd als standard Laufzeit verwendet wird.
 
 \subsubsection{\textit{Kubelet}}
 Kubelet fungiert als \glqq node agent\grqq{} und registriert die Node mit dem
@@ -313,34 +312,43 @@ Im folgenden wichtige Optionen die etwas genauer erklärt werden:
   \end{lstlisting}
 
 \subsection{Lightweight Kubernetes}
-Ligthweight Kubernetes auch K3s genannt ist eine Kubernetes Distribution von
+Ligthweight Kubernetes auch K3s genannt ist eine Kubernetes Distribution von dem Unternehmen
 Rancher. Der größte Unterschied der Distribution ist die einnehmende größe 
 auf Hostsystemen mit einer einzelnen Binärdatei von nur 40MB ist auch Platz auf kleineren Geräten.
-Der hauptsächliche Verwendungszweck von k3s liegt in IoT und Edge-Devices, da viele Treiber ersetzt wurden \cite{k3s}.
+Der hauptsächliche Verwendungszweck von k3s liegt in IoT und Edge-Devices, da unwichtige Kubernetes Inhalte entfernt wurden. \cite{k3s}.
 Trotz dieser Reduzierung, bleiben die Kernfunktionalitäten von Kubernetes erhalten und werden 
 so weit wie möglich parallel auf dem neusten Stand gehalten \cite{k3sgit}.
 
 \subsubsection{Unterschiede von k3s}
-Die Kommunikation zwischen Master Node und Worker Node findet in k3s, über einen
-Tunnel Proxy auf der Worker Node statt, welche weiter an den Supervisor der Master Node
-weitergeleitet wird. Desweiteren verfügt auch die Master Node über Kubelet und Kubeproxy (vgl. Beispiel~\ref{fig:k3sarchitektur}).
-Einige Besonderheiten von k3s zu k8s:
+Die Abbildung \ref{fig:k3sarchitektur} zeigt die Architektur von k3s auf. Das Kubernetes äquivalent zu Master und Nodes
+sind hier Server und Agents. Eine Besonderheit dessen ist, das Server parallel einen Agent Prozess auf dem selben Knoten starten und
+somit Arbeitslasten mithilfe von Kubelet und Kubeproxy ausführen können. Weiterhin wird im Gegensatz zu k8s containerd weiterhin unterstüzt und
+kommt vorinstalliert mit Kubelet. Zwei weitere Besonderheiten werden näher erläutert:
 
-\subsubsection{\textit{Kine}}
-ist eine Abstraktionsschicht von etcd, welche sqlite, Postgress, Mysql und dqlite übersetzt \cite{k3sgit}.
+\textbf{Kine}
+das Akronym steht für 'Kine is not etcd' und ist eine Abstraktionsschicht von etcd, welche sqlite, Postgress, Mysql und dqlite übersetzt \cite{k3sgit}.
+Dadurch kann der Backend Speicher des Clusters durch die oben genannten Datenbanksysteme ersetzt werden.
 
-\subsubsection{\textit{Flannel}}
-verwendet Flannel als überlagerndes Netzwerkmodell \cite{flannel}.
+\textbf{Flannel}
+ist ein überlagerndes Netzwerkmodell in k3s und ermöglicht ein IPv4 Netzwerk innerhalb eines Clusters mit mehreren Knoten.
+Eine Binärdatei startet Agents auf Hostssystemen und alloziert Subnetze in einem vorkonfigurierten Adressraum.
+Das Modell ist dabei für die Übertragungsart des Datenverkehrs zwischen unterschiedlichen Knotenpunkten zuständig.
+Die Speicherung der Netzwerkkonfiguration erfolgt über etcd oder der Kubernetes API \cite{flannel}.
+
 
 \begin{figure}
   \centering
-  \includegraphics[width=1.0\columnwidth]{images/k3s.png}
-  \caption{k3s Architektur \cite{k3s}}
+  \includegraphics[width=1.0\columnwidth]{images/k3s-architecture.jpeg}
+  \caption{k3s Architektur \cite{k3sarch}}
   \label{fig:k3sarchitektur}
 \end{figure}
 
 \subsection{Rancher}
-Die zuständige Firma hinter k3s ist das Softwareunternehmen Rancher.
+Neben Lightweight Kubernetes bietet die Firma Rancher auch die gleichnamige Open Source Lösung für 
+die Orchestrierung von Kubernetes Clustern an. 
+
+Durch die Benutzeroberfläche von Rancher wird die Verwaltung
+von mehreren Clustern und deren Inhalte vereinfacht. 
 
 \subsection{Hybrid Cloud}
 
