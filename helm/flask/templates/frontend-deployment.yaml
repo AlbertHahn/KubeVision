@@ -21,12 +21,12 @@ spec:
             - containerPort: {{ .Values.frontend.image.port }}
           env:
           - name: loginEndpoint
-            value: /auth/login
+            value: https://labs.albert-hahn-apply.com/auth/login
           - name: registerEndpoint
-            value: /auth/register
+            value: https://labs.albert-hahn-apply.com/auth/register
           - name: websocketServer
             value: https://labs.albert-hahn-apply.com
           - name: profileEndpoint
-            value: /profile
+            value: https://labs.albert-hahn-apply.com/profile
       nodeSelector:
         hardware: {{ .Values.frontend.nodeSelector.hardware }}

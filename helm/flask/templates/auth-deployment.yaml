@@ -21,10 +21,10 @@ spec:
             - containerPort: {{ .Values.auth.image.port }}
           env:
           - name: homeEndpoint
-            value: /
+            value: https://labs.albert-hahn-apply.com/
           - name: trainEndpoint
-            value: /train
+            value: https://labs.albert-hahn-apply.com/train
           - name: profileEndpoint
-            value: /profile
+            value: https://labs.albert-hahn-apply.com/profile
           - name: mongoEndpoint
             value: "mongodb://admin:password@mongodbservice:27017/?authSource=admin"

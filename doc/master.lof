@@ -6,6 +6,7 @@
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Virtualisierungsm\IeC {\"o}glichkeiten \relax }}{7}{figure.caption.7}%
 \contentsline {figure}{\numberline {2.4}{\ignorespaces Komponenten eines Kubernetes Cluster \cite {kubernetesnodekomponenten}\relax }}{8}{figure.caption.9}%
 \contentsline {figure}{\numberline {2.5}{\ignorespaces k3s Architektur \cite {k3sarch}\relax }}{13}{figure.caption.22}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Rancher Server Kommunikation mit einem downstream k3s Cluster, \IeC {\"u}berarbeitete Abbildung von \cite {rancherArchitecture}. (F\IeC {\"u}r die sp\IeC {\"a}tere Implementierung nachgebildet)\relax }}{14}{figure.caption.23}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
