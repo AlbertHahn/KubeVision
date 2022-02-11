@@ -141,8 +141,8 @@ Die Zusammensetzung der beschriebenen Kubernetes Komponenten ergeben ein Kuberne
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.0\columnwidth]{images/components-of-kubernetes.png}
-    \caption{Komponenten eines Kubernetes Cluster \cite{kubernetesnodekomponenten}}
+    \includegraphics[width=1.0\columnwidth]{images/KubernetesKomponenten.png}
+    \caption{Komponenten eines Kubernetes Cluster in Anlehnung an \cite{kubernetesnodekomponenten}.}
     \label{fig:cluster}
 \end{figure}
 
@@ -314,86 +314,108 @@ Im folgenden wichtige Optionen die etwas genauer erklärt werden:
   \end{lstlisting}
 
 \subsection{Lightweight Kubernetes} \label{k3s}
-Ligthweight Kubernetes auch K3s genannt ist eine Kubernetes Distribution von dem Unternehmen
+Ligthweight Kubernetes auch K3s genannt ist eine Open-Source Kubernetes Distribution von dem Unternehmen
 Rancher. Der größte Unterschied der Distribution ist die einnehmende größe 
 auf Hostsystemen mit einer einzelnen Binärdatei von nur 40MB ist auch Platz auf kleineren Geräten.
+Durch die Verschlankung der Distribution ist der ideale Anwendungszweck für IoT oder Edge-Devices mit wenig Rechenleistung.
+Denn die minimalen Systemanforderungen für Hostsysteme liegen bei einem 512MB-RAM Speicher und einer Pi4B BCM2711, 1.50 GHz CPU\footnote{Einplatinencomputer Raspberry Pi 4B, basierend auf ARM \cite{pi4} } \cite{k3sAnforderung}.
 Der hauptsächliche Verwendungszweck von k3s liegt in IoT und Edge-Devices, da unwichtige Kubernetes Inhalte entfernt wurden. \cite{k3s}.
 Trotz dieser Reduzierung, bleiben die Kernfunktionalitäten von Kubernetes erhalten und werden 
 so weit wie möglich parallel auf dem neusten Stand gehalten \cite{k3sgit}.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=1.0\columnwidth]{images/K3sArchitektur.png}
+  \caption{K3s Architektur in Anlehnung an \cite{k3sarch}.}
+  \label{fig:k3sarchitektur}
+\end{figure}
+
 \subsubsection{Besonderheiten}
 Die Abbildung \ref{fig:k3sarchitektur} zeigt die Architektur von k3s auf. Das Kubernetes äquivalent zur Control Plane und Node
 sind Server und Agent. Eine Besonderheit dessen ist, das Server parallel einen Agent Prozess auf dem selben Knoten starten und
-somit Arbeitslasten mithilfe von Kubelet ausführen. Weiterhin wird im Gegensatz zu k8s containerd weiterhin unterstüzt und
-kommt vorinstalliert mit Kubelet. Zwei weitere Besonderheiten werden näher erläutert:
+somit Arbeitslasten mithilfe von Kubelet ausführen \cite{k3sServerAgent}. Weiterhin wird im Gegensatz zu Kubernetes containerd weiterhin unterstüzt und
+kommt vorinstalliert mit Kubelet \cite{k3s}. Zwei weitere Unterschiede werden näher erläutert:
 
 \textbf{Kine}
-das Akronym steht für 'Kine is not etcd' und ist eine Abstraktionsschicht von etcd, welche sqlite, Postgress, Mysql und dqlite übersetzt \cite{k3sgit}.
+das Akronym steht für 'Kine is not etcd' und ist eine Abstraktionsschicht für etcd, welche sqlite, Postgress, Mysql und dqlite übersetzt \cite{k3sgit}.
 Dadurch kann der Backend Speicher des Clusters durch die oben genannten Datenbanksysteme ersetzt werden.
 
 \textbf{Flannel}
 ist ein überlagerndes Netzwerkmodell in k3s und ermöglicht IPv4 Netzwerke innerhalb eines Clusters mit mehreren Knoten.
-Eine Binärdatei startet Agents auf Hostssystemen und alloziert Subnetze in einem vorkonfigurierten Adressraum.
+Dazu wird eine einzelne Binärdatei gestartet, welche Agents auf Hostssystemen startet und alloziert Subnetze in einem vorkonfigurierten Adressraum.
 Das Modell ist dabei für die Übertragungsart des Datenverkehrs zwischen unterschiedlichen Knotenpunkten zuständig.
 Die Speicherung der Netzwerkkonfiguration erfolgt über etcd oder der Kubernetes API \cite{flannel}.
 
 
-\begin{figure}
-  \centering
-  \includegraphics[width=1.0\columnwidth]{images/k3s-architecture.jpeg}
-  \caption{k3s Architektur \cite{k3sarch}}
-  \label{fig:k3sarchitektur}
-\end{figure}
-
 \subsection{Rancher}
-In diesem Abschnitt wird die Open-Source Lösung Rancher von dem gleichnamigen Unternehmen zur Orchestierungs von Kubernetes Clustern näher behandelt.
+In diesem Unterabschnitt wird die Open-Source Lösung Rancher von dem gleichnamigen Unternehmen zur Orchestierungs von Kubernetes Clustern näher behandelt.
 Diese ermöglicht, das Verwalten von Kubernetes Clustern auf der eigenen Infrastruktur, sowohl vor Ort als auch in der Cloud.
 Die Bereitstellung von Clustern mittels Rancher ist Cloud-Anbieter unabhängig,
 weshalb Cluster in der Praxis mit der selben Rancher Instanz auf AWS, Azure oder anderen Cloud-Anbietern betreut werden können \cite{rancher}.
 
 Die Rancher Benutzeroberfläche vereinfacht das steuern von Arbeitslasten, auf einer zentralen administrativen Instanz, welche gleichzeitig Authentifizierung und Rechteverteilung von Benutzern anbietet.
 Das grundsätzliche verwalten von Arbeitslasten verlangt kein tiefgründiges Wissen bezüglich Kubernetes Konzepte. 
-Die mitgelieferten Tools ermöglichen die Auslieferung und Verbindung von Kubernetes Objekten und abstrahieren die Komplexität, die für die Betreuung eines solchen Systems notwendig sind.
-Für komplexere Konfigurationen, kann über die Oberfläche ein Terminal mit Kubectl aufgerufen werden \cite{rancher,AzureKubernetesService}.
+Die mitgelieferten Tools ermöglichen die Auslieferung und Verbindung von Kubernetes Objekten und abstrahieren die Komplexität, die für die Betreuung eines solchen Systems notwendig sind \cite{rancher,AzureKubernetesService}.
 
-\begin{figure}
+Für komplexere Konfigurationen, kann über die Oberfläche ein Terminal mit Kubectl aufgerufen werden.
+Wie auch in Kubernetes ist der Zugang auf ein Kubernetes Cluster von einer lokalen Entwicklungsumgebung mit einer kubeconfig-Datei möglich, diese beeinhaltet die Adresse zum Rancher Server, Nutzerrechte und Zertifizierungszeichen \cite{rancherKubeconfig}.
+
+\begin{figure}[!htb]
   \centering
-  \includegraphics[width=1.0\columnwidth]{images/RancherArchitekturClusterController.png}
-  \caption{Rancher Server Kommunikation mit einem downstream k3s Cluster, überarbeitete Abbildung von \cite{rancherArchitecture}. (Für die spätere Implementierung nachgebildet)}
+  \includegraphics[width=0.8\columnwidth]{images/RancherArchitekturClusterController.png}
+  \caption{Rancher Server Kommunikation mit einem downstream k3s Cluster, überarbeitete Abbildung von \cite{rancherArchitecture}. (Im Sinne der späteren Architektur nachgebildet)}
   \label{fig:rancherarchitektur}
 \end{figure}
 
-Die Abbildung \ref*{fig:rancherarchitektur} zeigt den Vorgang von Zwei Benutzern, 
-die auf ein von Rancher verwalteten downstream Cluster\footnote{Die offiziele Bezeichnung für ein Kubernetes Cluster unter Rancher ist \textbf{downstream Cluster} \cite{rancherArchitectureRecommendations}} zugreifen.
+Die Abbildung \ref{fig:rancherarchitektur} zeigt den Vorgang von Zwei Benutzern, 
+die auf ein von Rancher verwalteten downstream k3s Cluster\footnote{Die offiziele Bezeichnung für ein Kubernetes Cluster unter Rancher ist \textbf{downstream Cluster} \cite{rancherArchitectureRecommendations}} zugreifen.
 Die nachfolgende Beschreibung aus der Dokumentation gibt die einzelnen Schritte mit der in der Abbildung nummerierten Posten wieder \cite{rancherArchitecture}.
+
+
 \begin{enumerate}
-\item Zuerst authentifiziert sich Bob mit seinen Benutzerdaten bei dem Authentifizierungs-Proxy für seine Rancher Instanz.
-Dieser Proxy leitet den Aufruf mit der ausgewählten downstream-Cluster Instanz weiter und führt diese aus.
+\item Zuerst authentifiziert sich Bob mit seinen Benutzerdaten bei dem Authentifizierungs-Proxy an seinem Rancher Server.
+Dieser Proxy leitet den Aufruf, über eine Kommandozeile oder der Rancher Benutzeroberfläche mit der ausgewählten downstream-Cluster Instanz weiter und führt diese aus.
 Dafür wird vor dem weiterleiten des Aufrufs, der angemessene Kubernetes Impersonation Header gesetzt, 
-welcher sich als Service Account der Rancher Instanz ausgibt und je nach Benutzerrecht reagiert.   
+welcher sich als Service Account der Rancher Instanz ausgibt und je nach Benutzerstatus reagiert.   
 \item Die Übertragung des Aufrufs erfolgt über einen Cluster-Controller auf dem Rancher Server
-und dem parallel laufendem Cluster-Agent auf dem downstream-Cluster. Der Controller ist für die Überwachung, Veränderung
+und dem parallel laufendem Cluster-Agent des downstream-Cluster. Der Controller ist für die Überwachung, Veränderung
 und Konfiguration von Zuständen auf dem laufendem Cluster zuständig. 
 \item Wenn der Cluster-Agent nicht erreichbar ist,
 werden die Aufrufe an den Node-Agent\footnote{Ein Rancher DaemonSet zur Interaktion mit Nodes, 
-nicht zu verwechseln mit dem k3s-Agent \cite{rancherAgents}. } überreicht, welcher standardmäßig auf jedem downstream-Cluster läuft.
+nicht zu verwechseln mit dem Node-Agent von k3s \cite{rancherAgents}. } überreicht, welcher standardmäßig auf jedem downstream-Cluster läuft.
 \item Zuletzt hat auch die Benutzerin Alice, die Möglichkeit sich über einen autorisierten Cluster Endpunkt zu verbinden.
 Denn jeder downstream-Cluster verfügt, über eine Kubeconfig, welche den Zugang ohne Authentifizierungs-Proxy erlaubt.
 Durch den Microservice kube-api-auth wird eine Kommunikation, über einen Web-Haken realisiert, der die Verbindung
-zwischen Alice Rechner ermöglicht. 
+zwischen Alice Rechner aufbaut. 
 Dies ermöglicht die Verwendung von Befehlszeilentools, wie Kubectl und Helm.
 \end{enumerate}
 
 %\section{Distributed Clouds}
 %\subsection{Edge Computing}
 \subsection{Hybrid Cloud}
-Eine hybride Cloud erlaubt die Verwendung von Hardware in der Cloud als auch vor Ort
-in der selben Infrastruktur zu betreiben.
+Eine Hybrid-Cloud ist eine Kombination aus Öffentlichen-Cloud-Diensten und Privaten-Cloud-Diensten, die auf einer einzigen Infrastruktur laufen.
+Dies ermöglicht die flexible Orchestrierung von Anwendungen, auf Hostssystemen vor Ort oder in der Cloud \cite{ibmHybrid}.
 
-\section{Microservice}
-\subsection{Aufbau}
-\subsection{Entwicklung}
-\subsection{Dezentrale Datenmanagement}
+Der Schwerpunkt solcher Hybrid-Clouds liegt, dabei bei der Portierbarkeit der Arbeitslasten auf allen Cloud-Umgebungen.
+Dafür ist die Aufbereitung oder Entwicklung, alter oder neuer Anwendungen für cloudnative Technologien nötig, mehr dazu im Abschnitt \ref{Microservice} zu Microservices.
+Private-Clouds können auch von Drittanbietern, durch externe Rechnzentren, als Enterprise Modell angeboten werden, die Entwicklern eine Landschaft bietet
+Hardware flexibel zu verändern. Dabei ist die Nutzung eines einzigen Betriebssystems ratsam, um Abhängigkeiten bei der Automatisierung von cloudnativen Anwendungen zu verhindern.
+Die Verwaltung erfolgt, dabei mit einer Container-Orchestierungsplattform, wie Kubernetes und ermöglicht die nahtlose Implementierung von Cloud-Umgebungen \cite{ibmHybrid}.
+
+\section{Microservice}\label{Microservice}
+Microservices sind unabhängige Dienste, die mit anderen Diensten über ein Netzwerk kommunizieren \cite{BuildingMicroservicesNewman}.
+Der folgende Abschnitt behandelt, zunächst die Architektur und dessen grunglegenden Aufbau.
+Danach werden Schlüsselkonzepte behandelt und anschließend die Vor- und Nachteile der konkurrierenden monolitschen Architektur zusammengefasst.
+
+
+\subsection{Architektur}
+Der von Fowler häufig zitierte Artikel beschreibt den Microservice-Stil, als einen Ansatz für die Entwicklung einer einzelnen Anwendung, die wiederum aus vielen kleineren Diensten besteht.
+Die jeweils mit eigenen Prozessen, miteinander über einfache Kommunikationsprotokolle wie HTTP kommunizieren.
+
+
+
+\subsection{Konzepte}
+\subsection{Vorteile}
 
 
 %\subsubsection{Ein Unterabschnitt}
