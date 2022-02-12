@@ -243,7 +243,7 @@ S.~Buchanan, J.~Rangama, and N.~Bellavance, ``\BIBforeignlanguage{en}{Deploying
 
 \bibitem{FowlerSoftwareComponent}
 \BIBentryALTinterwordspacing
-``bliki: {SoftwareComponent}.'' [Online]. Available:
+``Softwarecomponent.'' [Online]. Available:
   \url{https://martinfowler.com/bliki/SoftwareComponent.html}
 \BIBentrySTDinterwordspacing
 
@@ -255,6 +255,12 @@ S.~Newman, \emph{Building microservices}, 2nd~ed.\hskip 1em plus 0.5em minus
 \BIBentryALTinterwordspacing
 ``A {Conversation} with {Werner} {Vogels} - {ACM} {Queue}.'' [Online].
   Available: \url{https://queue.acm.org/detail.cfm?id=1142065}
+\BIBentrySTDinterwordspacing
+
+\bibitem{FowlerBoundedContext}
+\BIBentryALTinterwordspacing
+``Boundedcontext.'' [Online]. Available:
+  \url{https://martinfowler.com/bliki/BoundedContext.html}
 \BIBentrySTDinterwordspacing
 
 \end{thebibliography}

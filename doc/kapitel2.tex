@@ -403,10 +403,8 @@ Hardware flexibel zu verändern. Dabei ist die Nutzung eines einzigen Betriebssy
 Die Verwaltung erfolgt, dabei mit einer Container-Orchestierungsplattform, wie Kubernetes und ermöglicht die nahtlose Implementierung von Cloud-Umgebungen \cite{ibmHybrid}.
 
 \section{Microservice}\label{Microservice}
-%Der Microservices, gewannen im Laufe der letzten Jahre an Popularität und
-%beschreiben, die Zusammensetzung einer Anwendung durch kleine unabhängige Dienste \cite{FowlerMicroservice}.
-Der folgende Abschnitt behandelt, zunächst die Architektur und dessen grunglegenden Aufbau.
-Danach werden Schlüsselkonzepte näher erläutert und anschließend die Vor- und Nachteile der konkurrierenden monolitschen Architektur zusammengefasst.
+Im Folgenden wird der Microservice Architektur-Stil und dessen Eigenschaften näher erläutert.
+Als Hauptquelle dient der häufig zitierte Artikel \cite{FowlerMicroservice} von Fowler.
 
 \subsection{Begriffserklärung}
 Fowler beschreibt den Microservice Architektur-Stil als eine Entwicklung von einer einzigen Anwendung die aus einer Reihe unabhängiger Dienste besteht. 
@@ -428,12 +426,12 @@ Jedoch argumentiert Fowler, dass mit dem Zuwachs an Cloud-Technologien dieser An
 Weiterhin merkt Fowler an, dass die Skalierbarkeit einer solchen Architektur mehr Ressourcen erfordert, da nicht einzelne Teile der Anwendung repliziert werden, sondern der vollständige Monolith (vgl. Abbildung~\ref{fig:monlithmicroservice}).
 Die Verwendung von einzelnen Diensten würde dieser Problematik entgegentreten und es Entwicklerteams ermöglichen einzelne Softwarekomponenten zu verwalten und gegebenenfalls in einer anderen Programmiersprache zu verwirklichen \cite{FowlerMicroservice}.
 
-\subsection{Konzepte}
+\subsection{Charakteristiken}
 
-Eine Microservice Architektur prägt sich durch bestimmte Konzepte und Charakteristiken aus. 
+Eine Microservice Architektur prägt sich durch bestimmte Charakteristiken aus. 
 Die Architektur muss nicht zwingend alle, in diesem Abschnitt beschriebenen, Eigenschaften erfüllen. 
 Jedoch sollte ein Großteil der Konzepte in einer Microservice Architektur aufweisbar sein \cite{FowlerMicroservice}. 
-Die folgenden Unterabschnitte erläutern diese Konzepte etwas näher.
+Die folgenden Unterabschnitte erläutern diese Charakteristiken etwas näher.
 
 \subsubsection{Komponententrennung durch Dienste}
 Fowler definiert Komponenten einer Software wie folgt: \begin{quote}\glqq Eine Komponente ist eine Softwareeinheit, die unabhängig austauschbar und erweiterbar ist.\grqq{} \cite{FowlerSoftwareComponent} \end{quote}
@@ -479,3 +477,16 @@ Da die einzelnen Anwendungskomponenten über Endpunkte kommunizieren, ist die Wa
 Entwicklerteams gewinnen so an größeren Handlungsspielraum und können bessere Werkzeuge für spezifische Probleme verwenden \cite{FowlerMicroservice}.
 
 \subsubsection{Dezentrale Datenmanagement}
+Die Dezentralisierung von Daten geschieht auf höchster Ebene und Abstrahiert diese für Kontext basierende Modelle. 
+Die Integration solcher Modelle wird durch die unterschiedliche Auffassung verschiedener System erschwert. 
+Attribute werden doppelt oder schlichtweg falsch für Schlüsselbegriffe belegt. 
+Eine Anwendung mit getrennten Softwarekomponenten erschwert dieses Unterfangen nur noch \cite{FowlerMicroservice}. 
+Weshalb es Sinnvoll ist einen \glqq Bounded Context\grqq{} zu definieren, welches zur Darstellung von Wechselwirkungen eines Modells, innerhalb größerer Teams dient \cite{FowlerBoundedContext}. 
+
+\subsubsection{Automatisierung von Infrastruktur}
+Das testen, ausliefern und bereitstellen von Microservices erfolgt automatisch \cite{FowlerMicroservice}. 
+Dieses Thema fällt in den Bereich Continuous Delivery und wird in dieser Arbeit nicht weiter behandelt. 
+
+\subsubsection{\glqq Design for failure \grqq{}}
+Softwarekomponenten müssen den Ausfall von anderen Diensten tolerieren. 
+Event basierte Kommunikation führt oft zu Fehlverhalten und kann durch Überwachungstools präventiv verhindert werden \cite{FowlerMicroservice}. 
