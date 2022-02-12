@@ -142,7 +142,7 @@ Die Zusammensetzung der beschriebenen Kubernetes Komponenten ergeben ein Kuberne
 \begin{figure}
     \centering
     \includegraphics[width=1.0\columnwidth]{images/KubernetesKomponenten.png}
-    \caption{Komponenten eines Kubernetes Cluster in Anlehnung an \cite{kubernetesnodekomponenten}.}
+    \caption{Komponenten eines Kubernetes Cluster in Anlehnung an \cite{kuberneteskomponenten}.}
     \label{fig:cluster}
 \end{figure}
 
@@ -326,7 +326,7 @@ so weit wie möglich parallel auf dem neusten Stand gehalten \cite{k3sgit}.
 \begin{figure}
   \centering
   \includegraphics[width=1.0\columnwidth]{images/K3sArchitektur.png}
-  \caption{K3s Architektur in Anlehnung an \cite{k3sarch}.}
+  \caption{K3s Architektur in Anlehnung an \cite{k3s}.}
   \label{fig:k3sarchitektur}
 \end{figure}
 
@@ -403,19 +403,79 @@ Hardware flexibel zu verändern. Dabei ist die Nutzung eines einzigen Betriebssy
 Die Verwaltung erfolgt, dabei mit einer Container-Orchestierungsplattform, wie Kubernetes und ermöglicht die nahtlose Implementierung von Cloud-Umgebungen \cite{ibmHybrid}.
 
 \section{Microservice}\label{Microservice}
-Microservices sind unabhängige Dienste, die mit anderen Diensten über ein Netzwerk kommunizieren \cite{BuildingMicroservicesNewman}.
+%Der Microservices, gewannen im Laufe der letzten Jahre an Popularität und
+%beschreiben, die Zusammensetzung einer Anwendung durch kleine unabhängige Dienste \cite{FowlerMicroservice}.
 Der folgende Abschnitt behandelt, zunächst die Architektur und dessen grunglegenden Aufbau.
-Danach werden Schlüsselkonzepte behandelt und anschließend die Vor- und Nachteile der konkurrierenden monolitschen Architektur zusammengefasst.
+Danach werden Schlüsselkonzepte näher erläutert und anschließend die Vor- und Nachteile der konkurrierenden monolitschen Architektur zusammengefasst.
 
+\subsection{Begriffserklärung}
+Fowler beschreibt den Microservice Architektur-Stil als eine Entwicklung von einer einzigen Anwendung die aus einer Reihe unabhängiger Dienste besteht. 
+Die Kommunikation der einzelnen Dienste untereinander wird häufig durch API-Aufrufe, über HTTP realisiert. 
+Diese Dienste sind vollautomatisch auszuliefern und orientieren sich bei der Entwicklung um business-capabilities. 
+Zusammenhängende Dienste werden minimal zentral gehalten und können in unterschiedlichen Programmiersprachen oder Technologien realisiert werden \cite{FowlerMicroservice}.
 
-\subsection{Architektur}
-Der von Fowler häufig zitierte Artikel beschreibt den Microservice-Stil, als einen Ansatz für die Entwicklung einer einzelnen Anwendung, die wiederum aus vielen kleineren Diensten besteht.
-Die jeweils mit eigenen Prozessen, miteinander über einfache Kommunikationsprotokolle wie HTTP kommunizieren.
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.8\columnwidth]{images/MonolithsAndMicroservices.png}
+  \caption{Gegenüberstellung von Monolithen und Microservices \cite{FowlerMicroservice}}
+  \label{fig:monlithmicroservice}
+\end{figure}
 
-
+Sinnvoll ist es hierbei, den Vergleich zu monolithischer Softwareentwicklung zu ziehen. 
+Ein monolith folgt, hierbei der Grundprämisse mittels der verwendeten Programmiersprache die Anwendung in einzelne Klassen, Funktionen und Namensräume aufzuteilen. 
+Dieser Ansatz ist gängig und erfolgsversprechend. 
+Jedoch argumentiert Fowler, dass mit dem Zuwachs an Cloud-Technologien dieser Ansatz immer frustrierender für Entwickler ist, denn bereits kleine Änderungen an einem Modul benötigt einen neuen Software-Build und Auslieferungsprozess. 
+Weiterhin merkt Fowler an, dass die Skalierbarkeit einer solchen Architektur mehr Ressourcen erfordert, da nicht einzelne Teile der Anwendung repliziert werden, sondern der vollständige Monolith (vgl. Abbildung~\ref{fig:monlithmicroservice}).
+Die Verwendung von einzelnen Diensten würde dieser Problematik entgegentreten und es Entwicklerteams ermöglichen einzelne Softwarekomponenten zu verwalten und gegebenenfalls in einer anderen Programmiersprache zu verwirklichen \cite{FowlerMicroservice}.
 
 \subsection{Konzepte}
-\subsection{Vorteile}
 
+Eine Microservice Architektur prägt sich durch bestimmte Konzepte und Charakteristiken aus. 
+Die Architektur muss nicht zwingend alle, in diesem Abschnitt beschriebenen, Eigenschaften erfüllen. 
+Jedoch sollte ein Großteil der Konzepte in einer Microservice Architektur aufweisbar sein \cite{FowlerMicroservice}. 
+Die folgenden Unterabschnitte erläutern diese Konzepte etwas näher.
 
-%\subsubsection{Ein Unterabschnitt}
+\subsubsection{Komponententrennung durch Dienste}
+Fowler definiert Komponenten einer Software wie folgt: \begin{quote}\glqq Eine Komponente ist eine Softwareeinheit, die unabhängig austauschbar und erweiterbar ist.\grqq{} \cite{FowlerSoftwareComponent} \end{quote}
+
+Dienste einer Microservice Architektur stellen Softwarekomponenten dar, die out-of-process mittels Web-Service-Anfragen oder Remote Procedural Calls interagieren.
+Bibliotheken hingegen beschrieben einen Verbund aus mehreren Komponenten, die in-memory Funktionsaufrufe nutzen. 
+Der resultierende Vorteil ist das Dienste unabhängig voneinander verändert und ausgeliefert werden können. 
+Denn bei Prozessen mit mehreren eingebundenen Bibliotheken, muss die gesamte Anwendung neu aufgesetzt werden \cite{FowlerMicroservice}. 
+
+Dadurch wird der Fokus auf die Entwicklung von unabhängigen Diensten, umso wichtiger, da die Veränderung an kooperierenden Schnittstellen zum Ausfall anderer Dienste führt. 
+Dem Entgegenzuwirken müssen Schnittstellen gut koordiniert werden und eine starke Kohäsion gewährleisten. Service Contracts der jeweiligen Dienste müssen sinnvoll gestaltet werden. 
+Weiterhin müssen Schnittstellen Grobkörniger entworfen werden, um den höheren Ressourcenverbrauch zur in-memory Variante auszugleichen \cite{FowlerMicroservice, BuildingMicroservicesNewman}. 
+
+Ein Dienst kann jedoch trotzdem aus mehreren Prozessen bestehen, beispielsweise einem Anwendungsprozess mit einer Datenbank, die nur von der Anwendung genutzt wird \cite{FowlerMicroservice, BuildingMicroservicesNewman}.
+
+\subsubsection{Strukturierung nach Business Capabilities}
+Bei der Entwicklung von großen Anwendungen werden Teams oft nach Technologischen Schichten getrennt. 
+Es werden Teams aus Benutzeroberflächen-, Anwendungs- und Datenbankentwicklern gebildet. 
+Die Entwicklung einer Microservice Architektur bedarf, jedoch die Organisierung, um die Business Capability. 
+Entwickler arbeiten Funktionsübergreifend in allen Bereichen der Softwareentwicklung und bringen vielfältige Kompetenzen mit.
+Der Grund dafür ist das bei Konstellationen mit einseitiger Softwarekompetenz, kleinste Änderungen zu Teamübergreifende Projekte und den damit verbundenen Kosten führt.
+Effiziente Entwickler werden sich immer für den Weg des geringsten Widerstands entscheiden und ihre Logik dort implementieren, zu der das Team Zugang hat \cite{FowlerMicroservice}.
+
+\subsubsection{Produkte nicht Projekte}
+Microservice Entwicklungen tendieren dazu den kompletten Lebenszyklus einer Software zu begleiten. 
+Der inspirierende Leitspruch bei Amazon dazu ist \begin{quote}
+  \glqq  you build it, you run it \grqq{} \cite{amazon}\end{quote} 
+Dem Gedanken nach übernimmt das Entwicklungsteam die vollständige Produktion der Software und übergibt diese nicht am Ende an ein Wartungsteam. 
+Dadurch stehen die Entwickler im direkten Kontakt mit dem Endnutzer und erfahren wie sich die Software im Betrieb verhält, da diese auch Zuständigkeiten des Supports übernehmen. 
+Die Mentalität dabei ist, einzelne Funktionen und Aufgaben der Anwendung nicht als eine Liste zu betrachten, sondern vielmehr die Erfüllung des Gedankens zur die strukturierung der Business Capability \cite{FowlerMicroservice}.
+
+\subsubsection{Intelligente Endpunkte statt komplexer Infrastruktur}
+Die Kommunikation von Diensten über Endpunkten soll so weit wie möglich entkoppelt und kohäsiv sein.  
+Anwendungen im Microservice-Stil enthalten ihre eigene Logik und agieren, als ein Filter für das Empfangen, Verarbeiten und Beantworten einer Anfrage. 
+Die Umsetzung erfolgt dabei mit RESTful-Protokollen für die Kommunikation über HTTP. 
+Eine weiterer Ansatz zur Kommunikation ist das Messaging.
+Die gewählte Infrastruktur muss hier nicht mehr als einen rudimentären Nachrichtenaustausch gewährleisten. 
+Der Schwerpunkt liegt dabei immer auf dem Endpunkt, welcher Nachrichten seltener erhält, aber mit einem gewonnenen Mehrwert umwandelt \cite{FowlerMicroservice}.
+
+\subsubsection{Dezentrale Verwaltung}
+Die dezentralisierung einer Anwendung in Softwarekomponenten, ermöglichen den Einsatz von unterschiedlichen Technologien. 
+Da die einzelnen Anwendungskomponenten über Endpunkte kommunizieren, ist die Wahl der Programmiersprache weniger relevant, als bei einer monolithischen Architektur. 
+Entwicklerteams gewinnen so an größeren Handlungsspielraum und können bessere Werkzeuge für spezifische Probleme verwenden \cite{FowlerMicroservice}.
+
+\subsubsection{Dezentrale Datenmanagement}

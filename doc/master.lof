@@ -4,9 +4,10 @@
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Docker Architektur \cite {dockerdeep}\relax }}{5}{figure.caption.2}%
 \contentsline {figure}{\numberline {2.2}{\ignorespaces Image Layers \relax }}{6}{figure.caption.5}%
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Virtualisierungsm\IeC {\"o}glichkeiten \relax }}{7}{figure.caption.7}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Komponenten eines Kubernetes Cluster in Anlehnung an \cite {kubernetesnodekomponenten}.\relax }}{8}{figure.caption.9}%
-\contentsline {figure}{\numberline {2.5}{\ignorespaces K3s Architektur in Anlehnung an \cite {k3sarch}.\relax }}{13}{figure.caption.21}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Komponenten eines Kubernetes Cluster in Anlehnung an \cite {kuberneteskomponenten}.\relax }}{8}{figure.caption.9}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces K3s Architektur in Anlehnung an \cite {k3s}.\relax }}{13}{figure.caption.21}%
 \contentsline {figure}{\numberline {2.6}{\ignorespaces Rancher Server Kommunikation mit einem downstream k3s Cluster, \IeC {\"u}berarbeitete Abbildung von \cite {rancherArchitecture}. (Im Sinne der sp\IeC {\"a}teren Architektur nachgebildet)\relax }}{15}{figure.caption.23}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Gegen\IeC {\"u}berstellung von Monolithen und Microservices \cite {FowlerMicroservice}\relax }}{16}{figure.caption.24}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
