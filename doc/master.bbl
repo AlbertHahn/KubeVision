@@ -38,16 +38,16 @@ Y.~Zhou, Y.~Yu, and B.~Ding, ``Towards mlops: A case study of ml pipeline
   platform,'' in \emph{2020 International Conference on Artificial Intelligence
   and Computer Engineering (ICAICE)}, 2020, pp. 494--500.
 
+\bibitem{dockerdeep}
+N.~Poulton, \emph{Docker deep dive : zero to Docker in a single book},
+  2020th~ed.\hskip 1em plus 0.5em minus 0.4em\relax [Germany]: Nigel Poulton,
+  2020.
+
 \bibitem{dockergetstarted}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Docker overview},'' Jan. 2022. [Online]. Available:
   \url{https://docs.docker.com/get-started/overview/}
 \BIBentrySTDinterwordspacing
-
-\bibitem{dockerdeep}
-N.~Poulton, \emph{Docker deep dive : zero to Docker in a single book},
-  2020th~ed.\hskip 1em plus 0.5em minus 0.4em\relax [Germany]: Nigel Poulton,
-  2020.
 
 \bibitem{dockerstoragedriver}
 \BIBentryALTinterwordspacing
@@ -91,12 +91,6 @@ R.~Morabito, J.~Kjällman, and M.~Komu, ``Hypervisors vs. lightweight
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Nodes},'' section: docs. [Online]. Available:
   \url{https://kubernetes.io/docs/concepts/architecture/nodes/}
-\BIBentrySTDinterwordspacing
-
-\bibitem{kubernetespods}
-\BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Pods}.'' [Online]. Available:
-  \url{https://kubernetes.io/docs/concepts/workloads/pods/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetesobjects}

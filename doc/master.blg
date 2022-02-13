@@ -9,6 +9,7 @@ A level-1 auxiliary file: kapitel3.aux
 A level-1 auxiliary file: kapitel4.aux
 A level-1 auxiliary file: kapitel5.aux
 A level-1 auxiliary file: kapitel6.aux
+A level-1 auxiliary file: kapitel7.aux
 The style file: IEEEtran.bst
 Reallocated singl_function (elt_size=8) to 100 items from 50.
 Reallocated singl_function (elt_size=8) to 100 items from 50.
@@ -21,44 +22,44 @@ Database file #1: bibliography.bib
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-You've used 39 entries,
+You've used 38 entries,
             4087 wiz_defined-function locations,
-            990 strings with 12284 characters,
-and the built_in function-call counts, 14886 in all, are:
-= -- 987
-> -- 164
+            988 strings with 12227 characters,
+and the built_in function-call counts, 14607 in all, are:
+= -- 971
+> -- 163
 < -- 43
-+ -- 97
++ -- 96
 - -- 22
-* -- 700
-:= -- 2326
-add.period$ -- 79
-call.type$ -- 39
-change.case$ -- 52
+* -- 687
+:= -- 2282
+add.period$ -- 77
+call.type$ -- 38
+change.case$ -- 51
 chr.to.int$ -- 117
-cite$ -- 39
-duplicate$ -- 1294
-empty$ -- 1574
+cite$ -- 38
+duplicate$ -- 1267
+empty$ -- 1541
 format.name$ -- 27
-if$ -- 3352
+if$ -- 3291
 int.to.chr$ -- 0
-int.to.str$ -- 39
-missing$ -- 265
-newline$ -- 206
+int.to.str$ -- 38
+missing$ -- 259
+newline$ -- 201
 num.names$ -- 9
-pop$ -- 923
+pop$ -- 899
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 1061
+skip$ -- 1042
 stack$ -- 0
-substring$ -- 277
-swap$ -- 721
+substring$ -- 276
+swap$ -- 709
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 39
+type$ -- 38
 warning$ -- 0
 while$ -- 24
-width$ -- 41
-write$ -- 357
+width$ -- 40
+write$ -- 349

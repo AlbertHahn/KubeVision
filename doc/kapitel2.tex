@@ -1,17 +1,18 @@
 \chapter{Grundlagen}
-Dieses Kapitel erläutert die Grundlagen die zum 
-Verständnis dieser Arbeit notwendig sind. 
-Angefangen mit der Erklärung für Technologien
-Docker und Kubernetes, hinzu Microservices.
+Dieses Kapitel erläutert die grundlegenden Begriffe und Konzepte die zum 
+Verständnis dieser Bachelorarbeit notwendig sind. 
+Dabei wird der Technologie-Stack aufsteigend beschrieben.
+Als Fundament die Container Technologie Docker.
+Forgesetzt mit der Containerplattform Kubernetes.
+Abschließend ein Abschnitt zu Microservices.
 
 %TEXT!!!!
 
 \section{Docker} \label{Docker}
 
 In diesem Abschnitt wird die Technologie \glqq Docker\grqq{} näher erläutert und
-nicht das Unternehmen \glqq Docker, Inc.\grqq{}, dass für die maßgebliche Entwicklung dessen verantwortlich ist.
-Angefangen mit der Terminologie, zum deutlicheren Verständnis der nächsten Abschnitte.
-Fortgesetzt mit der aufsteigenden Erklärung der Architektur bis zum Aufbau eines Containers.
+nicht das Unternehmen \glqq Docker, Inc.\grqq{}, dass für die maßgebliche Entwicklung dessen verantwortlich ist \cite{dockerdeep}.
+Angefangen mit der aufsteigenden Erklärung der Architektur bis zum Aufbau eines Containers.
 
 %\subsection{Terminologie}
 %\begin{itemize}
@@ -25,7 +26,7 @@ Fortgesetzt mit der aufsteigenden Erklärung der Architektur bis zum Aufbau eine
 Die Docker Technologie ist in der Programmiersprache \glqq GO\grqq{} geschrieben und nutzt Funktionalitäten des
 Linux Kernels, wie cgroups und namespaces.
 Namespaces ermöglichen die Isolation von Prozessen in sogenannte Container, welche unabhängig voneinander arbeiten \cite{dockergetstarted}.
-Diese beeinhalten alle nötigen Abhängigkeiten zur Ausführung der vordefinierten Anwendung.
+Diese beeinhalten alle nötigen Abhängigkeiten zur Ausführung der vordefinierten Anwendungen.
 Container gewinnen dadurch an Portabilität, die ein bereitstellen auf Infrastrukturen mit der Docker
 Laufzeit ermöglichen.
 Die Laufzeit setzt sich aus \glqq runc\grqq{} einer low-Level Laufzeit und \glqq containerd\grqq{} einer higher-Level
@@ -40,7 +41,7 @@ Auf die Orchestrierung mit Swarm wird nicht weiter eingeganen, da sie zum Verst�
 \begin{figure}
     \centering
     \includegraphics[width=0.5\columnwidth]{images/DockerArch.png}
-    \caption{Docker Architektur \protect\cite{dockerdeep}}
+    \caption{Docker Architektur in Anlehnung an \protect\cite{dockerdeep}}
     \label{fig:dockerarch}
 \end{figure}
 
@@ -120,20 +121,21 @@ Ansätze \cite{hypervisorcontainer}.
 
 Die Einsparung von Ressourcen und dem einfachen bereitstellen auf Hostsysteme,
 prädestinieren containerisierte Anwendungen für die Verwendung von Microservices
-auf Container Plattformen wie Kubernetes.
+auf Containerplattformen wie Kubernetes.
 
 
 \section{Kubernetes}
+\begin{quote}
+  \glqq Der Name Kubernetes stammt aus dem Griechischen, bedeutet Steuermann oder Pilot, [...]
+K8s ist eine Abkürzung, die durch Ersetzen der 8 Buchstaben \glqq ubernete\grqq{} mit \glqq 8\grqq{} abgeleitet wird\grqq{} \cite{kubernetes}.
+\end{quote}
+
 
 Dieser Abschnitt befasst sich zunächst mit den einzelnen Komponenten der Kubernetes Architektur.
 Hinleitend werden spezielle Themen wie k3s, Hybrid Cloud und Rancher näher erläutert.
 Kubernetes ermöglicht die Orchestrierung von containerisierten Arbeitslasten
-und Services. Seit 2014 hat Google das Open-Source-Projekt zur Verfügung
-gestellt und baut auf 15 Jahre Erfahrungen mit Produktions-Workloads \cite{kubernetes}.
-
-\subsubsection{Namensgebung}
-\glqq Der Name Kubernetes stammt aus dem Griechischen, bedeutet Steuermann oder Pilot, [...]
-K8s ist eine Abkürzung, die durch Ersetzen der 8 Buchstaben \glqq ubernete\grqq{} mit \glqq 8\grqq{} abgeleitet wird\grqq{} \cite{kubernetes}.
+und Diensten. Seit 2014 hat Google das Open-Source-Projekt zur Verfügung
+gestellt und baut auf 15 Jahre Erfahrungen mit Produktions-Workloads auf \cite{kubernetes}.
 
 \subsection{Cluster}
 Die Zusammensetzung der beschriebenen Kubernetes Komponenten ergeben ein Kubernetes Cluster (vgl. Abbildung~\ref{fig:cluster}).
@@ -148,30 +150,23 @@ Die Zusammensetzung der beschriebenen Kubernetes Komponenten ergeben ein Kuberne
 
 \subsubsection{Control Plane}
 Control Planes\footnote{Seit Kubernetes v1.20, ist die korrekte Bezeichnung für die Master Node Control Plane \cite{Kuberneteschangemaster}} sind für die Steuerungsebene des Clusters zuständig,
-dabei entscheidet und reagiert dieser auf globaler Ebene auf eintreffende Clustereignisse \cite{kuberneteskomponenten}.
-Die nächsten Unterabschnitte beschreiben diese näher:
+dabei entscheidet und reagiert dieser auf globaler Ebene auf eintreffende Clustereignisse.
+Die Kubernetes Dokumentation beschreiben diese Komponenten wie folgt \cite{kuberneteskomponenten}:
 
-\subsubsection{\textit{API Server}}
-Der API Server operiert über REST und bietet eine Schnittstelle zu Diensten
-inner- und außerhalb der Master-Komponenten \cite{kuberneteskomponenten}.
-
-\subsubsection{\textit{etcd}}
-etcd ist der primäre Datenspeicher von Kubernetes und sichert alle Zustände eines
-Cluster \cite{kuberneteskomponenten}.
-
-\subsubsection{\textit{Scheduler}}
-Der Scheduler ist zuständig für die Verteilung und Ausführung von Pods auf Nodes \cite{kuberneteskomponenten}.
-
-\subsubsection{\textit{Controller Manager}}
-Der Controller Manager reagiert auf Ausfälle von Nodes, erhält die korrekte
-Anzahl von Replikationen eines Pods und verbindet Services miteinander \cite{kuberneteskomponenten}.
+\begin{itemize}
+  \item \textbf{API Server}: Der API Server operiert über REST und bietet eine Schnittstelle zu Diensten
+  inner- und außerhalb der Master-Komponenten.
+  \item \textbf{etcd} etcd ist der primäre Datenspeicher von Kubernetes und sichert alle Zustände eines Cluster.
+  \item \textbf{Scheduler}: Der Scheduler ist zuständig für die Verteilung und Ausführung von Pods auf Nodes.
+  \item \textbf{Controller Manager}: Der Controller Manager reagiert auf Ausfälle von Nodes, erhält die korrekte Anzahl von Replikationen eines Pods und verbindet Services miteinander.
+\end{itemize}
 
 \subsubsection{Node}
 Eine Node\footnote{Um den Sprachfluss zu wahren wird der englische Begriff Node, als Kubernetes Ressourcenobjekt nicht übersetzt. 
-Die Übersetzung Knoten findet als Hardwareinstanz statt.} 
-ist eine Hardware Einheit, die je nach Kubernetes Einrichtung eineVM, physische Maschine oder 
-eine Instanz in einer privaten oder öffentlichen Cloud darstellen kann \cite{kubernetesnodes}.
-Dieser umfasst folgende Komponenten:
+Die Übersetzung Knoten findet jediglich als Hardwareinstanz statt.} 
+ist eine Hardware Einheit, die je nach Kubernetes Einrichtung eine VM, physische Maschine oder 
+eine Instanz in einer privaten oder öffentlichen Cloud darstellen kann.
+Dieser umfasst folgende Komponenten \cite{kubernetesnodes}:
 
 \subsubsection{\textit{Container Laufzeit}}
 Der Abschnitt \hyperref[Docker]{2.1} beschreibt bereits alles zu diesem Thema.
@@ -182,15 +177,15 @@ da k3s containerd als standard Laufzeit verwendet wird.
 \subsubsection{\textit{Kubelet}}
 Kubelet fungiert als \glqq node agent\grqq{} und registriert die Node mit dem
 API-Server eines Clusters, dabei stellt es sicher das Container innerhalb eines Pods
-funktionieren \cite{kubernetesnodes}.
+funktionieren.
 
 \subsubsection{\textit{Kube-Proxy}}
 Ein Kube-Proxy ist ein Netzwerk Proxy und verwaltet die Netzwerkrechte auf Nodes.
-Diese erlauben die Kommunikation zwischen Pods inner- und außerhalb des Clusters \cite{kubernetesnodes}.
+Diese erlauben die Kommunikation zwischen Pods inner- und außerhalb des Clusters.
 
 \subsection{Pods}
 Ein Pod stellt die kleinste Einheit eines Kubernetes Clusters dar und ist eine Gruppe von mindestens einem Container.
-Dieser erlaubt die gemeinsame Nutzung von Speicher- und Netzwerkressourcen mit Anweisungen zur Ausführung der Container \cite{kubernetespods}.
+Dieser erlaubt die gemeinsame Nutzung von Speicher- und Netzwerkressourcen mit Anweisungen zur Ausführung der Container.
 
 \subsection{Deployment}
 Ein Deployment ist ein Ressourcenobjekt, dass mit einem Deployment Controller den gewünschten Zustand einer Anwendung aufrechterhält.
@@ -250,11 +245,11 @@ Die einzelnen Spezifikationen werden folgendermaßen definiert \cite{kubernetess
   \item \textbf{port}: Port auf dem der Service lauscht.
 \end{itemize}
 
-\begin{lstlisting}[caption={zum deutlicheren Verständnis mit dem deployment.yaml, leicht abgewandelte service.yaml \cite{kubernetesservice} },captionpos=b,label={lst:service},language=yaml]
+\begin{lstlisting}[caption={service.yaml \cite{kubernetesservice} },captionpos=b,label={lst:service},language=yaml]
     apiVersion: v1
     kind: Service
     metadata:
-      name: my-service
+      name: nginx-service
     spec:
       selector:
         app: nginx
@@ -282,7 +277,7 @@ Die übliche Verwendung eines Controllers beeinhaltet die Lastenverteilung durch
 Diese Kommunikation findet, wie auch bei dem NGINX Ingress Controller \cite{kubernetesingresscontrollerlayer} in der Anwendungsschicht des OSI-Schichtenmodells statt und ermöglicht, dadurch die 
 Lastenverteilung von öffentlichen Endpunkten zu internen Pods in einem Cluster \cite{kubernetesingressibm}.
 Wie in alle anderen Kubernetes Objekten auch werden vordefinierte Aufgaben des Ingress Controller durch YAML-Dateien abgebildet (vgl. Beispiel~\ref{lst:ingress}).
-Im folgenden wichtige Optionen die etwas genauer erklärt werden:
+Im folgenden wichtige Optionen die etwas genauer erklärt werden \cite{kubernetesingress}:
 
 \begin{itemize}
   \item \textbf{ingressClassName}: definiert den Ingress Controller.
@@ -308,11 +303,11 @@ Im folgenden wichtige Optionen die etwas genauer erklärt werden:
           pathType: Prefix
           backend:
             service:
-              name: test
+              name: nginx-service
               port:
                 number: 80
   \end{lstlisting}
-
+%%ÜBERARBEITEN
 \subsection{Lightweight Kubernetes} \label{k3s}
 Ligthweight Kubernetes auch K3s genannt ist eine Open-Source Kubernetes Distribution von dem Unternehmen
 Rancher. Der größte Unterschied der Distribution ist die einnehmende größe 
@@ -490,3 +485,5 @@ Dieses Thema fällt in den Bereich Continuous Delivery und wird in dieser Arbeit
 \subsubsection{\glqq Design for failure \grqq{}}
 Softwarekomponenten müssen den Ausfall von anderen Diensten tolerieren. 
 Event basierte Kommunikation führt oft zu Fehlverhalten und kann durch Überwachungstools präventiv verhindert werden \cite{FowlerMicroservice}. 
+
+\section{Zusammenfassung}
