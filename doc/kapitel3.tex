@@ -1,9 +1,48 @@
-\chapter{Anforderungen}
+\chapter{Analyse}
 
 Das vorherige Kapitel beschreibte die nötigen Technologien für die Realisierung und Ausführung einer Microservice Architektur.
-Dieses Kapitel beschäftigt sich nun mit der Analyse 
+Dieses Kapitel beschäftigt sich nun mit der Analyse. 
 
-\section{Analyse}
+\section{Anforderungen}
+
+In diesem Abschnitt werden wir die Anforderungen für die 
+
+
+\subsection{Proof Of Concept}
+Die Krones AG entwickelt ein Konzept für eine wartungsfreie Infrastruktur mit einem continuous delivery System, um durch Microservices in der Cloud die Produktionsanlage Standortübergreifend zu modernisieren. 
+Dessen Umsetzbarkeit wird in einem Proof of Concept unter Beweis gestellt. 
+Im Zuge dessen wird die Relevanz von Microservices auf der Cloud im Bereich der künstlichen Intelligenz auf einer zukünftigen Produktionsanlage untersucht. 
+Die praktische Umsetzung wird durch ein Kubernetes basierendes Cluster mit Edge Devices aus mehreren Knotenpunkten realisiert, welche on-premise und mit einem Zugang zu Cloud Ressourcen aufgesetzt wird. 
+Die Realisierung eines solchen Systems erfolgt durch die Containerplattform Kubernetes und mit dem Orchestierungstool Rancher.
+
 \subsection{Anwendungsszenario}
+Der Schwerpunkt der zu entwickelnden Anwendung soll ein Dashboard mit Authentifizierungsmechanismus sein. 
+Dieser soll Benutzern ermöglichen sich mit ihrem Passwort oder per Gesichtserkennung in ihr Profil einzuloggen. 
+Die Daten sollen persistent gespeichert und können bei erneuten Aufruf der Website wieder verwendet werden. 
+Die Anwendung muss automatisch auf einem Kubernetes Cluster Deploybar sein. 
+Es soll die Charakteristiken und Vorteile einer Microservice Architektur aufweisen. 
+Die Anwendung soll Blaupausen Charakter erfüllen, um ähnliche Herausforderungen zu bewerkstelligen. 
+
+\subsection{Stakeholder}
+Ein Stakeholder ist eine Person oder Organisiation mit Einfluss auf die Anforderungen eines Systems.
+\url{https://www.hanser-elibrary.com/doi/epdf/10.3139/9783446443136.005}
+Die Stakeholder sind wie folgt beschrieben:
+
+\subsubsection{Operator}
+Die Webanwendung verfügt über eine Benutzeroberfläche die eine Authentifizierung ermöglicht.
+Der Anwender kann sich mit seinen Benutzerdaten und Passwort anmelden oder mit Gesichtserkennung. 
+Die Daten werden dabei persistent gespeichert und sind bei erneuten Abruf der Anwendung vorhanden. 
+Der Benutzer kann nach erfolgreichen Login auf sein Profil zugreifen.
+
+\subsubsection{Kunde}
+Die Webanwendung in Form einer Microservice Architektur funktioniert auf dessen Kubernetes fähigen Infrastruktur. 
+Der Kunde kann zwischen on-premise und Cloud-Ressourcen für die Verarbeitung der Gesichtserkennung wählen. 
+Eine Vorkonfiguration ermöglicht die automatische Zuweisung der gewünschten Hardware Ressourcen.
+
+\subsubsection{Entwickler}
+Die Anwendungsentwicklung ist so konzeptioniert, dass zukünftige Entwickler die Strategie der Bereitstellung für eigene Projekte verwenden können.  
+Die Webanwendung erfüllt die Charakterisitiken einer Microservice Architektur.
+
 \section{Spezifikation}
-\subsection{Use-Case}
+\subsection{Funktionale}
+\subsection{nicht-Funktionale}

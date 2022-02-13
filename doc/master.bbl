@@ -257,4 +257,8 @@ S.~Newman, \emph{Building microservices}, 2nd~ed.\hskip 1em plus 0.5em minus
   \url{https://martinfowler.com/bliki/BoundedContext.html}
 \BIBentrySTDinterwordspacing
 
+\bibitem{LearningCoreDNS}
+J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
+  0.4em\relax Farnham, England: O'Reilly UK, Sep. 2019.
+
 \end{thebibliography}

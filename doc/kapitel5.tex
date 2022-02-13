@@ -1,22 +1,94 @@
 \chapter{Implementierung der Architektur}
 
-\section{Aufbau der Implementierung}
-\subsection{Hardware-Layer}
-\subsection{Software-Layer}
-\subsection{Betriebssystem}
+Das folgende Kapitel beschreibt die Vorgehensweisen der Implementierung.
+Angefangen mit dem Aufbau der einzelnen Schichten der Anwendung.
+
 
 \section{Konfiguration und Einrichtung}
+
+In diesem Abschnitt geht es um die Einrichtung der Kubernetes Infrastruktur.
+Zuerst die Einrichtung der einzelnen virtuellen privaten Server in Vultr, die als Knotenpunkte in unserem Kubernetes Cluster funktonieren.
+Danach die Installation der Infrastruktur mit k3s.
+Als nächstes kommt die Konfiguration einer Domain zum Einsatz, um die Microservices zu verwenden.
+Abschließend erfolgt die Bereitstellung von Zertifikaten für unsere Domain.
+
 \subsection{Virtueller Privater Server}
-\subsection{Domain}
-\subsection{SSL-Verschlüsselung}
+
+Durch die Einschränkungen, beschrieben in Abschnitt \ref{Einschraenkungen},
+wird für die Installation der Kubernetes Plattform virtuelle private Server (VPS) verwendet.
+Ein VPS ist eine virtuelle Maschine, die von Drittanbietern wie Internet-Hosting-Diensten, als Dienst verkauft wird.
+Dies ermöglicht das Mieten von Hardware für einen monatlichen Geldbeitrag.
+Die Server dienen als Knotenpunkte für die spätere Kubernetes Installation.
+Es werden ingesamt drei VPS-Instanzen gemietet auf denen das Betriebssystem installiert wird.
+
+\subsubsection{Betriebssystem}
+Im Rahmen des PoC mit dem Unternehmen SUSE wurde das 
+Betriebssystem SLE-Micro Enterprise 5.1 bereitgestellt und auf den Serverinstanzen installiert.
+Das Betriebssystem ist für den Einsatz von IoT und Edge-Device Szenarien bestimmt.
+Dieses arbeitet mit transactional-updates, welche Updates erst aktivieren, wenn das Betriebssystem neugestartet wurde. 
+Erfolgt das Update nicht wird ein rollback des vorherigen Versionszustand hergestellt.
+Für die spätere Installation von k3s wird eine fehlende Abhängigkeit auf dem Betriebssystem benötigt \ref{lst:apparmor}.
+
+\begin{lstlisting}[caption={apparmor-parser command},captionpos=b,label={lst:apparmor},language=bash]
+transactional-update pkg install apparmor-parser
+\end{lstlisting}
+
+\subsubsection{Domain}
+Der Zugang zur Webanwendung wird mithilfe einer öffentlichen Domain ermöglicht.
+Der DNS-Eintrag einer Domain ist für die Adressierung zuständig.
+Durch die Veränderung des A-Records leiten wir alle Anfragen der Domain auf eine IPv4-Adresse um \cite{LearningCoreDNS}.
+Die IPv4 Adresse ist in diesem Fall, der Cluster Master unserer späteren k3s-Installation.
+
+\subsection{Kubernetes Installation}
+Dieser Abschnitt behandelt die Einrichtung und Installation der Kubernetes Distribution Lightweight Kubernetes und der Orchestrierungsplattform Rancher.
+
+
+\subsubsection{Lightweight Kubernetes}\label{k3screate}
+Für die Installation von k3s auf den Server wurde ein Shell Skript entwickelt, 
+dass mit den nötigen Befehlen aus der Dokumentation geschrieben wurde.
+\begin{lstlisting}[caption={Ausschnitt des installk3s.sh Skripts},captionpos=b,label={lst:k3sintall},language=bash]
+    curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" K3S_CLUSTER_INIT=1 sh -
+    TOKEN=$( cat /var/lib/rancher/k3s/server/node-token )
+    
+    USERNAME=root
+    SCRIPT="curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" K3S_TOKEN=$TOKEN K3S_URL=https://$ip4:6443 sh - "
+    for HOSTNAME in ${HOSTS[@]} ; do
+        ssh -o StrictHostKeyChecking=no -l ${USERNAME} ${HOSTNAME} "hostnamectl set-hostname ${HOSTNAMES[$COUNTER]}; ${SCRIPT}"  
+        echo "HOSTNAME CHANGED: ${HOSTNAMES[$COUNTER]}"
+        ((COUNTER++))
+    done
+\end{lstlisting}
+
+Das Skript holt mittels \textit{curl} Aufruf das Installationsskript für k3s und installiert es mit den vorgegebenen Initialisierungsparametern. 
+Der Parameter \textit{INSTALL\_K3S\_EXEC} bestimmt die Aufgabe der Node.
+\textit{K3S\_CLUSTER\_INIT} initialisiert die Node als neuen Cluster-Master.
+Danach wird ein Token im \textit{../k3s/server} Verzeichnis angelegt, dieser ist für die Verknüpfung der andern Knoten nötig und wird als Variable gespeichert.
+In einer Schleife werden die vom Skript vorher abgefragten IP-Adressen und Hostsystemnamen des Benutzer verarbeitet.
+Über das Secure Shell (SSH) Netzwerkprotokoll verbindet sich das ausführende System mit den restlichen Knotenpunkten
+und installiert mithilfe der Variablen \textit{TOKEN} und \textit{SCRIPT} k3s.
+
+\subsubsection{Rancher}
+Im Rahmen des PoCs wurde bereits ein Rancher Server zur Verwaltung von mehreren downstream Cluster erstellt.
+Der im vorherigen Abschnitt \ref{k3screate} eingerichtete k3s Cluster wird mit dem Rancher Server verbunden.
+Über die Rancher Benutzeroberfläche lässt sich das Kubernetes Cluster mithilfe des \textit{Add Cluster} Buttons hinzufügen.
+Die weiteren Schritte ermöglichen, dass benennen des Cluster und den notwendigen Befehl zum verknüpfen des gewünschten Clusters.
+
+\subsection{Microservice}
+Dieser Abschnitt behandelt den Aufbau der Anwendung im Microservice-Stil.
+Der Aufbau der Anwendung zur Gesichtserkennung in ist in mehrere Services aufgeteilt.
+
+\subsection{Frontend-Service}
+\subsection{Authentifizierungs-Service}
+\subsection{Backend-Service}
+
 
 %alles ausschreiben??
-\section{Frameworks und Bibliotheken für Microservices}
-\subsection{Flask}
-\subsection{Gunicorn}
-\subsection{SocketIO}
-\subsection{OpenCV}
-\subsection{MongoDB}
+%\section{Frameworks und Bibliotheken für Microservices}
+%\subsection{Flask}
+%\subsection{Gunicorn}
+%\subsection{SocketIO}
+%\subsection{OpenCV}
+%\subsection{MongoDB}
 
 \section{Gesichtserkennung}
 \subsection{Alignment}
@@ -30,6 +102,7 @@
 \subsection{DockerHub}
 
 \section{Orchestrierung}
+\subsection{SSL-Verschlüsselung}
 \subsection{Deployment}
 \subsection{Ingress}
 \subsubsection{Nginx-Ingress}

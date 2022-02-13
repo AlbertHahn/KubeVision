@@ -22,11 +22,12 @@ done
 
 hostnamectl set-hostname "$PREFIX"0
 
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" K3S_CLUSTER_INIT=1 sh -
+
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={v1.20.4+k3s1} INSTALL_K3S_EXEC="server" K3S_CLUSTER_INIT=1 sh -
 TOKEN=$( cat /var/lib/rancher/k3s/server/node-token )
 
 USERNAME=root
-SCRIPT="curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" K3S_TOKEN=$TOKEN K3S_URL=https://$ip4:6443 sh - "
+SCRIPT="curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={v1.20.4+k3s1} INSTALL_K3S_EXEC="server" K3S_TOKEN=$TOKEN K3S_URL=https://$ip4:6443 sh - "
 for HOSTNAME in ${HOSTS[@]} ; do
     ssh -o StrictHostKeyChecking=no -l ${USERNAME} ${HOSTNAME} "hostnamectl set-hostname ${HOSTNAMES[$COUNTER]}; ${SCRIPT}"  
     echo "HOSTNAME CHANGED: ${HOSTNAMES[$COUNTER]}"
@@ -64,8 +65,3 @@ cert-manager jetstack/cert-manager \
 --version v1.0.4
 
 echo "Job finished, the cluster has been successfully initialized"
-
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={v1.20.4+k3s1} INSTALL_K3S_EXEC="server" K3S_CLUSTER_INIT=1 sh -
-TOKEN=$( cat /var/lib/rancher/k3s/server/node-token )
-
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={v1.20.4+k3s1} INSTALL_K3S_EXEC="server" K3S_TOKEN=K104c28ba6d9000caefbb8bade070493227d101944ae158e0484341c06bf7991b48::server:eec03a6d8d8eb2ca3f3b538bb426fcf6 K3S_URL=https://45.77.52.36:6443 sh -
