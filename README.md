@@ -11,7 +11,7 @@ The application provides a GUI and allows the user to authenticate through eithe
 The local system needs access through kubectl and helm to a running Kubernetes Cluster.
 Commands for applying the kubeconfig, export the config as ENV.
 
-`export KUBECONFIG=~/Documents/Kubernetes/KubeVision/kubeconfig_poc`\
+`export KUBECONFIG=~/your/path/to/KubeVision/kubeconfig_poc`
 
 ### Deploying KubeVision through Helm.
 `cd helm/flask`\
