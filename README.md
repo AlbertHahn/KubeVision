@@ -2,7 +2,11 @@
 ![alt text](https://github.com/AlbertHahn/KubeVision/blob/main/KubeVision.png)
 Logo created in Blender by Albert Hahn.
 
-# Quick Installation with Helm
+KubeVision is a microservice web-application, developed for my bachelor thesis.
+The application provides a GUI and allows the user to authenticate through either password and username or face-detection.
+
+
+# Online Kubernetes Deployment with Helm
 ## Requirements
 The local system needs access through kubectl and helm to a running Kubernetes Cluster.
 Commands for applying the kubeconfig, export the config as ENV.
@@ -24,7 +28,7 @@ Commands for applying the kubeconfig, export the config as ENV.
 
 The background for this step is that, the mongodb deployment somehow doesn't initialize a admin user on start, needed for CRUD-Operations.
 
-# Quick Deployment with Docker-Compose
+# Offline Deployment with Docker-Compose
 ## Requirements
 Docker and Docker-Compose Installation on the local machine.
 
