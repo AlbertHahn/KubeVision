@@ -19,7 +19,7 @@ wird für die Installation der Kubernetes Plattform virtuelle private Server (VP
 Ein VPS ist eine virtuelle Maschine, die von Drittanbietern wie Internet-Hosting-Diensten, als Dienst verkauft wird.
 Dies ermöglicht das Mieten von Hardware für einen monatlichen Geldbeitrag.
 Die Server dienen als Knotenpunkte für die spätere Kubernetes Installation.
-Es werden ingesamt drei VPS-Instanzen gemietet auf denen das Betriebssystem installiert wird.
+Es werden ingesamt drei VPS-Instanzen gemietet auf denen das folgende Betriebssystem installiert wird.
 
 \subsubsection{Betriebssystem}
 Im Rahmen des PoC mit dem Unternehmen SUSE wurde das 
@@ -73,11 +73,16 @@ Der im vorherigen Abschnitt \ref{k3screate} eingerichtete k3s Cluster wird mit d
 Über die Rancher Benutzeroberfläche lässt sich das Kubernetes Cluster mithilfe des \textit{Add Cluster} Buttons hinzufügen.
 Die weiteren Schritte ermöglichen, dass benennen des Cluster und den notwendigen Befehl zum verknüpfen des gewünschten Clusters.
 
-\subsection{Microservice}
-Dieser Abschnitt behandelt den Aufbau der Anwendung im Microservice-Stil.
-Der Aufbau der Anwendung zur Gesichtserkennung in ist in mehrere Services aufgeteilt.
+\subsection{KubeVision}
+Dieser Abschnitt behandelt die einzelnen Softwarekomponenten der Microservice-Anwendung KubeVision.
+Die Webanwendung ist in drei verschiedene Dienste unterteilt.
+Zum einen der Benutzeroberfläche für die Interaktion mit dem Benutzer.
+Danach dem Authentifizierungsdienst, der für die Registrierung und Anmeldung zuständig ist.
+Abschließend der Backend-Dienst, welcher die Authentifizierung per Gesichtserkennung ermöglicht.
 
 \subsection{Frontend-Service}
+Das Frontend besteht aus einer HTML5-Benutzeroberfläche und wird für die Interaktion mit dem Benutzer
+mit Javascript kombiniert.
 \subsection{Authentifizierungs-Service}
 \subsection{Backend-Service}
 
