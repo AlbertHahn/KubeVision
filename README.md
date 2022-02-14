@@ -17,7 +17,9 @@ Commands for applying the kubeconfig, export the config as ENV.
 
 ### Run this commands in the deployment pod.
 `mongo`
+
 `use admin`
+
 `db.createUser({user: 'admin',pwd: 'password',roles: [ { role: 'root', db: 'admin' } ]})`
 
 The background for this step is that, the mongodb deployment somehow doesn't initialize a admin user on start, needed for CRUD-Operations.
