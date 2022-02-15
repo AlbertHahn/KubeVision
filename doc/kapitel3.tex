@@ -1,48 +1,53 @@
 \chapter{Analyse}
 
-Das vorherige Kapitel beschreibte die nötigen Technologien für die Realisierung und Ausführung einer Microservice Architektur.
-Dieses Kapitel beschäftigt sich nun mit der Analyse. 
+Das vorherige Kapitel beschreibte die nötigen Technologien für die Realisierung und Ausführung einer Anwendung im Microservice Architektur-Stil.
+Dieses Kapitel beschäftigt sich nun mit der Analyse für die spätere Konzeptphase.
 
-\section{Anforderungen}
+\section{Modernisierung der Infrastruktur}
+Dieser Abschnitt behandelt die aktuellen Bestrebungen der Krones AG hinsichtlich dem Aufbau einer modernen Infrastruktur in Produktionsanlagen. 
+Zunächst der Proof of Concept in dem die Umsetzbarkeit eines Kubernetes fähigen Konzept geprüft wurde. 
+Danach darauf aufbauende Anwendungsmöglichkeiten im Bereich der Echtzeitkommunikation oder künstlichen Intelligenz. 
 
-In diesem Abschnitt werden wir die Anforderungen für die 
+\subsection{Proof of Concept}
+Die Krones AG entwickelt neue Konzepte, um Produktionsanlagen Standortübergreifend zu modernisieren. 
+In einem davon wurde ein Proof of Concept (Poc) mit dem Software Unternehmen SUSE durchgeführt, um die Umsetzbarkeit von Kubernetes Technologien zu evaluieren. 
+Diese beinhaltete die Aufrüstung von Produktionsanlage mit Virtual Edge Devices. 
+Die über einen Hypervisor Typ 1 zwei Betriebssysteme gleichzeitig ausführen, dem Human Interface (HMI) mit Windows 10 Embedded und Linux SLE-Micro 5.0 Enterprise. 
+Die Integration der Geräte ermöglichen die Maschinennahe Nutzung von Echtzeit Informationen, während des Betriebs und dienen als Fundament für den Aufbau einer wartungsfreien Infrastruktur.
+
+\subsubsection{Kubernetes}
+Die einzelnen Virtual Edge Devices sollen in zukunft als Knotenpunkte für ein Kubernetes Cluster dienen. 
+Dafür wird die für Edge Szenarien entworfene Kubernetes Distribution k3s installiert. 
+Die Kubernetes Cluster werden mit dem Orchestrierungstool Rancher verwaltet. 
+Diese abstrahiert die Komplexität für den aktiven Betrieb von mehreren Clustern.
 
 
-\subsection{Proof Of Concept}
-Die Krones AG entwickelt ein Konzept für eine wartungsfreie Infrastruktur mit einem continuous delivery System, um durch Microservices in der Cloud die Produktionsanlage Standortübergreifend zu modernisieren. 
-Dessen Umsetzbarkeit wird in einem Proof of Concept unter Beweis gestellt. 
-Im Zuge dessen wird die Relevanz von Microservices auf der Cloud im Bereich der künstlichen Intelligenz auf einer zukünftigen Produktionsanlage untersucht. 
-Die praktische Umsetzung wird durch ein Kubernetes basierendes Cluster mit Edge Devices aus mehreren Knotenpunkten realisiert, welche on-premise und mit einem Zugang zu Cloud Ressourcen aufgesetzt wird. 
-Die Realisierung eines solchen Systems erfolgt durch die Containerplattform Kubernetes und mit dem Orchestierungstool Rancher.
+\subsection{Microservices}
+\subsubsection{Echtzeitkommunikation}
+\subsubsection{Künstliche Intelligenz}
 
-\subsection{Anwendungsszenario}
-Der Schwerpunkt der zu entwickelnden Anwendung soll ein Dashboard mit Authentifizierungsmechanismus sein. 
-Dieser soll Benutzern ermöglichen sich mit ihrem Passwort oder per Gesichtserkennung in ihr Profil einzuloggen. 
-Die Daten sollen persistent gespeichert und können bei erneuten Aufruf der Website wieder verwendet werden. 
-Die Anwendung muss automatisch auf einem Kubernetes Cluster Deploybar sein. 
-Es soll die Charakteristiken und Vorteile einer Microservice Architektur aufweisen. 
-Die Anwendung soll Blaupausen Charakter erfüllen, um ähnliche Herausforderungen zu bewerkstelligen. 
+\section{Fachkonzept}
+Im folgenden Abschnitt werden die Anforderungen und Anwendungsfälle für die spätere Konzeption der Microservice Architektur erhoben.
+Dafür wird ein zielorientierter Ansatz gewählt, der Anforderungen aus den Zielen einer Aufgabenstellung herleitet \cite[S.47]{Laplante}. 
 
-\subsection{Stakeholder}
-Ein Stakeholder ist eine Person oder Organisiation mit Einfluss auf die Anforderungen eines Systems.
-\url{https://www.hanser-elibrary.com/doi/epdf/10.3139/9783446443136.005}
-Die Stakeholder sind wie folgt beschrieben:
+\subsection{Anforderungserhebung}
+Der vorherige Abschnitt beschreibt die Aufgabenstellungen, die mithilfe von Zielen erreicht werden können. 
+Diese sind erforderlich, um die zukünftigen Anforderungen der Software zu erarbeiten und werden in einer Anforderungsmatrix wiedergeben. 
 
-\subsubsection{Operator}
-Die Webanwendung verfügt über eine Benutzeroberfläche die eine Authentifizierung ermöglicht.
-Der Anwender kann sich mit seinen Benutzerdaten und Passwort anmelden oder mit Gesichtserkennung. 
-Die Daten werden dabei persistent gespeichert und sind bei erneuten Abruf der Anwendung vorhanden. 
-Der Benutzer kann nach erfolgreichen Login auf sein Profil zugreifen.
+\begin{table}[!htb]
+\begin{center}
 
-\subsubsection{Kunde}
-Die Webanwendung in Form einer Microservice Architektur funktioniert auf dessen Kubernetes fähigen Infrastruktur. 
-Der Kunde kann zwischen on-premise und Cloud-Ressourcen für die Verarbeitung der Gesichtserkennung wählen. 
-Eine Vorkonfiguration ermöglicht die automatische Zuweisung der gewünschten Hardware Ressourcen.
+\begin{tabular}{|p{1cm}|p{6.8cm}|p{6.8cm}|l|l}
+    \hline
+    \textbf{Nr.} & \textbf{Ziele} & \textbf{Anforderungen} \\
+    \hline
+    A01 & Auf dem Kubernetes Cluster laufen Anwendungen im Bereich der künstlichen Intelligenz.& Dienste sollen Funktionen der künstlichen Intelligenz ausführen können.\\
+    \hline
+    A02	& Anwendungen auf einem Kubernetes Cluster haben die Möglichkeit Daten persistent zu speichern.& Dienste sollen über einen Speicher verfügen der Daten persistent speichert.\\
+    \hline
+\end{tabular}
+\caption{Anforderungsmatrix}
+\end{center}
+\end{table}
 
-\subsubsection{Entwickler}
-Die Anwendungsentwicklung ist so konzeptioniert, dass zukünftige Entwickler die Strategie der Bereitstellung für eigene Projekte verwenden können.  
-Die Webanwendung erfüllt die Charakterisitiken einer Microservice Architektur.
-
-\section{Spezifikation}
-\subsection{Funktionale}
-\subsection{nicht-Funktionale}
+\subsection{Anwendungsfälle}
