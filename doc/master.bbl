@@ -29,7 +29,8 @@ M.~Villamizar, O.~Garcés, H.~Castro, M.~Verano, L.~Salamanca, R.~Casallas, and
 
 \bibitem{linatronic}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{de}{Krones linatronic 735}.'' [Online]. Available:
+``\BIBforeignlanguage{de}{Krones linatronic 735},'' Feb. 2022. [Online].
+  Available:
   \url{https://www.krones.com/de/produkte/maschinen/leerflaschen-inspektionsmaschine-linatronic-735.php}
 \BIBentrySTDinterwordspacing
 
@@ -67,6 +68,13 @@ R.~Morabito, J.~Kjällman, and M.~Komu, ``Hypervisors vs. lightweight
   virtualization: A performance comparison,'' in \emph{2015 IEEE International
   Conference on Cloud Engineering}, 2015, pp. 386--393.
 
+\bibitem{containervsvm}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en-US}{Are {Containers} {Replacing} {Virtual}
+  {Machines}?}'' Aug. 2018. [Online]. Available:
+  \url{https://www.docker.com/blog/containers-replacing-virtual-machines/}
+\BIBentrySTDinterwordspacing
+
 \bibitem{kubernetes}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{de}{Was ist kubernetes?}'' section: docs. [Online].
@@ -91,6 +99,13 @@ R.~Morabito, J.~Kjällman, and M.~Komu, ``Hypervisors vs. lightweight
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Nodes},'' section: docs. [Online]. Available:
   \url{https://kubernetes.io/docs/concepts/architecture/nodes/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{kubernetesdocker}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Don't panic: Kubernetes and docker},'' Dec. 2020,
+  section: blog. [Online]. Available:
+  \url{https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetesobjects}
@@ -235,11 +250,27 @@ S.~Buchanan, J.~Rangama, and N.~Bellavance, ``\BIBforeignlanguage{en}{Deploying
   \url{https://martinfowler.com/articles/microservices.html}
 \BIBentrySTDinterwordspacing
 
+\bibitem{MicroservicePattern}
+\BIBentryALTinterwordspacing
+``Microservices {Pattern}: {Decompose} by business capability.'' [Online].
+  Available:
+  \url{http://microservices.io/patterns/decomposition/decompose-by-business-capability.html}
+\BIBentrySTDinterwordspacing
+
 \bibitem{FowlerSoftwareComponent}
 \BIBentryALTinterwordspacing
 ``Softwarecomponent.'' [Online]. Available:
   \url{https://martinfowler.com/bliki/SoftwareComponent.html}
 \BIBentrySTDinterwordspacing
+
+\bibitem{BuildingMicroservicesNewmanChapter5}
+S.~Newman, ``Implementing microservice communication.''\hskip 1em plus 0.5em
+  minus 0.4em\relax Sebastopol, CA: O'Reilly Media, Sep. 2021.
+
+\bibitem{microservicesvssoa}
+M.~Richards, \emph{\BIBforeignlanguage{en}{Microservices vs.
+  {Service}-{Oriented} {Architecture}}}.\hskip 1em plus 0.5em minus 0.4em\relax
+  O'Reilly UK.
 
 \bibitem{BuildingMicroservicesNewman}
 S.~Newman, \emph{Building microservices}, 2nd~ed.\hskip 1em plus 0.5em minus
@@ -249,6 +280,13 @@ S.~Newman, \emph{Building microservices}, 2nd~ed.\hskip 1em plus 0.5em minus
 \BIBentryALTinterwordspacing
 ``A {Conversation} with {Werner} {Vogels} - {ACM} {Queue}.'' [Online].
   Available: \url{https://queue.acm.org/detail.cfm?id=1142065}
+\BIBentrySTDinterwordspacing
+
+\bibitem{ProtoBuf}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Protocol {Buffers} {\textbar} {Google}
+  {Developers}}.'' [Online]. Available:
+  \url{https://developers.google.com/protocol-buffers}
 \BIBentrySTDinterwordspacing
 
 \bibitem{FowlerBoundedContext}
