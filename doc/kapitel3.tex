@@ -44,7 +44,6 @@ Und können die Informationen sinnvoll verarbeiten und persistent speichern.
 \subsubsection{Künstliche Intelligenz}
 Die Anwendung bringt einen Mehrwert im Bereich der künstlichen Intelligenz und nutzt die Infrastruktur zur Auswertung von Deep Learning Modellen. 
 
-\newpage
 \section{Fachkonzept}
 Im folgenden Abschnitt werden die Anforderungen und Anwendungsfälle für die spätere Konzeption der Microservice-Architektur erhoben.
 Dafür wird ein zielorientierter Ansatz gewählt, der Anforderungen aus den Zielen einer Aufgabenstellung herleitet \cite[S.47]{Laplante}. 
@@ -128,7 +127,7 @@ Diese werden nun für das Konzept der Anwendung verwendet.
 
 
 
-\subsection{Konzept}
+\subsection{Konzept}\label{Konzept}
 Die prototypische Anwendung wird containerisert und über ein Registry verfügbar sein [\hyperlink{A03}{A03}] [\hyperlink{A05}{A05}]. 
 Weiterhin muss die Anwendung unter der Berücksichtigung der Aspekte einer Microservice-Architektur, wie in Abschnitt \ref{Microservice} beschrieben, konzipiert und entwickelt werden. 
 Die einzelnen Dienste der Anwendung müssen auf einem Kubernetes-fähigen Cluster ausgeliefert und in Betrieb genommen werden [\hyperlink{A04}{A04}].
@@ -139,19 +138,67 @@ Es ist vorgesehen, dass die Anwendung in einem hybriden Cloud-Szenario die vorde
 Arbeitslasten, wie dem Auswerten von Deep-Learning-Modellen wie im Falle der Linatronic AI \cite{linatronic}, sollen beispielhaft dargestellt werden [\hyperlink{A01}{A01}]. 
 Dafür muss die Kommunikation von Diensten in Echtzeit stattfinden, um Informationen am Zielort schnell zu verarbeiten und eine nahtlose Verarbeitung großer Daten zu ermöglichen [\hyperlink{A06}{A06}].
 
-\subsubsection{Anwendungsszenario}
+\subsubsection{Anwendungsszenario}\label{Anwendungsszenario}
 
 Der Schwerpunkt der zu entwickelnden Anwendung soll ein Dashboard mit Authentifizierungsmechanismus sein. 
 Dieser soll Benutzern ermöglichen sich mit ihrem Passwort oder per Gesichtserkennung in ihr Profil einzuloggen. 
-Die Daten sollen persistent gespeichert werden und können bei erneuten Aufruf der Website wieder verwendet werden [\hyperlink{A02}{A02}]. 
+Die Daten sollen persistent gespeichert werden und können bei erneutem Aufruf der Website wieder verwendet werden [\hyperlink{A02}{A02}]. 
 
-\subsubsection{Mögliches Vorgehen}
+\subsection{Grobentwurf}
+
+Auf der Grundlage von Abschnitt \ref{Konzept} werden die Grobentwürfe erstellt.
+Die Konzeptentwürfe gliedern sich in zwei Teile, der Infrastruktur und der Anwendung.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{images/GrobentwurfInfrastruktur.png}
+    \caption{Grobentwurf der Infrastruktur}
+    \label{fig:GrobentwurfInfrastruktur}
+  \end{figure}
+
+\textbf{Lokale Entwicklungsumgebung}: Die Entwicklung der Anwendung verläuft lokal und wird durch ein Versionsverwaltungssystem verwaltet.
+Ein Befehl an das Kubernetes-Cluster initialisiert die Auslieferung und Bereitstellung der einzelnen Dienste. 
+
+\textbf{Image-Registry}: Für die Auslieferung und Bereitstellung von Containern wird ein Image-Registry verwendet.
+Dienste erhalten seperate Images und können unabhängig abgerufen werden.
+
+\textbf{Kubernetes-Cluster}: Das Kubernetes-Cluster wird von einer Orchestierungsinstanz verwaltet.
+Das Abrufen der Dienste erfolgt über ein Image-Registry.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{images/GrobentwurfAnwendung.png}
+    \caption{Grobentwurf der Awendung}
+    \label{fig:GrobentwurfAnwendung}
+  \end{figure}
+
+Die Abbildung \ref{fig:GrobentwurfAnwendung} stellt das Anwendungszenario aus dem Unterabschnitt \ref{Anwendungsszenario} dar.
+Die Anwendung aus dem Szenario wird in drei Diensten aufgeteilt.
+
+\textbf{Frontend-Service}: Das Dashboard wird über den Frontend-Service bereitgestellt.
+Darüber kann ein Benutzer die Funktionalitäten anderer Dienste nutzen.
+
+\textbf{Authentication-Service}: Die Anmeldung und Registrierung in ein Nutzerkonto erfolgt über den Authentication-Service.
+Dieser ermöglicht die persistente Speicherung der Nutzerdaten.
+
+\textbf{Facedetection-Service}: Der Facedetection-Service bietet eine Anmeldung mithilfe von Gesichtserkennung an.
+Die relevanten Daten zur Gesichtserkennung werden in einer Datenbank persistent gespeichert.
+
+\subsection{Mögliches Vorgehen}
 
 Die Entwicklung der Anwendung wird in drei auf sich aufbauende Schichten eingeteilt.
 
-\textbf{Anwendungsentwicklung}: 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\columnwidth]{images/Schichtenentwurf.png}
+    \caption{Vorgehen des Entwicklungsprozesses in Schichten}
+    \label{fig:Schichtenentwurf}
+  \end{figure}
+
+\subsubsection{Anwendungsentwicklung}
 Die Anwendung wird Anfangs erst für die Ausführung am lokalen Rechner entwickelt.
-Einzelne Dienste werden in Aufgabengebiete unterteilt und deren Zuständigkeiten zugewiesen.
+
+Einzelne Verzeichnise 
 
 \textbf{Containervirtualisierung}: 
 Das entwickelte Programm wird dann containerisiert und lokal ausgeführt.
