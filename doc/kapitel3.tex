@@ -105,8 +105,8 @@ Ziele sind erforderlich, um die zukünftigen Anforderungen der Software zu erarb
 \end{center}
 \end{table}
 
-Die Tabelle gewährt einen groben Überblick der nötigen Systemanforderungen an die Mircoservice Architektur. 
-Diese werden nun für das Konzept der Anwendung verwendet.
+Die Tabelle gewährt einen groben Überblick der nötigen Systemanforderungen an die Mircoservice-Architektur. 
+Diese werden nun im nächsten Abschnitt für das Konzept der Anwendung verwendet.
 %Diese werden verfeinert und unterteilen sich im nächsten Abschnitt in Funktionale Anforderungen, also dem Grundverhalten, des Systems das der Nutzer erwartet und den nicht-Funktionale Anforderungen, den qualitativen oder leistungstechnischen Aspekten der Anwendung.
 
 
@@ -128,7 +128,7 @@ Diese werden nun für das Konzept der Anwendung verwendet.
 
 
 \subsection{Konzept}\label{Konzept}
-Die prototypische Anwendung wird containerisert und über ein Registry verfügbar sein [\hyperlink{A03}{A03}] [\hyperlink{A05}{A05}]. 
+Die prototypische Anwendung wird containerisiert und über eine Container-Registry verfügbar sein [\hyperlink{A03}{A03}] [\hyperlink{A05}{A05}]. 
 Weiterhin muss die Anwendung unter der Berücksichtigung der Aspekte einer Microservice-Architektur, wie in Abschnitt \ref{Microservice} beschrieben, konzipiert und entwickelt werden. 
 Die einzelnen Dienste der Anwendung müssen auf einem Kubernetes-fähigen Cluster ausgeliefert und in Betrieb genommen werden [\hyperlink{A04}{A04}].
 Bevor die Anwendung verwendet wird, muss ein fester Testprozess die Funktionalität gewährleisten [\hyperlink{A07}{A07}].
@@ -144,7 +144,24 @@ Der Schwerpunkt der zu entwickelnden Anwendung soll ein Dashboard mit Authentifi
 Dieser soll Benutzern ermöglichen sich mit ihrem Passwort oder per Gesichtserkennung in ihr Profil einzuloggen. 
 Die Daten sollen persistent gespeichert werden und können bei erneutem Aufruf der Website wieder verwendet werden [\hyperlink{A02}{A02}]. 
 
-\subsection{Grobentwurf}
+\subsection{Vorgehen}
+Darauf aufbauend, wird im nächsten Schritt das fachliche Vorgehen zur Realisierung des Konzepts festgelegt.
+
+\subsubsection{Komponententrennung von Diensten}
+Wie in Abschnitt \ref{Microservice} behandelt werden die Kernfunktionalitäten der zu entwickelnden Anwendung  in einzelne Dienste aufgeteilt.
+Im Systementwurf muss definiert werden über welche Schnittstellen die Dienste verfügen und über welche Endpunkte diese Erreichbar sind.
+Folgend müssen auch die Service-Contracts zwischen den Diensten definiert werden.
+
+\subsubsection{Auslieferungsstrategie}
+Die Dienste müssen unabhängig voneinander auslieferbar sein.
+Dienste verfügen über einem eigenen Speicherort, die aus dem Kubernetes-Cluster erreichbar ist.
+
+\subsubsection{Bereitstellungsstrategie}
+
+\subsubsection{Vorkonfiguration}
+
+
+\section{Grobentwurf}
 
 Auf der Grundlage von Abschnitt \ref{Konzept} werden die Grobentwürfe erstellt.
 Die Konzeptentwürfe gliedern sich in zwei Teile, der Infrastruktur und der Anwendung.
@@ -173,7 +190,7 @@ Das Abrufen der Dienste erfolgt über ein Image-Registry.
   \end{figure}
 
 Die Abbildung \ref{fig:GrobentwurfAnwendung} stellt das Anwendungszenario aus dem Unterabschnitt \ref{Anwendungsszenario} dar.
-Die Anwendung aus dem Szenario wird in drei Diensten aufgeteilt.
+Die Anwendung aus dem Szenario wird in drei Dienste aufgeteilt.
 
 \textbf{Frontend-Service}: Das Dashboard wird über den Frontend-Service bereitgestellt.
 Darüber kann ein Benutzer die Funktionalitäten anderer Dienste nutzen.
@@ -184,9 +201,9 @@ Dieser ermöglicht die persistente Speicherung der Nutzerdaten.
 \textbf{Facedetection-Service}: Der Facedetection-Service bietet eine Anmeldung mithilfe von Gesichtserkennung an.
 Die relevanten Daten zur Gesichtserkennung werden in einer Datenbank persistent gespeichert.
 
-\subsection{Mögliches Vorgehen}
+\subsection{Entwicklungsprozess}
 
-Die Entwicklung der Anwendung wird in drei auf sich aufbauende Schichten eingeteilt.
+Die Entwicklung der Anwendung wird in vier auf sich aufbauende Schichten eingeteilt (vgl. Abbildung~\ref{fig:Schichtenentwurf}).
 
 \begin{figure}[!htb]
     \centering
@@ -195,19 +212,24 @@ Die Entwicklung der Anwendung wird in drei auf sich aufbauende Schichten eingete
     \label{fig:Schichtenentwurf}
   \end{figure}
 
-\subsubsection{Anwendungsentwicklung}
-Die Anwendung wird Anfangs erst für die Ausführung am lokalen Rechner entwickelt.
-
-Einzelne Verzeichnise 
+\textbf{Anwendungsentwicklung}: 
+Ein zentrales Repository beeinhaltet Verzeichnisse für die einzelnen Dienste.
+Die Dienste werden lokal entwickelt, getestet und ausgeführt.
 
 \textbf{Containervirtualisierung}: 
-Das entwickelte Programm wird dann containerisiert und lokal ausgeführt.
-Es wird getestet, ob die Containerisierung funktioniert und eine Kommmunikation
-untereinander möglich ist. Schließlich wird das Image auf ein öffentliches Registry geladen.
+Das entwickelte Programm wird dann containerisiert und weiterhin lokal ausgeführt.
+Es wird getestet, ob die Containerisierung erfolgreich war und eine Kommmunikation untereinander möglich ist. 
+Schließlich wird das Image auf ein öffentliches Registry hochgeladen. 
+Jeder Dienst hat dabei einen eigenen Speicherort in Form eines Images.
 
-\textbf{Kubernetes Deployment}: 
-Das Testcluster wird aufgesetzt, installiert und in einen Rancher Server integriert.
+\textbf{Kubernetes-Deployment}: 
+Das zentrale Repository beinhaltet ein weiteres Verzeichnis für die Kubernetes-Ressourcenobjekte in Form von \acs{yaml}-Dateien.
+Bei Zugang der Entwicklungsumgebung zu einem Kubernetes-Cluster können diese Dateien ausgeführt werden.
 
+\textbf{Kubernetes-Cluster}: 
+Das Testcluster wird aufgesetzt, installiert und in eine Orchestrierungsinstanz integriert.
+Skripte für die Vorkonfiguration und Installation des Kubernetes-Clusters, erhalten ein eigenes Verzeichnis im zentralen Repository.
+Die Auslieferung der Dienste erfolgt über das Image-Registry und werden von dem Kubernetes-Cluster heruntergeladen.
 
 
 
