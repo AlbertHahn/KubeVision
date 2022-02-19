@@ -1,48 +1,97 @@
 \chapter{Analyse}
 
 Das vorherige Kapitel beschrieb die nötigen Technologien für die Realisierung und Ausführung einer Anwendung im Microservice-Architektur-Stil.
-Dieses Kapitel beschäftigt sich nun mit der Analyse für die spätere Konzeptphase.
+Dieser Teil widmet sich mit den Innovationsforschungen der Krones AG in Form eines Proof of Concepts.
+In diesem werden Technologien zur Modernisierung der Systemlandschaft untersucht, wie dem Edge-Computing und Kubernetes.
 
-\section{Modernisierung der Infrastruktur}\label{moderninfra}
-Dieser Abschnitt behandelt die aktuellen Bestrebungen der Krones AG hinsichtlich dem Aufbau einer modernen Infrastruktur in Produktionsanlagen. 
-Zunächst wird der Proof of Concept, in dem die Umsetzbarkeit eines Kubernetes fähigen Konzept geprüft wurde behandelt. 
-Anschließend werden Anwendungsmöglichkeiten im Bereich der Echtzeitkommunikation oder künstlichen Intelligenz untersucht. 
 
-\subsection{Proof of Concept}
+\section{Proof of Concept}\label{moderninfra}
 Die Krones AG entwickelt neue Konzepte, um Produktionsanlagen standortübergreifend zu modernisieren. 
-In einem davon wurde ein \ac{poc} mit dem Software-Unternehmen SUSE durchgeführt, um die Umsetzbarkeit von Kubernetes-Technologien zu evaluieren. 
-Diese beinhaltete die Aufrüstung einer Produktionsanlage mit Virtual-Edge-Devices, 
-die über einen Hypervisor Typ 1 zwei Betriebssysteme gleichzeitig ausführen. Windows 10 Embedded, als \ac{hmi} und Linux SUSE Linux Enterprise Micro. 
-Die Integration der Geräte ermöglicht die maschinennahe Nutzung von Echtzeitinformationen während des Betriebs und dienen als Fundament für den Aufbau einer wartungsfreien Infrastruktur.
+In einem davon wurde ein \ac{poc} mit dem Software-Unternehmen SUSE durchgeführt, um die Umsetzung neuer Cloud-Technologien zu evaluieren. 
+Die folgenden Punkte behandeln die Kernthemen des \acs{poc} wie Edge-Computing und Kubernetes.
 
-\subsubsection{Kubernetes}
-Die einzelnen Virtual-Edge-Devices sollen in Zukunft als Knotenpunkte für ein Kubernetes Cluster dienen. 
-Dafür wird die für Edge-Szenarien entworfene Kubernetes-Distribution k3s installiert. 
-Die Kubernetes-Cluster werden mit dem Orchestrierungstool Rancher verwaltet. 
-Diese abstrahiert die Komplexität für den aktiven Betrieb von mehreren Clustern.
+\subsection{Edge-Computing}
+Edge-Computing bezeichnet die dezentrale Verarbeitung von Daten in direkter Nähe der Datenquelle. 
+Das verringert den Bedarf an lokale Rechenzentren und senkt die Latenzzeiten bei der Übertragung von Daten. 
+Betrachtungsgenstand des PoC war die Virtualisierung der bereits vorhandenen Industrierechner der Firma B\&R, um sie als Virtual-Edge-Devices zu verwenden.
+Auf den Virtual-Edge-Devices werden dann Operationen wie erfassen, aggregieren und aufbereiten von Daten direkt an der Anlage ausgeführt. 
+Die derzeitigen Anwendungen der Krones AG sind für das Betriebssystem Windows konzipiert und entwickelt worden.
+Für das Edge-Szenario soll aber ein Linux basierte Betriebssystem verwendet werden,
+weshalb die Integration über Virualisierungsmöglichkeiten realisiert wird.
+
+\subsubsection{Virtualisierung}
+Das Unternehmen B\&R steht in Kooperation mit der Firma RTS, diese bietet Technologie für die Virtualisierung von Echtzeit Betriebssystemen an \cite{rtosandbundr}.
+Dafür wird ein Hypervisor genutzt, um gleichzeitig unterschiedliche Echtzeit Betriebssysteme in Form von VMs auszuführen.
+Dies ermöglicht auch die Zuteilung von Hardwareressourcen auf den laufenden VMs.
+Ein Vorteil ist das keine zusätzliche Hardware benötigt wird.
+Die Zuweisung für Hardwareschnittstelen wie Ethernet USB-Ports ist durch diesen Ansatz auch möglich.
+Virtuelle Netzwerke erlauben die Zuweisung von IPv4 und Mac-Adressen einzelner Prozessorkerne.
+Diese ermöglichen eine direkte Kommunikation über Internetprotokolle wie TCP/IP oder COBRA.
+Weiter kann jedes virtualisierte Betriebssystem Daten über einen gemeinsame Speicherpartitionen verwaltet werden \cite{rtos}.
+
+\subsubsection{Connected \ac{hmi}}
+Die Produktionsanlagen nutzen Windows 10 Embedded als Betriebssytem.
+Darauf läuft das \acs{hmi} mit einer Touch-Oberfläche für Benutzereingaben.
+Dies ist für die zentrale Überwachung und Steuerung von Analagenprozessen zuständig.
+Und erlaubt die Einteilung von Produktionsrelevanten Aufgaben wie Wartungsarbeiten, Materialversorgung und Qualitätskontrollen \cite{hmi}.
+
+\subsubsection{SUSE Linux Enterprise Micro}
+Das für Edge-Szenarien entwickelte Open-Source-Betriebssystem SUSE Linux Enterprise Micro ist das zweite virtualisierte Betriebssystem, dass auf dem Hypervisor laufen soll.
+Dieses arbeitet mit transactional-updates, welche Updates erst aktivieren, wenn das Betriebssystem neu gestartet wurde. 
+Erfolgt das Update nicht wird ein Rollback zum vorherigen Versionszustand durchgeführt und ermöglicht wartungsfreie Zustände der Geräte.
+Das Betriebssytem wurde, um die Idee von containerisierten Arbeistlasten und Microservices entwickelt.
+
+\subsection{Kubernetes}
+Auf der Grundlage des Edge-Computing war der zweite Schwerpunkt des PoC die Orchestrierung einer solchen Infrastruktur. 
+Dabei sollen die einzelnen Virtual-Edge-Devices in Zukunft als Knotenpunkte für ein Kubernetes-Cluster dienen. 
+Dafür wird die für Edge-Szenarien entworfene Kubernetes-Distribution k3s installiert.
+
+Auf dieser sollen containerisierte Anwendungen ausgeliefert und bereitgestellt werden.
+Anwendungen wie Mircoservices können innerhalb des Cluster über Endpunkte oder Kubernetes-Objekte kommunizieren.
+Dadurch müssen Hostssysteme und der darauf laufenden Software nicht mit dessen Netzwerkadresse angesprochen werden.
+Die Vorkonfiguration von Anwendung fällt durch die Architektur von Containern auch weg.
 
 
-\subsection{Aufgabenstellung}
-Im Zuge dessen wird die Umsetzbarkeit und Relevanz von Microservices auf der zukünftigen Produktionsanlage untersucht. 
-Diese muss folgende Aufgabengebiete untersuchen.
+
+\subsubsection{Rancher}
+Zur Orchestrierung der Kubernetes-Cluster Instanzen wurde die Orchestrierungsplattform Rancher näher untersucht. 
+Diese ermöglicht die zentrale Verwaltung mehrerer Kubernetes-Cluster in Produktionsumgegebungen.
+Weiterhin wurde die Bedienbarkeit der Benutzeroberfläche untersucht und es wurden Tests durchgeführt.
+Bei diesen wurden containerisierte Arbeitslasten verwaltet und Kubernetes-Objekte erstellt und miteinander verbunden.
+Ein weiterer Vorteil ist die Auslieferung von Kubernetes-Anwendungen durch den Apps \& Marketplace von Rancher. 
+
+\subsubsection{Helm}
+Helm ist ein Kubernetes-Package-Manager und ermöglicht die Erstellung, Installation und das Updaten von Kubernetes Anwendungen.
+Wichtige Konzepte von Helm sind Charts, diese sind eine Ansammlung von Informationen zur Erstellung von Anwendungen als Kubernetes-Instanz. 
+Config diese beinhalten die Informationen der Konfiguration von Charts und erstellen oder verpacken diese.
+Release bezeichnet eine laufende Instanz eines Chart in Kombination einer bestimmten Config \cite{helm}.
+
+Helm selber ist eine ausführbare Datei, die aus einem Kommandozeilentool besteht, dem Helm-Client.
+Dieser erlaubt die lokale Entwicklung von Charts und dem verwalteten von Repositories wie auch der Versionsverwaltung.
+Weiterhin dient der Client als Schnittstelle zur Helm-Library, welche Operationen mit dem Kubernetes-API-Server ermöglichen.
+Dadurch können Charts und Konfigurationen als ein Release gebildet werden.
+Weiterhin können Charts in einem Kubernetes-Cluster installiert werden.
+Wie auch deinstalliert und aktualisiert werden. 
+Die Konfigurationsdateien von Helm werden in der Regel, wie auch Kubernetes-Ressourcenobjekt in YAML geschrieben \cite{helm}.
+
+Der Anwendungsfall im Bezug zur Krones AG ist die Kundenindividuelle Konfiguration von Kubernetes Anwendungen die in einem Kunden Repository gespeichert werden.
+Die Kundenkonfigurationen stehen dabei als Helm-Charts verfügbar und ermöglichen eine vereinfachte Auslieferung und Bereitstellung durch Helm-Repositories.
+Der Rancher Apps \& Marketplace ist hierbei eine Möglichkeit Helm-Charts, über eine Benutzeroberfläche zu konfigurieren und installieren.
 
 
-\subsubsection{Bereitstellung}
-Die Auslieferung und Entwicklung bestimmter Software soll zukünftig über Kundenrepositories erfolgen. 
-Diese ermöglichen einen zentralen Ort für die kundenindividuelle Konfiguration der Anlagensoftware. 
+\section{Anwendungsfälle}
+Die Betrebungen des PoC zeigten neue Anwendungsfälle für die weitere Untersuchung des Kubernetes-Clusters.
 
-\subsubsection{Hybrid Cloud}
-Die Anwendung funktioniert in einem hybriden Cloud-Szenario mit unterschiedlichen Ressourcentypen. Kunden können sensible Daten in Ihrer eigenen
-privaten Cloud oder einem lokalen Rechenzentrum speichern und gleichzeitig die
-Vorteile von den erhöhten Rechenressourcen einer verwalteten Public Cloud nutzen.
-Die flexible Wahl der Ressourcen ermöglicht kürzere Berechnungszeiten, ohne on-premise Hardware zu besitzen, die zur Auswertung und Evaluierung von Produktionsanlagen dienen.
+\subsection{Hybrid Cloud}
+Die zukünftige Kubernetes-Infrastruktur kann die Integration von On-Premise und Cloud-Ressourcen in einer Softwareumgegbung ermöglichen.
 
-\subsubsection{Echtzeitkommunikation}
-Die Anwendung auf den Edge-Devices kommunizieren in Echtzeit miteinander. 
-Und können die Informationen sinnvoll verarbeiten und persistent speichern.
 
-\subsubsection{Künstliche Intelligenz}
-Die Anwendung bringt einen Mehrwert im Bereich der künstlichen Intelligenz und nutzt die Infrastruktur zur Auswertung von Deep Learning Modellen. 
+
+\subsection{Microservices}
+\subsection{Künstliche Intelligenz}
+\subsubsection{Deep Learning}
+
+
 
 \section{Fachkonzept}
 Im folgenden Abschnitt werden die Anforderungen und Anwendungsfälle für die spätere Konzeption der Microservice-Architektur erhoben.
@@ -157,21 +206,25 @@ Die Dienste müssen unabhängig voneinander auslieferbar sein.
 Dienste verfügen über einem eigenen Speicherort, die aus dem Kubernetes-Cluster erreichbar ist.
 
 \subsubsection{Bereitstellungsstrategie}
+Bei der Bereistellung des Dienstes muss das Zielsystem über die notwendigen 
 
 \subsubsection{Vorkonfiguration}
 
 
-\section{Grobentwurf}
+\section{Grobkonzeption}
 
 Auf der Grundlage von Abschnitt \ref{Konzept} werden die Grobentwürfe erstellt.
 Die Konzeptentwürfe gliedern sich in zwei Teile, der Infrastruktur und der Anwendung.
 
+\subsection{Infrastruktur}
+Die Abbildung \ref{fig:GrobentwurfInfrastruktur} stellt das Zielsystem dar.
+
 \begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.8\columnwidth]{images/GrobentwurfInfrastruktur.png}
-    \caption{Grobentwurf der Infrastruktur}
-    \label{fig:GrobentwurfInfrastruktur}
-  \end{figure}
+  \centering
+  \includegraphics[width=0.8\columnwidth]{images/GrobentwurfInfrastruktur.png}
+  \caption{Grobentwurf der Infrastruktur}
+  \label{fig:GrobentwurfInfrastruktur}
+\end{figure}
 
 \textbf{Lokale Entwicklungsumgebung}: Die Entwicklung der Anwendung verläuft lokal und wird durch ein Versionsverwaltungssystem verwaltet.
 Ein Befehl an das Kubernetes-Cluster initialisiert die Auslieferung und Bereitstellung der einzelnen Dienste. 
@@ -182,15 +235,20 @@ Dienste erhalten seperate Images und können unabhängig abgerufen werden.
 \textbf{Kubernetes-Cluster}: Das Kubernetes-Cluster wird von einer Orchestierungsinstanz verwaltet.
 Das Abrufen der Dienste erfolgt über ein Image-Registry.
 
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.8\columnwidth]{images/GrobentwurfAnwendung.png}
-    \caption{Grobentwurf der Awendung}
-    \label{fig:GrobentwurfAnwendung}
-  \end{figure}
 
+
+
+
+\subsection{Anwendung}
 Die Abbildung \ref{fig:GrobentwurfAnwendung} stellt das Anwendungszenario aus dem Unterabschnitt \ref{Anwendungsszenario} dar.
 Die Anwendung aus dem Szenario wird in drei Dienste aufgeteilt.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.8\columnwidth]{images/GrobentwurfAnwendung.png}
+  \caption{Grobentwurf der Awendung}
+  \label{fig:GrobentwurfAnwendung}
+\end{figure}
 
 \textbf{Frontend-Service}: Das Dashboard wird über den Frontend-Service bereitgestellt.
 Darüber kann ein Benutzer die Funktionalitäten anderer Dienste nutzen.
@@ -214,7 +272,7 @@ Die Entwicklung der Anwendung wird in vier auf sich aufbauende Schichten eingete
 
 \textbf{Anwendungsentwicklung}: 
 Ein zentrales Repository beeinhaltet Verzeichnisse für die einzelnen Dienste.
-Die Dienste werden lokal entwickelt, getestet und ausgeführt.
+Diese werden lokal entwickelt, getestet und ausgeführt.
 
 \textbf{Containervirtualisierung}: 
 Das entwickelte Programm wird dann containerisiert und weiterhin lokal ausgeführt.

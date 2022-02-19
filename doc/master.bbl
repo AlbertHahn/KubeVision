@@ -295,6 +295,33 @@ S.~Newman, \emph{Building microservices}, 2nd~ed.\hskip 1em plus 0.5em minus
   \url{https://martinfowler.com/bliki/BoundedContext.html}
 \BIBentrySTDinterwordspacing
 
+\bibitem{rtosandbundr}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{de-DE}{Zwei {Betriebssysteme} auf einem {Gerät}
+  {\textbar} {B}\&{R} {Industrial} {Automation}}.'' [Online]. Available:
+  \url{https://www.br-automation.com/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{rtos}
+\BIBentryALTinterwordspacing
+``{RTS} {Hypervisor} - {Hardware} partitioning - {Real}-{Time} {Systems}.''
+  [Online]. Available:
+  \url{https://www.real-time-systems.com/de/use-cases/rts-hypervisor-hardware-partitioning.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{hmi}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{de}{Connected {HMI}: die neue {Generation} der
+  {Maschinenvisualisierung} - {Krones}}.'' [Online]. Available:
+  \url{https://www.krones.com/de/produkte/innovationen/maschinenvisualisierung-connected-hmi.php}
+\BIBentrySTDinterwordspacing
+
+\bibitem{helm}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en-us}{Helm {Architecture}}.'' [Online]. Available:
+  \url{https://helm.sh/docs/topics/architecture/}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Laplante}
 P.~A. Laplante, \emph{Requirements Engineering for Software and Systems}, ser.
   Applied Software Engineering Series.\hskip 1em plus 0.5em minus 0.4em\relax

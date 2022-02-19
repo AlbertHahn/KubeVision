@@ -9,9 +9,9 @@
 \contentsline {figure}{\numberline {2.6}{\ignorespaces Rancher Server Kommunikation mit einem downstream k3s Cluster, \IeC {\"u}berarbeitete Abbildung von \cite {rancherArchitecture}. (Im Sinne der sp\IeC {\"a}teren Architektur nachgebildet)\relax }}{14}{figure.caption.19}%
 \contentsline {figure}{\numberline {2.7}{\ignorespaces Gegen\IeC {\"u}berstellung von Monolithen und Microservices \cite {FowlerMicroservice}\relax }}{16}{figure.caption.20}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Grobentwurf der Infrastruktur\relax }}{24}{figure.caption.41}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Grobentwurf der Awendung\relax }}{24}{figure.caption.42}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Vorgehen des Entwicklungsprozesses in Schichten\relax }}{25}{figure.caption.43}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Grobentwurf der Infrastruktur\relax }}{25}{figure.caption.42}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Grobentwurf der Awendung\relax }}{26}{figure.caption.43}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Vorgehen des Entwicklungsprozesses in Schichten\relax }}{27}{figure.caption.44}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
