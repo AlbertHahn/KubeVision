@@ -1,8 +1,118 @@
-% Big picture nicht vergessen, blaupausenartig ein Beispiel nach meiner Art
-\chapter{Ergebnisse}
-\section{Microservice}
-\subsection{Frontend-Serivce}
-\subsection{Backend-Serivce}
-\subsection{Authentifizierungs-Serivce}
+\chapter{Implementierung der Architektur}
+
+Das folgende Kapitel beschreibt die Vorgehensweisen der Implementierung.
+Angefangen mit der Konfiguration und Einrichtung der Knotenpunkte für das Kubernetes-Cluster.
+
+
+\section{Konfiguration und Einrichtung}
+
+In diesem Abschnitt geht es um die Einrichtung der Kubernetes Infrastruktur.
+Zuerst die Einrichtung der einzelnen virtuellen privaten Server in Vultr, die als Knotenpunkte in unserem Kubernetes Cluster funktonieren.
+Danach die Installation der Infrastruktur mit k3s.
+Zunächst wird eine Domain für den späteren Einsatz der Microservices konfiguriert.
+Abschließend erfolgt die Bereitstellung von Zertifikaten für die Domain.
+
+\subsection{Virtueller privater Server}
+
+Durch die Einschränkungen, beschrieben in Abschnitt \ref{Einschraenkungen},
+werden für die Installation der Kubernetes Plattform virtuelle private Server (VPS) verwendet.
+Ein VPS ist eine virtuelle Maschine, die von Drittanbietern wie Internet-Hosting-Diensten, als Dienst verkauft wird.
+Dies ermöglicht das Mieten von Hardware.
+Die Server dienen als Knotenpunkte für die spätere Kubernetes Installation.
+Es werden ingesamt drei VPS-Instanzen gemietet auf denen das folgende Betriebssystem installiert wird.
+
+\subsubsection{Betriebssystem}
+Im Rahmen des PoC mit dem Unternehmen SUSE wurde das 
+Betriebssystem SLE-Micro Enterprise 5.1 bereitgestellt und auf den Serverinstanzen installiert.
+Dieses arbeitet mit transactional-updates, welche Updates erst aktivieren, wenn das Betriebssystem neu gestartet wurde. 
+Erfolgt das Update nicht wird ein Rollback zum vorherigen Versionszustand durchgeführt.
+
+\subsubsection{Domain}
+Der Zugang zur Webanwendung wird mithilfe einer öffentlichen Domain ermöglicht.
+Der DNS-Eintrag einer Domain ist für die Adressierung zuständig.
+Durch die Veränderung des A-Records leiten alle Anfragen der Domain auf eine IPv4-Adresse um \cite{LearningCoreDNS}.
+Die IPv4 Adresse ist in diesem Fall der Cluster Master der späteren k3s-Installation.
+
+\subsection{Kubernetes Installation}
+Dieser Abschnitt behandelt die Einrichtung und Installation der Kubernetes-Distributi\-on Lightweight Kubernetes und der Orchestrierungsplattform Rancher.
+
+
+\subsubsection{Lightweight Kubernetes}\label{k3screate}
+Für die Installation von k3s auf den Server wurde ein Shell-Skript entwickelt, 
+das mit den nötigen Befehlen aus der Dokumentation geschrieben wurde.
+\begin{lstlisting}[caption={Ausschnitt aus dem installk3s.sh},captionpos=b,label={lst:k3sintall},language=bash]
+    curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" K3S_CLUSTER_INIT=1 sh -
+    TOKEN=$( cat /var/lib/rancher/k3s/server/node-token )
+    
+    USERNAME=root
+    SCRIPT="curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" K3S_TOKEN=$TOKEN K3S_URL=https://$ip4:6443 sh - "
+    for HOSTNAME in ${HOSTS[@]} ; do
+        ssh -o StrictHostKeyChecking=no -l ${USERNAME} ${HOSTNAME} "hostnamectl set-hostname ${HOSTNAMES[$COUNTER]}; ${SCRIPT}"  
+        echo "HOSTNAME CHANGED: ${HOSTNAMES[$COUNTER]}"
+        ((COUNTER++))
+    done
+\end{lstlisting}
+
+Das Skript holt mittels \textit{curl} Aufruf das Installationsskript für k3s und führt es mit den vorgegebenen Initialisierungsparametern aus. 
+Der Parameter \textit{INSTALL\_K3S\_EXEC} bestimmt die Aufgabe der Node.
+\textit{K3S\_CLUSTER\_INIT} initialisiert die Node als neuen Cluster-Master.
+Danach wird ein Token im \textit{../k3s/server} Verzeichnis angelegt. Dieser ist für die Verknüpfung der andern Knoten nötig und wird als Variable gespeichert.
+In einer Schleife werden die vom Skript vorher abgefragten IP-Adressen und Hostsystemnamen des Benutzer verarbeitet.
+Über das Netzwerkprotokoll \ac{ssh} verbindet sich das ausführende System mit den restlichen Knotenpunkten
+und installiert mithilfe der Variablen \textit{TOKEN} und \textit{SCRIPT} k3s.
+
+\subsubsection{Rancher}
+Im Rahmen des PoCs wurde bereits ein Rancher-Server zur Verwaltung von mehreren downstream-Cluster erstellt.
+Der im vorherigen Abschnitt \ref{k3screate} eingerichtete k3s-Cluster wird mit dem Rancher Server verbunden.
+Über die Rancher-Benutzeroberfläche lässt sich das Kubernetes-Cluster mithilfe des \textit{Add Cluster} Buttons hinzufügen.
+Die weiteren Schritte ermöglichen das benennen des Cluster und den notwendigen Befehl zum verknüpfen der gewünschten Cluster.
+Diese werden wegen ihrer Trivialität nicht weiter ausgeführt.
+
+\subsection{KubeVision}
+Dieser Abschnitt behandelt die einzelnen Softwarekomponenten der Microservice-Anwendung KubeVision.
+Die Webanwendung ist in drei verschiedene Dienste unterteilt.
+Erstens der Benutzeroberfläche für die Interaktion mit dem Benutzer.
+Zweitens dem Authentifizierungsdienst, der für die Registrierung und Anmeldung zuständig ist.
+Drittens der Backend-Dienst, welcher die Authentifizierung per Gesichtserkennung ermöglicht.
+
+\subsection{Frontend-Service}
+Das Frontend besteht aus einer HTML5-Benutzeroberfläche und wird für die Interaktion mit dem Benutzer
+mit JavaScript kombiniert.
+\subsection{Authentifizierungs-Service}
+\subsection{Backend-Service}
+
+
+%alles ausschreiben??
+%\section{Frameworks und Bibliotheken für Microservices}
+%\subsection{Flask}
+%\subsection{Gunicorn}
+%\subsection{SocketIO}
+%\subsection{OpenCV}
+%\subsection{MongoDB}
+
+\section{Gesichtserkennung}
+\subsection{Alignment}
+\subsection{Training}
+\subsection{Model}
+
+\section{Containerisierung}
+\subsection{Volumes}
+\subsection{Netzwerk}
+\subsection{Docker-Compose}
+\subsection{DockerHub}
+
+\section{Orchestrierung}
+\subsection{SSL-Verschlüsselung}
+\subsection{Deployment}
+\subsection{Ingress}
+\subsubsection{Nginx-Ingress}
 \subsection{Loadbalancer}
-\subsection{Kubernetes Cluster}
+\subsection{Taints and Tolerations}
+\subsection{Node Affinity}
+\subsection{Helm}
+
+
+\section{Testen der Implementeriung}
+\subsection{Service Kommunikation}
+\subsection{Loadbalancing}
+\subsection{Gesichtserkennung}

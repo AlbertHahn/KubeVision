@@ -322,11 +322,6 @@ S.~Newman, \emph{Building microservices}, 2nd~ed.\hskip 1em plus 0.5em minus
   \url{https://helm.sh/docs/topics/architecture/}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Laplante}
-P.~A. Laplante, \emph{Requirements Engineering for Software and Systems}, ser.
-  Applied Software Engineering Series.\hskip 1em plus 0.5em minus 0.4em\relax
-  London, England: Auerbach, Mar. 2009.
-
 \bibitem{LearningCoreDNS}
 J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
   0.4em\relax Farnham, England: O'Reilly UK, Sep. 2019.
