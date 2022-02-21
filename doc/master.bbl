@@ -322,6 +322,64 @@ S.~Newman, \emph{Building microservices}, 2nd~ed.\hskip 1em plus 0.5em minus
   \url{https://helm.sh/docs/topics/architecture/}
 \BIBentrySTDinterwordspacing
 
+\bibitem{flaskdocu}
+\BIBentryALTinterwordspacing
+``Welcome to {Flask} — {Flask} {Documentation} (2.0.x).'' [Online].
+  Available: \url{https://flask.palletsprojects.com/en/2.0.x/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{restfulpython}
+G.~C. Hillar, \emph{{Hands-On} {RESTful} Python Web Services}, 2nd~ed.\hskip
+  1em plus 0.5em minus 0.4em\relax Birmingham, England: Packt Publishing, Dec.
+  2018.
+
+\bibitem{gunciorndocs}
+\BIBentryALTinterwordspacing
+``Design — {Gunicorn} 20.1.0 documentation.'' [Online]. Available:
+  \url{https://docs.gunicorn.org/en/latest/design.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{opencvintro}
+\BIBentryALTinterwordspacing
+``{OpenCV}: {Introduction}.'' [Online]. Available:
+  \url{https://docs.opencv.org/3.4/d1/dfb/intro.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{ansari_core_2020}
+\BIBentryALTinterwordspacing
+S.~Ansari, ``\BIBforeignlanguage{en}{Core {Concepts} of {Image} and {Video}
+  {Processing}},'' in \emph{\BIBforeignlanguage{en}{Building {Computer}
+  {Vision} {Applications} {Using} {Artificial} {Neural} {Networks}: {With}
+  {Step}-by-{Step} {Examples} in {OpenCV} and {TensorFlow} with {Python}}},
+  S.~Ansari, Ed.\hskip 1em plus 0.5em minus 0.4em\relax Berkeley, CA: Apress,
+  2020, pp. 9--26. [Online]. Available:
+  \url{https://doi.org/10.1007/978-1-4842-5887-3_2}
+\BIBentrySTDinterwordspacing
+
+\bibitem{opencvpython}
+\BIBentryALTinterwordspacing
+``{OpenCV}: {Introduction} to {OpenCV}-{Python} {Tutorials}.'' [Online].
+  Available: \url{https://docs.opencv.org/4.x/d0/de3/tutorial_py_intro.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{httpwebsocket}
+E.~F. de~Souza~Soares, R.~Melo~Thiago, L.~G. Azevedo, M.~de~Bayser,
+  V.~Torres~da Silva, and R.~F.~de G.~Cerqueira, ``Evaluation of server push
+  technologies for scalable client-server communication,'' in \emph{2018 IEEE
+  Symposium on Service-Oriented System Engineering (SOSE)}, 2018, pp. 1--10.
+
+\bibitem{socketio}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Introduction {\textbar} {Socket}.{IO}}.'' [Online].
+  Available: \url{https://socket.io/docs/v4/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{python-socketio}
+\BIBentryALTinterwordspacing
+``python-socketio — python-socketio documentation.'' [Online]. Available:
+  \url{https://python-socketio.readthedocs.io/en/latest/}
+\BIBentrySTDinterwordspacing
+
 \bibitem{LearningCoreDNS}
 J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
   0.4em\relax Farnham, England: O'Reilly UK, Sep. 2019.

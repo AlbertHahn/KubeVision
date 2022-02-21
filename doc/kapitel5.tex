@@ -3,28 +3,65 @@ Im Fokus des vierten Kapitels steht die Konzeption und Architektur der Microserv
 
 \section{Design Entscheidungen}
 
-\subsection{Backend-Server}
+Der folgende Abschnitt behandelt die gewählten Technologien für das Lösungskonzept der Microservice-Architektur.
+
+\subsection{Backend}
 
 \subsubsection{Flask}
-Das leichtgewichtige Framework Flask wird für die 
+Für die Entwicklung der Webanwendung in Python wird das Microframework Flask verwendet.
+Dieses beinhaltet nur die wesentlichsten Funktionalitäten für die Webentwicklung.
+Dafür bietet das Framework eine hohe Flexibilität, da die nötigen Bibliotheken vom Entwickler gewählt werden können \cite{flaskdocu} und
+vereinfacht die Erstellung von \acs{api}s \cite[S.11]{restfulpython}.
+
+Die Verwendung von Blueprints ermöglicht die Aufteilung von Endpunkten in views.
+Bei Aufrufen eines Endpunkts wird die dazugehörige view ausgegeben \cite{flaskdocu}.
+Dadurch kann man die Funktionalität der Webanwendung nach Endpunkten strukturieren und ist ideal für die Ausführung einer Microservice-Architektur.
+
+Weiterhin ermöglichen die Flask-Abhängigkeiten wie Template-Engine Jinja und dem WSIG Werkzeugkasten,
+das Rendern von HTML-Templates mit Daten aus der Flask-Anwendung
+und dem Bereitstellen einer standartisierten Schnittstelle \ac{wsgi}, welche die Verwendung der meisten Webserver ermöglicht \cite{flaskdocu}.
+
 
 \subsubsection{Gunicorn}
+Gunicorn ist ein \acs{wsgi} \acs{http} server für Unix.
+Dieser ist mit den meisten Webframeworks kompatibel.
+Das Gunicorn-Modell teilt einen Master-Prozess in mehrere Worker-Prozesse auf.
+Der Master-Prozess ist lediglich eine Schleife für die bestehenden Worker-Prozesse
+und ist bei Ausfall für den Neustart zuständig.
+Die Worker-Prozesse sind für die Verarbeitung von eingehenden Anfragen zuständig.
+Diese teilen sich in folgende Worker-Class ein. 
+Sync-Workers bearbeiten Anfragen jeweils Einzeln und unterstützten keine persistente Verbindung.
+Async-Workers sind basierend auf Greenlets und unterstützten mithilfe von Gevent asynchrone Koroutinen \cite{gunciorndocs}. 
+
+\subsubsection{OpenCV}
+OpenCV ist eine Open-Source-Computer-Vision\footnote{Computer-Vision bezeichnet die Transformation von visuellen Daten in eine abgewandelte Form, die zu Beantwortung einer Fragestellung dienen kann.} Bibliothek, die zur Vearbeitung von Bildern verwendet wird \cite{opencvintro}.
+Da ein Video nur eine Serie von Bildern ist, können die Techniken der Bildverarbeitung auch hier genutzt werden \cite{ansari_core_2020}.
+Die Bibliothek beinhaltet eine Vielzahl an Algorithmen mit Bezug zu Computer-Vision oder Machine-Learning.
+Diese untersützten auch die Verwendung von \acp{gpu} die auf den Programmierschnittstellen \ac{cuda} oder \ac{opencl} basieren \cite{opencvpython}.
+Die Anwendung wird mit der Python-Version der Bibliothek entwickelt, um ihn in unseren Python-Flask Webanwendung leichter zu integrieren.
+
+
 
 \subsection{Frontend}
 
-\subsubsection{HTML}
-
-\subsubsection{JavaScript}
+\subsubsection{\ac{html} und JavaScript}
+Die Umsetzung der Benutzerobfläche erfolgt mit der Auszeichnungssprache \acs{html}5 in Kombination
+mit der Skriptsprache JavaScript, um die Interaktion des Anwenders zu realisiern.
+Für die erleichterte Gestaltung der Website wird das Frontend-\acs{css}-Framework Bootstrap Version 5.0 genutzt.
 
 \subsection{Kommunikation}
 
 \subsubsection{SocketIO}
+Die bidirektionale und ereignisbasierte Echtzeitkommunikation zwischen den Diensten wird mithilfe der SocketIO Bibliothek realisiert.
+Die Bibliothek unterstützt mehrere Programmiersprachen für Server und Client Implementierung, welche von der Community gewartet werden.
+Eine Kommunikation zwischen Server und Client erfolgt über WebSockets, wenn dies nicht möglich ist, wird auf die Ressourcen intensivere \cite{httpwebsocket} Alternative \acs{http}-long-polling zurückgegriffen \cite{socketio}.
+Für die Kommunikation der Webanwendung wird die Server Implementierung von Python-Socketio genutzt \cite{python-socketio}.
+Die Implementierung der Anwenderlogik erfolgt über die JavaScript SocketIO Bibliothek, diese sind Plattformunabhängig.
 
-\subsubsection{REST}
 
-\subsection{Gesichtserkennung}
-
-\subsubsection{OpenCV}
+\subsubsection{\ac{rest}}
+\acs{rest} ist ein Architektur-Stil für verteilte Systeme.
+Dieser ist ein Ressourcen basierende Architektur, die zugänglich über übliche 
 
 \subsection{Datenbank}
 

@@ -25,45 +25,45 @@ Warning--empty booktitle in BuildingMicroservicesNewmanChapter5
 Warning--empty year in microservicesvssoa
 
 Done.
-You've used 49 entries,
+You've used 58 entries,
             4087 wiz_defined-function locations,
-            1035 strings with 13696 characters,
-and the built_in function-call counts, 18084 in all, are:
-= -- 1193
-> -- 188
-< -- 43
-+ -- 112
-- -- 26
-* -- 838
-:= -- 2853
-add.period$ -- 100
-call.type$ -- 49
-change.case$ -- 61
-chr.to.int$ -- 117
-cite$ -- 51
-duplicate$ -- 1588
-empty$ -- 1955
-format.name$ -- 32
-if$ -- 4069
+            1069 strings with 15020 characters,
+and the built_in function-call counts, 21792 in all, are:
+= -- 1437
+> -- 242
+< -- 56
++ -- 141
+- -- 35
+* -- 1002
+:= -- 3431
+add.period$ -- 119
+call.type$ -- 58
+change.case$ -- 72
+chr.to.int$ -- 150
+cite$ -- 60
+duplicate$ -- 1903
+empty$ -- 2356
+format.name$ -- 42
+if$ -- 4918
 int.to.chr$ -- 0
-int.to.str$ -- 49
-missing$ -- 326
-newline$ -- 250
-num.names$ -- 12
-pop$ -- 1143
+int.to.str$ -- 58
+missing$ -- 389
+newline$ -- 291
+num.names$ -- 17
+pop$ -- 1360
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 1294
+skip$ -- 1561
 stack$ -- 0
-substring$ -- 287
-swap$ -- 869
-text.length$ -- 4
+substring$ -- 362
+swap$ -- 1044
+text.length$ -- 6
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 49
+type$ -- 58
 warning$ -- 2
-while$ -- 27
-width$ -- 51
-write$ -- 438
+while$ -- 39
+width$ -- 60
+write$ -- 515
 (There were 2 warnings)
