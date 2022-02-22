@@ -11,20 +11,19 @@ Der folgende Abschnitt behandelt die gewählten Technologien für das Lösungsko
 Für die Entwicklung der Webanwendung in Python wird das Microframework Flask verwendet.
 Dieses beinhaltet nur die wesentlichsten Funktionalitäten für die Webentwicklung.
 Dafür bietet das Framework eine hohe Flexibilität, da die nötigen Bibliotheken vom Entwickler gewählt werden können \cite{flaskdocu} und
-vereinfacht die Erstellung von \acs{api}s \cite[S.11]{restfulpython}.
+vereinfacht die Erstellung von \acs{api}s \cite[S.11]{restfulpython} durch Blueprints.
 
 Die Verwendung von Blueprints ermöglicht die Aufteilung von Endpunkten in views.
 Bei Aufrufen eines Endpunkts wird die dazugehörige view ausgegeben \cite{flaskdocu}.
 Dadurch kann man die Funktionalität der Webanwendung nach Endpunkten strukturieren und ist ideal für die Ausführung einer Microservice-Architektur.
 
-Weiterhin ermöglichen die Flask-Abhängigkeiten wie Template-Engine Jinja und dem WSIG Werkzeugkasten,
+Weiterhin ermöglichen die Flask-Abhängigkeiten wie Template-Engine Jinja und dem \acs{wsgi} Werkzeugkasten,
 das Rendern von HTML-Templates mit Daten aus der Flask-Anwendung
 und dem Bereitstellen einer standartisierten Schnittstelle \ac{wsgi}, welche die Verwendung der meisten Webserver ermöglicht \cite{flaskdocu}.
 
 
 \subsubsection{Gunicorn}
-Gunicorn ist ein \acs{wsgi} \acs{http} server für Unix.
-Dieser ist mit den meisten Webframeworks kompatibel.
+Gunicorn ist ein \acs{wsgi} \acs{http} server für Unix, welcher mit den meisten Webframeworks kompatibel ist.
 Das Gunicorn-Modell teilt einen Master-Prozess in mehrere Worker-Prozesse auf.
 Der Master-Prozess ist lediglich eine Schleife für die bestehenden Worker-Prozesse
 und ist bei Ausfall für den Neustart zuständig.
@@ -38,7 +37,7 @@ OpenCV ist eine Open-Source-Computer-Vision\footnote{Computer-Vision bezeichnet 
 Da ein Video nur eine Serie von Bildern ist, können die Techniken der Bildverarbeitung auch hier genutzt werden \cite{ansari_core_2020}.
 Die Bibliothek beinhaltet eine Vielzahl an Algorithmen mit Bezug zu Computer-Vision oder Machine-Learning.
 Diese untersützten auch die Verwendung von \acp{gpu} die auf den Programmierschnittstellen \ac{cuda} oder \ac{opencl} basieren \cite{opencvpython}.
-Die Anwendung wird mit der Python-Version der Bibliothek entwickelt, um ihn in unseren Python-Flask Webanwendung leichter zu integrieren.
+Die Anwendung wird mit der Python-Version der Bibliothek entwickelt, um die Implementierung in die Python-Webanwendung zu vereinfachen.
 
 
 
@@ -53,36 +52,110 @@ Für die erleichterte Gestaltung der Website wird das Frontend-\acs{css}-Framewo
 
 \subsubsection{SocketIO}
 Die bidirektionale und ereignisbasierte Echtzeitkommunikation zwischen den Diensten wird mithilfe der SocketIO Bibliothek realisiert.
-Die Bibliothek unterstützt mehrere Programmiersprachen für Server und Client Implementierung, welche von der Community gewartet werden.
+Die Bibliothek unterstützt mehrere Programmiersprachen für Server und Client Implementierungen, welche von der Community gewartet werden.
 Eine Kommunikation zwischen Server und Client erfolgt über WebSockets, wenn dies nicht möglich ist, wird auf die Ressourcen intensivere \cite{httpwebsocket} Alternative \acs{http}-long-polling zurückgegriffen \cite{socketio}.
 Für die Kommunikation der Webanwendung wird die Server Implementierung von Python-Socketio genutzt \cite{python-socketio}.
 Die Implementierung der Anwenderlogik erfolgt über die JavaScript SocketIO Bibliothek, diese sind Plattformunabhängig.
 
 
 \subsubsection{\ac{rest}}
-\acs{rest} ist ein Architektur-Stil für verteilte Systeme.
-Dieser ist ein Ressourcen basierende Architektur, die zugänglich über übliche 
+\acs{rest} ist eine Ressourcen basierende Architektur für verteilte Systeme.
+Diese Ressourcen werden über eine einheitliche Schnittstelle basierend auf 
+\acs{http} Methoden zugänglich.
+Dabei ist jede Ressource über eine URL erreichbar.
+REST erlaubt dabei Ressourcen in verschiedene Datentypen zu repräsentieren, wie text, xml, json, etc.
+Die Kommunikation über die HTTP-API funktioniert wie die über create, read, update und delete (CRUD) parallel mit den HTTP-Methoden GET, POST, PUT und DELETE \cite{fundamentalsRestfulAPI}.
 
 \subsection{Datenbank}
 
 \subsubsection{MongoDB}
 
+\section{Entwicklung}
+In dem folgenden Abschnitt werden die Entwicklungsschritte der Microservice-Anwendung erläutert.
+
+\subsection{Versionsverwaltung}
+
+\subsection{Microservice-Entwicklung}
+
+Die Abbildung \ref{fig:DevWorkflowDocker} zeigt den Arbeitsablauf der Service-Entwicklung auf.
+Zuerst wird die Funktionalität des Dienstes realisiert und dann mithilfe eines Dockerfiles ein Docker-Image erstellt.
+Dafür wird ein Base-Image entweder aus einem Docker-Registry, wie DockerHub oder aus dem lokalen registry benötigt.
+Um den Container zu starten, kann ein Docker-Befehl auf dem Hostssystem ausgeführt werden.
+Die Nutzung von Docker-Compose erlaubt das Starten mehrerer Container mithilfe von Konfigurationsdateien in Form von YAML-Dateien.
+Nachdem ausführen der Container können diese getestet werden.
+Abschließend kann der Entwicklungsablauf fortgeführt werden oder ein Release für das Versionsverwaltungssystem und dem Container-Registry erstellt werden.
+
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\columnwidth]{images/DevWorkflowDocker.png}
+    \caption{Microservice-Entwicklung in Anlehnung an \cite{dockerappsworkflow}}
+    \label{fig:DevWorkflowDocker}
+\end{figure}
+
+
+\subsection{Helm-Chart-Entwicklung}
+
+Die Abbildung \ref{fig:DevWorkflowKubernetes} beschreibt den Vorgang bei der Entwicklung von Helm-Charts für Kubernetes.
+Als Erstes wird ein Helm-Chart entwickelt.
+Der Kommandozeilenbefehl \textit{helm lint} überprüft den vorgegebenen Pfad zum Chart und führt eine Serie von Tests zur Validierung durch.
+Danach kann dieser auf einem Kubernetes-Cluster installiert werden, 
+wenn die Kubernetes-Ressourcenobjekte einen Docker-Container benötigen,
+wird das spezifizierte Image aus dem öffentlichen DockerHub Registry heruntergeladen.
+Der Service kann jetzt mit dem Kommandozeilentool Kubectl getestet werden.
+Zuletzt wird die Entwicklung am Helm-Chart fortgeführt oder ins Versionsverwaltungssystem hochgeladen.
+
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\columnwidth]{images/DevWorkflowKubernetes.png}
+    \caption{Kubernetes-Entwicklung in Anlehnung an \cite{dockerappsworkflow}}
+    \label{fig:DevWorkflowKubernetes}
+\end{figure}
+
+
+
 \section{Architektur}
 Dieser Abschnitt befasst sich mit der Architektur der zu entwickelnden Anwendung.
-Die Architektur wird in mehrere Bausteinschichten abgebildet.
-Der grundlegende Aufbau der Architektur wird seziert und dessen einzelne Komponenten
-und Funktionsweisen aufgeklärt.
-
-Dabei geht die Abstraktionsschicht absteigend von der Benutzereingabe bis zum Services.
+Die Architektur wird in mehrere Abstraktionsschichten abgebildet.
+Dabei geht die Abstraktionsschichten absteigend von der Benutzereingabe bis zu den Diensten.
 
 
+\subsection{Microservices}
+
+Die Abbildung \ref{fig:UML-Microservices} zeigt die einzelnen Softwarekomponenten der Webanwendung, welche als Docker-Container laufen.
+Das Frontend dient als visuelles-Gateway für die anderen Dienste.
+Dieses bietet vier Endpunkte die für Nutzer über einen Webbrowser erreichbar sind.
+Der Home-Endpunkt ermöglicht den Login oder Logout eines Nutzers über die REST-API des Authentication-Dienstes.
+Register erlaubt die Registrierung eines Nutzers in der Datenbank.
+Train und Facelogin senden Bilder an den Facerecognition-Dienst, dies geschieht mit dem Kommunikationsprotokoll SocketIO.
+Damit wird das Modell zur Gesichtserkennung trainiert und ermöglicht die spätere Zwei-Faktor-Authentifizierung mittels Login per Gesichtserkennung.
+
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\columnwidth]{images/UML-Microservices-Diagramm.png}
+    \caption{Lokale Microservice Entwicklung}
+    \label{fig:UML-Microservices}
+\end{figure}
 
 
 
 
-\subsection{Frontend-Service}
+\subsection{Helm-Installation}
+
+Die einzelnen Dienste der Webanwendung werden mithilfe von einem Helm-Chart gleichzeitig auf ein Kubernetes-Cluster installiert.
+Dabei hat jeder Dienst ein eigenes Verzeichnis mit den notwendigen Kubernetes-Ressourcenobjekten.
 
 
-\subsection{Container}
-\subsection{Kubernetes}
-\subsection{Frontend-Service}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{images/HelmDeployment.png}
+    \caption{Kubernetes Architektur}
+    \label{fig:HelmInstallation}
+\end{figure}
+
+
+
+
+

@@ -380,6 +380,22 @@ E.~F. de~Souza~Soares, R.~Melo~Thiago, L.~G. Azevedo, M.~de~Bayser,
   \url{https://python-socketio.readthedocs.io/en/latest/}
 \BIBentrySTDinterwordspacing
 
+\bibitem{fundamentalsRestfulAPI}
+\BIBentryALTinterwordspacing
+S.~Patni, ``\BIBforeignlanguage{en}{Fundamentals of {RESTful} {APIs}},'' in
+  \emph{\BIBforeignlanguage{en}{Pro {RESTful} {APIs}: {Design}, {Build} and
+  {Integrate} with {REST}, {JSON}, {XML} and {JAX}-{RS}}}, S.~Patni, Ed.\hskip
+  1em plus 0.5em minus 0.4em\relax Berkeley, CA: Apress, 2017, pp. 1--9.
+  [Online]. Available: \url{https://doi.org/10.1007/978-1-4842-2665-0_1}
+\BIBentrySTDinterwordspacing
+
+\bibitem{dockerappsworkflow}
+\BIBentryALTinterwordspacing
+nishanil, ``\BIBforeignlanguage{de-de}{Entwicklungsworkflow für
+  {Docker}-{Apps}}.'' [Online]. Available:
+  \url{https://docs.microsoft.com/de-de/dotnet/architecture/microservices/docker-application-development-process/docker-app-development-workflow}
+\BIBentrySTDinterwordspacing
+
 \bibitem{LearningCoreDNS}
 J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
   0.4em\relax Farnham, England: O'Reilly UK, Sep. 2019.
