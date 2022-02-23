@@ -70,6 +70,12 @@ Die Kommunikation über die HTTP-API funktioniert wie die über create, read, up
 
 \subsubsection{MongoDB}
 
+MongoDB ist eine Dokumentenorientierte Datenbank bei den Daten nicht in einer Tabelle, 
+sondern in Dokumenten gespeichert wird und zählt damit zu den NoSQL-Datenbanken.
+Dies ermöglicht die Darstellung von komplexen hierarchischen Beziehungen mit einem einzigen Eintrag.
+Dokumente sind nach einer Key-Value-Struktur aufgebaut und besitzen kein vorgeschriebenes Schema zur Erstellung von Einträgen.
+
+
 \section{Entwicklung}
 In dem folgenden Abschnitt werden die Entwicklungsschritte der Microservice-Anwendung erläutert.
 
@@ -146,7 +152,8 @@ Damit wird das Modell zur Gesichtserkennung trainiert und ermöglicht die späte
 
 Die einzelnen Dienste der Webanwendung werden mithilfe von einem Helm-Chart gleichzeitig auf ein Kubernetes-Cluster installiert.
 Dabei hat jeder Dienst ein eigenes Verzeichnis mit den notwendigen Kubernetes-Ressourcenobjekten.
-
+Der Befehl helkm install 
+Bei Angabe eines Docker-Images in einer Spezifikationsdatei wird
 
 \begin{figure}[!htb]
     \centering

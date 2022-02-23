@@ -19,4 +19,4 @@ ENV PYTHONUNBUFFERED 1
 EXPOSE 5000
 
 # Start the container with gunicorn geventwebsocket workers and bind it to port 5000 use run.py as entrypoint.
-CMD ["gunicorn" , "-k" ,"geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "1" , "--bind" , ":5000" , "run:app"]
+CMD ["gunicorn" , "-k" ,"geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "3" , "--bind" , ":5000" , "run:app"]

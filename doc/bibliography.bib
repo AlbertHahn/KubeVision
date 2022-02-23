@@ -710,3 +710,39 @@ doi={10.1109/SOSE.2018.00010}
 	author = {nishanil},
 	file = {Snapshot:/home/alberthahn/Zotero/storage/CRY5HG3K/docker-app-development-workflow.html:text/html},
 }
+
+%%KUBERNETES CERTS
+
+
+@misc{certmanager,
+	title = {Issuer},
+	url = {https://cert-manager.io/docs/concepts/issuer/},
+	abstract = {Issuers, and ClusterIssuers, are Kubernetes resources that represent certificate authorities (CAs) that are able to generate signed certificates by honoring certificate signing requests. All cert-manager certificates require a referenced issuer that is in a ready condition to attempt to honor the request.
+An example of an Issuer type is CA. A simple CA Issuer is as follows:
+apiVersion:cert-manager.io/v1kind:Issuermetadata:name:ca-issuernamespace:mesh-systemspec:ca:secretName:ca-key-pairThis is a simple Issuer that will sign certificates based on a private key.},
+	language = {en},
+	urldate = {2022-02-23},
+	journal = {cert-manager},
+	note = {Section: docs},
+	file = {Snapshot:/home/alberthahn/Zotero/storage/M3U9JDDX/issuer.html:text/html},
+}
+
+
+@misc{certmanageracme,
+	title = {{ACME}},
+	url = {https://cert-manager.io/docs/configuration/acme/},
+	abstract = {Automatically provision and manage TLS certificates in Kubernetes},
+	language = {en},
+	urldate = {2022-02-23},
+	journal = {cert-manager},
+	file = {Snapshot:/home/alberthahn/Zotero/storage/EL2DNE36/acme.html:text/html},
+}
+
+
+@misc{certissuerarticle,
+	title = {Acquire {SSL} {Certificates} in {Kubernetes} from {Let}'s {Encrypt} with {Cert}-{Manager}},
+	url = {https://www.thinktecture.com/de/kubernetes/ssl-certificates-with-cert-manager-in-kubernetes/},
+	abstract = {Learn how to acquire valid SSL certificates from Let's Encrypt in Kubernetes environments with cert-manager.},
+	urldate = {2022-02-23},
+	file = {Snapshot:/home/alberthahn/Zotero/storage/SDYG7WAV/ssl-certificates-with-cert-manager-in-kubernetes.html:text/html},
+}

@@ -400,4 +400,16 @@ nishanil, ``\BIBforeignlanguage{de-de}{Entwicklungsworkflow für
 J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
   0.4em\relax Farnham, England: O'Reilly UK, Sep. 2019.
 
+\bibitem{certmanager}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Issuer},'' section: docs. [Online]. Available:
+  \url{https://cert-manager.io/docs/concepts/issuer/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{certmanageracme}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{{ACME}}.'' [Online]. Available:
+  \url{https://cert-manager.io/docs/configuration/acme/}
+\BIBentrySTDinterwordspacing
+
 \end{thebibliography}

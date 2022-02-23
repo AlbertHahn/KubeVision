@@ -1,4 +1,4 @@
-\chapter{Implementierung der Architektur}
+\chapter{Umsetzung des Lösungskonzepts}
 
 Das folgende Kapitel beschreibt die Vorgehensweisen der Implementierung.
 Angefangen mit der Konfiguration und Einrichtung der Knotenpunkte für das Kubernetes-Cluster.
@@ -12,61 +12,20 @@ Danach die Installation der Infrastruktur mit k3s.
 Zunächst wird eine Domain für den späteren Einsatz der Microservices konfiguriert.
 Abschließend erfolgt die Bereitstellung von Zertifikaten für die Domain.
 
-\subsection{Virtueller privater Server}
+\subsubsection{Virtueller privater Server}
 
 Durch die Einschränkungen, beschrieben in Abschnitt \ref{Einschraenkungen},
 werden für die Installation der Kubernetes Plattform virtuelle private Server (VPS) verwendet.
 Ein VPS ist eine virtuelle Maschine, die von Drittanbietern wie Internet-Hosting-Diensten, als Dienst verkauft wird.
 Dies ermöglicht das Mieten von Hardware.
 Die Server dienen als Knotenpunkte für die spätere Kubernetes Installation.
-Es werden ingesamt drei VPS-Instanzen gemietet auf denen das folgende Betriebssystem installiert wird.
-
-\subsubsection{Betriebssystem}
-Im Rahmen des PoC mit dem Unternehmen SUSE wurde das 
-Betriebssystem SLE-Micro Enterprise 5.1 bereitgestellt und auf den Serverinstanzen installiert.
-Dieses arbeitet mit transactional-updates, welche Updates erst aktivieren, wenn das Betriebssystem neu gestartet wurde. 
-Erfolgt das Update nicht wird ein Rollback zum vorherigen Versionszustand durchgeführt.
+Es werden ingesamt drei VPS-Instanzen gemietet auf denen das Betriebssystem SLE-Micro Enterprise 5.1 bereitgestellt und auf den Serverinstanzen installiert.
 
 \subsubsection{Domain}
 Der Zugang zur Webanwendung wird mithilfe einer öffentlichen Domain ermöglicht.
 Der DNS-Eintrag einer Domain ist für die Adressierung zuständig.
 Durch die Veränderung des A-Records leiten alle Anfragen der Domain auf eine IPv4-Adresse um \cite{LearningCoreDNS}.
 Die IPv4 Adresse ist in diesem Fall der Cluster Master der späteren k3s-Installation.
-
-\subsection{Kubernetes Installation}
-Dieser Abschnitt behandelt die Einrichtung und Installation der Kubernetes-Distributi\-on Lightweight Kubernetes und der Orchestrierungsplattform Rancher.
-
-
-\subsubsection{Lightweight Kubernetes}\label{k3screate}
-Für die Installation von k3s auf den Server wurde ein Shell-Skript entwickelt, 
-das mit den nötigen Befehlen aus der Dokumentation geschrieben wurde.
-\begin{lstlisting}[caption={Ausschnitt aus dem installk3s.sh},captionpos=b,label={lst:k3sintall},language=bash]
-    curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" K3S_CLUSTER_INIT=1 sh -
-    TOKEN=$( cat /var/lib/rancher/k3s/server/node-token )
-    
-    USERNAME=root
-    SCRIPT="curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" K3S_TOKEN=$TOKEN K3S_URL=https://$ip4:6443 sh - "
-    for HOSTNAME in ${HOSTS[@]} ; do
-        ssh -o StrictHostKeyChecking=no -l ${USERNAME} ${HOSTNAME} "hostnamectl set-hostname ${HOSTNAMES[$COUNTER]}; ${SCRIPT}"  
-        echo "HOSTNAME CHANGED: ${HOSTNAMES[$COUNTER]}"
-        ((COUNTER++))
-    done
-\end{lstlisting}
-
-Das Skript holt mittels \textit{curl} Aufruf das Installationsskript für k3s und führt es mit den vorgegebenen Initialisierungsparametern aus. 
-Der Parameter \textit{INSTALL\_K3S\_EXEC} bestimmt die Aufgabe der Node.
-\textit{K3S\_CLUSTER\_INIT} initialisiert die Node als neuen Cluster-Master.
-Danach wird ein Token im \textit{../k3s/server} Verzeichnis angelegt. Dieser ist für die Verknüpfung der andern Knoten nötig und wird als Variable gespeichert.
-In einer Schleife werden die vom Skript vorher abgefragten IP-Adressen und Hostsystemnamen des Benutzer verarbeitet.
-Über das Netzwerkprotokoll \ac{ssh} verbindet sich das ausführende System mit den restlichen Knotenpunkten
-und installiert mithilfe der Variablen \textit{TOKEN} und \textit{SCRIPT} k3s.
-
-\subsubsection{Rancher}
-Im Rahmen des PoCs wurde bereits ein Rancher-Server zur Verwaltung von mehreren downstream-Cluster erstellt.
-Der im vorherigen Abschnitt \ref{k3screate} eingerichtete k3s-Cluster wird mit dem Rancher Server verbunden.
-Über die Rancher-Benutzeroberfläche lässt sich das Kubernetes-Cluster mithilfe des \textit{Add Cluster} Buttons hinzufügen.
-Die weiteren Schritte ermöglichen das benennen des Cluster und den notwendigen Befehl zum verknüpfen der gewünschten Cluster.
-Diese werden wegen ihrer Trivialität nicht weiter ausgeführt.
 
 \subsection{KubeVision}
 Dieser Abschnitt behandelt die einzelnen Softwarekomponenten der Microservice-Anwendung KubeVision.
@@ -76,43 +35,159 @@ Zweitens dem Authentifizierungsdienst, der für die Registrierung und Anmeldung 
 Drittens der Backend-Dienst, welcher die Authentifizierung per Gesichtserkennung ermöglicht.
 
 \subsection{Frontend-Service}
-Das Frontend besteht aus einer HTML5-Benutzeroberfläche und wird für die Interaktion mit dem Benutzer
-mit JavaScript kombiniert.
-\subsection{Authentifizierungs-Service}
+Frontend-Service ist die Benutzeroberfläche zur Interaktion mit dem Benutzer.
+Der Dienst ist in mehrere Blueprints mit eigenen Endpunkten aufgebaut.
+Jeder dieser Endpunkte gibt einen URL-Pfad für die Interaktion mit dem Frontend-Service oder einem anderen Dienst an.
+Bei Aufruf eines Endpunkts wird eine view aufgerufen und mithilfe der Template Engine Jinja2 eine spezifische HTML-Datei aus dem templates-Verzeichnis ausgegeben.
+Diese spezifische Datei ist ein HTML Code-Block und wird in die Main-View gesetzt.
+
+Es gibt Zwei Blueprints einer im Verzeichnis home, welcher die Funktionalitäten und Endpunkte für das einloggen, registrieren und anzeigen des Profils ausgibt.
+Für die Authentifizierungsmöglichkeiten wird auf die Authentication-Service-Endpunkte umgeleitet.
+Das Zweite Blueprint gibt views zum Interagieren mit dem Facerecognition-Service an.
+Dieser beinhaltet Logik in Form von JavaScript mit der eingebundenen Bibliothek SocketIO und ermöglicht das Senden von Bildern mithilfe einer Webcam.
+
+Für die Kommunikation mit dem Facerecognition-Service wird die Kamera des Benutzers benötigt.
+Das Modul und die enthaltene Klasse Camera.js ist für die Verwendung der Webcam zuständig.
+Die Funktion navigator.mediaDevices.enumerateDevices() listet alle angeschlossenen Peripheregeräte mit Kamerafunktion auf.
+Diese Geräte werden dann in einer Schleife in eine Dropdown-Liste platziert.
+Der Nutzer kann danach eine spezifische Kamera auswählen.
+
+Mit der Klasse socketio.js lässt sich die bidirektionale Kommunikation mit dem Facerecognition-Service aufbauen.
+Es gibt drei unterschiedliche Events für die Kommunikation mit dem Dienst.
+Stream sendet eine bestimmte Anzahl an Bildern an den Dienst und löst im Anschluss das Event traindata aus.
+Dieses Event wird über den Endpunkt train ermöglicht.
+Der Zweite Endpunkt facelogin ermöglicht die Kommunikation über das Event Predict.
+Dieser sendet eine bestimmte Anzahl an Bildern an den Dienst und ermöglicht den Login des Nutzers.
+
+
+
+\subsection{Authentication-Service}
+
+
+
+
 \subsection{Backend-Service}
 
-
-%alles ausschreiben??
-%\section{Frameworks und Bibliotheken für Microservices}
-%\subsection{Flask}
-%\subsection{Gunicorn}
-%\subsection{SocketIO}
-%\subsection{OpenCV}
-%\subsection{MongoDB}
 
 \section{Gesichtserkennung}
 \subsection{Alignment}
 \subsection{Training}
 \subsection{Model}
 
-\section{Containerisierung}
-\subsection{Volumes}
-\subsection{Netzwerk}
+\section{Dockerisierung}
+
+Der nächste Schritt ist die Dockerisierung der losen Dienste.
+
+\subsection{Dockerfile}
+
+Jeder Dienst verfügt über ein eigenes Dockerfile mit Anweisungen zum Erstellen eines Docker-Images.
+Um Redundanz zu vermeiden wird im folgenden das Dockerfile zum Facerecognition-Service näher erläutert (vgl. Quellcode~\ref{lst:Dockerfile}).
+Dieser ist ähnlich aufgebaut wie die Dockerfiles der anderen Dienste.
+Das Dockerfile befindet sich im selben Verzeichnis, wie die Code-Dateien des Dienstes.
+
+
+\begin{lstlisting}[caption={Dockerfile},captionpos=b ,label={lst:Dockerfile},language=Dockerfile]
+    FROM python:3.7.2-stretch
+    
+    WORKDIR /app
+    ADD . /app
+    
+    RUN apt-get update
+    RUN apt-get install ffmpeg libsm6 libxext6  -y
+    RUN pip install --upgrade pip setuptools wheel
+    RUN pip install -r requirements.txt
+    
+    ENV PYTHONUNBUFFERED 1
+    EXPOSE 5000
+    
+    CMD ["gunicorn" , "-k" ,"geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "3" , "--bind" , ":5000" , "run:app"]
+    \end{lstlisting}
+
+Die Basis des Docker-Images ist ein Python-Stretch-Image, welches auf dem leichtgewichtigen Betriebssystem Debian-Stretch aufbaut.
+Zunächst werden die nötigen Bibliotheken zur Ausführung von OpenCV installiert.
+Danach wird mit pip die notwendigen Pythonbibliotheken installiert.
+In der requirements.txt stehen alle Bibliothekennamen mit der erforderlichen Version.
+Die Enviornmental-Variable ermöglicht die Ausgabe des Python-Buffers im Terminal.
+Die CMD Anweisung des Containers startet immer mit dem Befehl einen Gunicorn-Webserver auszuführen.
+Die zusätzlichen Flags geben die Art und Anzahl der Worker-Prozesse an.
+Letztendlich wird die Webanwendung mit der WSGI-Schnittstelle an den gewählten Port 5000 ausgeführt.
+
 \subsection{Docker-Compose}
+
+
+
 \subsection{DockerHub}
 
-\section{Orchestrierung}
-\subsection{SSL-Verschlüsselung}
-\subsection{Deployment}
+\section{Helm-Chart}
+Dieser Abschnitt beschreibt die Entwicklung der Kubernetes-Ressourcenobjekte für die Bereitstellung mit dem Package-Manager Helm.
+Um Redundanz zu vermeiden wird die Umsetzung der Kubernetes-Ressourcenobjekte beispielhaft am Dienst Facerecognition gezeigt.
+Helm-Charts verfügen über eine YAML-Datei namens Values, welche globale Variablen für das Helm-Chart definiert.
+Dadurch können die Kubernetes-Ressourcenobjekte von einer Datei aus vorkonfiguriert werden.
+
+
+\subsection{Service}
+Jeder Dienst verfügt über einen eigenen Kubernetes-Service.
+Dieser gibt die Ports des Dienstes an.
+
 \subsection{Ingress}
+
+Für die Implementierung der Webanwendung wird ein Nginx-Ingress verwendet.
+Dieser stellt den Endpunkt eines Services in Form einer URL dar.
+Die folgenden Schritte sind zur Bereitstellung des Ingress notwendig.
+
+
+\subsubsection{SSL-Verschlüsselung}
+Die Verwendung der Webcam eines Benutzers ist nur in einem sicheren Kontext möglich.
+Die Kommunikation zwischen einem Client und Ingress muss TLS-Verschlüsselt sein, um JavaScript Methoden wie MediaDevices.getUserMedia() auszuführen.
+Dafür benötigt der Ingress-Controller ein Zertifikat und einen privaten Schlüssel.
+Dieser kann automatischen mit einem Kubernetes-Issuer erstellt werden und von einem Ingress referenziert werden \cite{certmanager}.
+
+\textbf{Issuer}: 
+Das add-on Cert-Manager kommt vorinstalliert mit k3s und automatisiert die Verwaltung von Zertifikaten.
+Dieser enthält die Kubernetes-Resource Issuer, welche zur Generieriung von privaten Schlüsseln dient.
+ERKLÄREN WIE ACME FUNKTIONIERT!
+
+\begin{lstlisting}[caption={issuer.yaml \cite{certmanageracme} },captionpos=b,label={lst:issuer},language=yaml]
+    apiVersion: cert-manager.io/v1
+    kind: Issuer
+    metadata:
+      name: letsencrypt-prod
+    spec:
+      acme:
+        server: https://acme-v02.api.letsencrypt.org/directory
+        privateKeySecretRef:
+          name: letsencrypt-key
+        solvers:
+        - http01:
+           ingress:
+             class: nginx
+
+\end{lstlisting}
+
+Die Ausführung des Issuers erzeugt einen privaten Schlüssel mit der Bezeichnung letsencrypt-key und dem Kubernetes-Issuer namens letsencrypt-prod.  
+
+\textbf{Cert}: 
+Der nächste Schritt ist die Erzeugung eines Zertifikats mit dem Issuer.
+
+\begin{lstlisting}[caption={cert.yaml \cite{certmanageracme} },captionpos=b,label={lst:cert},language=yaml]
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: cert-prod
+    spec:
+      secretName: deploy-secret
+      issuerRef: 
+        name: letsencrypt-prod
+      dnsNames:
+      - "your-domain.com"
+
+\end{lstlisting}
+
+Die Ausführung des Kubernetes-Cert erstellt ein signiertes Zertifikat.
+Das erzeugte Secret mit der Bezeichnung deploy-secret kann von einem Ingress zur Verschlüsselung der Kommunikation verwendet werden.
+
 \subsubsection{Nginx-Ingress}
-\subsection{Loadbalancer}
-\subsection{Taints and Tolerations}
-\subsection{Node Affinity}
-\subsection{Helm}
+
+\subsection{Deployment}
 
 
-\section{Testen der Implementeriung}
-\subsection{Service Kommunikation}
-\subsection{Loadbalancing}
-\subsection{Gesichtserkennung}

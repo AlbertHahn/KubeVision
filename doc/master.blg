@@ -25,45 +25,45 @@ Warning--empty booktitle in BuildingMicroservicesNewmanChapter5
 Warning--empty year in microservicesvssoa
 
 Done.
-You've used 60 entries,
+You've used 62 entries,
             4087 wiz_defined-function locations,
-            1081 strings with 15461 characters,
-and the built_in function-call counts, 22900 in all, are:
-= -- 1524
-> -- 258
+            1088 strings with 15604 characters,
+and the built_in function-call counts, 23506 in all, are:
+= -- 1564
+> -- 260
 < -- 61
-+ -- 148
++ -- 150
 - -- 38
-* -- 1063
-:= -- 3626
-add.period$ -- 124
-call.type$ -- 60
-change.case$ -- 76
+* -- 1092
+:= -- 3724
+add.period$ -- 128
+call.type$ -- 62
+change.case$ -- 79
 chr.to.int$ -- 162
-cite$ -- 62
-duplicate$ -- 1985
-empty$ -- 2462
+cite$ -- 64
+duplicate$ -- 2042
+empty$ -- 2529
 format.name$ -- 45
-if$ -- 5164
+if$ -- 5297
 int.to.chr$ -- 0
-int.to.str$ -- 60
-missing$ -- 404
-newline$ -- 301
+int.to.str$ -- 62
+missing$ -- 417
+newline$ -- 311
 num.names$ -- 21
-pop$ -- 1402
+pop$ -- 1450
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 1639
+skip$ -- 1681
 stack$ -- 0
-substring$ -- 392
-swap$ -- 1101
+substring$ -- 396
+swap$ -- 1128
 text.length$ -- 7
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 60
+type$ -- 62
 warning$ -- 2
 while$ -- 46
-width$ -- 62
-write$ -- 537
+width$ -- 64
+write$ -- 554
 (There were 2 warnings)
