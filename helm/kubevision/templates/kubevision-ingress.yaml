@@ -1,0 +1,56 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+ name: kubevision-ingress
+ annotations:
+    nginx.ingress.kubernetes.io/websocket-services : "{{ .Values.face.service.name }}"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "64m"
+    cert-manager.io/issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.envEndpoint.host }}
+    secretName: deploy-secret
+  rules:
+  - host: {{ .Values.envEndpoint.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Values.auth.service.name }}
+            port:
+              number: {{ .Values.auth.image.port }}
+        path: /auth/logout
+        pathType: Prefix
+      - backend:
+          service:
+            name: {{ .Values.auth.service.name }}
+            port:
+              number: {{ .Values.auth.image.port }}
+        path: /auth/login
+        pathType: Prefix
+      - backend:
+          service:
+            name: {{ .Values.auth.service.name }}
+            port:
+              number: {{ .Values.auth.image.port }}
+        path: /auth/register
+        pathType: Prefix
+      - backend:
+          service:
+            name: {{ .Values.face.service.name }}
+            port:
+              number: {{ .Values.face.image.port }}
+        path: /socket.io
+        pathType: Prefix
+      - backend:
+          service:
+            name: {{ .Values.frontend.service.name }}
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  ingressClassName: nginx

@@ -2,16 +2,16 @@ version: "3.7"
 
 services:
 
-  flask:
+  frontend:
     build: ./frontend
-    image: albird/flask:latest
-    container_name: flask
+    image: albird/frontend:latest
+    container_name: frontend
     restart: always
     environment:
       loginEndpoint: http://localhost:5001/auth/login
       registerEndpoint: http://localhost:5001/auth/register
       websocketServer: http://localhost:5000
-      profileEndpoint: http://localhost:8000/profile
+      homeEndpoint: http://localhost:8000
     expose:
       - 8000
     ports:
@@ -26,30 +26,29 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - flask
+      - frontend
 
-  flask-opencv:
-    build: ./backend
-    image: albird/flask-opencv:latest
-    container_name: flask-opencv
+  facerecognition:
+    build: ./facerecognition
+    image: albird/facerecognition:latest
+    container_name: facerecognition
     restart: always
     environment:
-      mongoEndpoint: mongodb://admin:password@localhost:27017
+      mongoEndpoint: mongodb://admin:password@localhost:27017/
     expose:
       - 5000
     ports:
       - "5000:5000"
     command: gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -b 0.0.0.0:5000 run:app
 
-  flask-auth:
-    build: ./auth
-    image: albird/flask-auth:latest
-    container_name: flask-auth
+  authentication:
+    build: ./authentication
+    image: albird/authentication:latest
+    container_name: authentication
     restart: always
     environment:
       homeEndpoint: http://localhost:8000/
       trainEndpoint: http://localhost:8000/train 
-      profileEndpoint: http://localhost:8000/profile 
       mongoEndpoint: mongodb://admin:password@localhost:27017/
     expose:
       - 5001

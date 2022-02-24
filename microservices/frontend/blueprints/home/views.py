@@ -8,8 +8,9 @@ authObj = {'login':loginEndpoint, 'register':registerEndpoint}
 
 @home.route("/")
 def show_home():
-    if "session_error" not in request.cookies:
-        return render_template('home.html', authObj=authObj)
+    if "session_user" in request.cookies:
+        name = request.cookies.get('session_user')
+        return render_template('profile.html', message=name, authObj=authObj)
     else:
         error = request.cookies.get('session_error')
         return render_template('home.html', message=error, authObj=authObj)
@@ -22,11 +23,3 @@ def show_register():
         error = request.cookies.get('session_error')
         return render_template('register.html', message=error, authObj=authObj)
 
-
-@home.route("/profile")
-def show_profile():
-    if "session_user" not in request.cookies:
-        return render_template('home.html', authObj=authObj)
-    else:
-        name = request.cookies.get('session_user')
-        return render_template('profile.html', message=name)

@@ -4,12 +4,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
 <script type="text/javascript">
   var socketServer = '{{ socketioEndpoints.websocketServer }}'
-  var profileEndpoint = '{{ socketioEndpoints.profileEndpoint }}'
+  var homeEndpoint = '{{ socketioEndpoints.homeEndpoint }}'
   var username = '{{ message }}'
 </script>
-<script text=text/javascript src="{{ url_for('static', filename='js/socketio.js') }}">
-</script>
+<script text=text/javascript src="{{ url_for('static', filename='js/socketio.js') }}"></script>
 <script text=text/javascript src="{{ url_for('static', filename='js/camera.js') }}"></script>
+<script text=text/javascript src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}
 
 {% block facelogin %}
@@ -20,7 +20,7 @@
         Welcome, if you already signed in and activated face recognition
         You can log in with your face!
     </p>
-    <p class="text-center" id="progress">Server connection unknown ...</p>
+    <p class="text-center progressbar">Server connection unknown ...</p>
   </div>
 </div>
 
@@ -54,8 +54,8 @@
         
             <div>
                 <h3>Server status</h3>
-                <p id="ServerStatus">
-                    unknown
+                <p class="progressbar">
+                  Server connection unknown ...
                 </p>
             </div>
         

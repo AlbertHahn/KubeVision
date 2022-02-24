@@ -4,9 +4,9 @@ from . import train, render_template, request, session
 import os
 
 websocketServer = os.environ['websocketServer']
-profileEndpoint = os.environ['profileEndpoint']
+homeEndpoint = os.environ['homeEndpoint']
 
-socketioEndpoints = {'websocketServer':websocketServer, 'profileEndpoint':profileEndpoint}
+socketioEndpoints = {'websocketServer':websocketServer, 'homeEndpoint':homeEndpoint}
 
 @train.route("/train")
 def train_home():

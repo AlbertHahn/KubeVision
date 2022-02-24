@@ -1,0 +1,78 @@
+namespace: default
+
+envEndpoint:
+  host: labs.albert-hahn-apply.com
+
+
+frontend:
+  name: frontend
+  replicas: 1
+
+  image:
+    name: albird/frontend
+    tag: latest
+    port: 8000
+
+  nodeSelector:
+    hardware: cloud
+  
+  service:
+    name: frontend-service
+    type: ClusterIP
+
+face:
+  name: facerecognition
+  replicas: 1
+
+  image:
+    name: albird/flask-opencv
+    tag: latest
+    port: 5000
+
+  nodeSelector:
+    hardware: premise
+
+  tolerations:
+    - key: "hardware"
+      operator: "Equal"
+      value: "cpu"
+      effect: "NoSchedule"
+  
+  service:
+    name: facerecognition-service
+    type: ClusterIP
+
+auth:
+  name: authentication
+  replicas: 1
+
+  image:
+    name: albird/authentication
+    tag: latest
+    port: 5001
+
+  nodeSelector:
+    hardware: cloud
+
+  service:
+    name: authentication-service
+    type: ClusterIP
+
+opencvolume:
+  skipuninstall: true
+  persistence:
+    claimName: opencv-images-claimdata
+    volumeName: opencv-images-volume
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: local-path
+    storage: 4Gi
+
+mongodbvolume:
+  persistence:
+    claimName: pvc
+    volumeName: pv
+    accessModes:
+      - ReadWriteOnce 
+    storageClassName: local-path
+    storage: 4Gi

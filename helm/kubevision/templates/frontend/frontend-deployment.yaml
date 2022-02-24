@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.frontend.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.frontend.replicas }}
+  selector:
+    matchLabels:
+      server: {{ .Values.frontend.name }}
+  template:
+    metadata:
+      labels:
+        server: {{ .Values.frontend.name }}
+    spec:
+      containers:
+        - name: {{ .Values.frontend.name }}
+          image: {{ .Values.frontend.image.name }}:{{ .Values.frontend.image.tag }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.frontend.image.port }}
+          env:
+          - name: loginEndpoint
+            value: https://{{ .Values.envEndpoint.host }}/auth/login
+          - name: registerEndpoint
+            value: https://{{ .Values.envEndpoint.host }}/auth/register
+          - name: websocketServer
+            value: https://{{ .Values.envEndpoint.host }}
+          - name: homeEndpoint
+            value: https://{{ .Values.envEndpoint.host }}/
+      nodeSelector:
+        hardware: {{ .Values.frontend.nodeSelector.hardware }}

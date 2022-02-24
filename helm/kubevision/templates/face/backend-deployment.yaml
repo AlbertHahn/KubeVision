@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.face.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.face.replicas }}
+  selector:
+    matchLabels:
+      server: {{ .Values.face.name }}
+  template:
+    metadata:
+      labels:
+        server: {{ .Values.face.name }}
+    spec:
+      volumes:
+        - name: {{ .Values.opencvolume.persistence.volumeName }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.opencvolume.persistence.claimName }}
+      containers:
+        - name: {{ .Values.face.name }}
+          image: {{ .Values.face.image.name }}:{{ .Values.face.image.tag }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.face.image.port }}
+
+          volumeMounts:
+            - mountPath: /app/modules/opencv/images
+              name: {{ .Values.opencvolume.persistence.volumeName }}
+          env:
+          - name: mongoEndpoint
+            value: "mongodb://admin:password@mongodbservice:27017/?authSource=admin"
+
+      nodeSelector:
+        hardware: {{ .Values.face.nodeSelector.hardware }}
+      {{- with .Values.face.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
