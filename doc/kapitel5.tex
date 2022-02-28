@@ -1,5 +1,5 @@
 \chapter{Lösungskonzept}
-Im Fokus des vierten Kapitels steht die Konzeption und Architektur der Microservice-Anwendung.
+Im Fokus des vierten Kapitels steht die Konzeption einer Anwendung im Microservice-Architektur-Stil.
 
 \section{Design Entscheidungen}
 
@@ -14,9 +14,8 @@ Dafür bietet das Framework eine hohe Flexibilität, da die nötigen Bibliotheke
 vereinfacht die Erstellung von \acs{api}s \cite[S.11]{restfulpython} durch Blueprints.
 
 Blueprints sind ein Konzept von Flask, welche die Aufteilung von Komponenten einer Webanwendung ermöglichen.
-Diese Komponenten können in Form von Routen unterschiedliche Endpunkte mit einer view ausgeben.
-Bei Aufrufen eines Endpunkts wird die dazugehörige view ausgegeben \cite{flaskdocu}.
-Dadurch kann man die Funktionalität der Webanwendung nach Endpunkten strukturieren und ist ideal für die Ausführung einer Microservice-Architektur.
+Diese Komponenten können in Form von Routen unterschiedliche Endpunkte mit einer View ausgeben \cite{flaskdocu}.
+Dadurch werden die Funktionalitäten der Webanwendung in Endpunkten strukturiert und ist ideal für die Ausführung einer Anwendung aus unterschiedlichen Softwarekomponenten.
 
 Weiterhin ermöglichen die Flask-Abhängigkeiten wie Template-Engine Jinja und dem \acs{wsgi} Werkzeugkasten,
 das Rendern von HTML-Templates mit Daten aus der Flask-Anwendung
@@ -29,7 +28,7 @@ Das Gunicorn-Modell teilt einen Master-Prozess in mehrere Worker-Prozesse auf.
 Der Master-Prozess ist lediglich eine Schleife für die bestehenden Worker-Prozesse
 und ist bei Ausfall für den Neustart zuständig.
 Die Worker-Prozesse sind für die Verarbeitung von eingehenden Anfragen zuständig.
-Diese teilen sich in folgende Worker-Class ein. 
+Diese teilen sich in folgende Worker-Klassen ein. 
 Sync-Workers bearbeiten Anfragen jeweils Einzeln und unterstützten keine persistente Verbindung.
 Async-Workers sind basierend auf Greenlets und unterstützten mithilfe von Gevent asynchrone Koroutinen \cite{gunciorndocs}. 
 

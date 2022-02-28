@@ -32,7 +32,7 @@ except errors.ServerSelectionTimeoutError as err:
 def login():
 
     user = request.form.get("fullname")
-    password = request.form.get("password1")
+    password = request.form.get("password")
     user_exists = records.find_one({"name": user})
 
     errorMsg = "Username or Password not found!"
@@ -48,11 +48,11 @@ def login():
             return error_entry_exists(homeEndpoint, errorMsg)
     return error_entry_exists(homeEndpoint, errorMsg)
 
-@auth.route('/auth/register', methods=['GET', 'POST'])
+@auth.route('/auth/register', methods=['POST'])
 def register():
 
     user = request.form.get("fullname")
-    password = request.form.get("password1")
+    password = request.form.get("password")
 
     user_exists = records.find_one({"name": user})
     if user_exists:
@@ -65,7 +65,7 @@ def register():
 
         return successful_redirect_user(homeEndpoint, user)
 
-@auth.route('/auth/logout', methods=['GET', 'POST'])
+@auth.route('/auth/logout', methods=['POST'])
 def logout():
 
     if "session_user" in request.cookies:

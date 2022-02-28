@@ -3,26 +3,25 @@
 Das folgende Kapitel beschreibt die Vorgehensweisen der Umsetzung des Konzepts.
 Diese sind in mehrere Teile gegliedert.
 Erstens mit der Konfiguration und Einrichtung der Knotenpunkte für das Kubernetes-Cluster.
-Zweitens mit der ausführenden Entwicklung Anwendung im Microservice-Architektur-Stil KubeVision.
+Zweitens mit der ausführenden Entwicklung der Anwendung im Microservice-Architektur-Stil mit dem Namen KubeVision.
 Drittens mit der Beschreibung für die implementierte Gesichtserkennung des Facerecognition-Services.
 Viertens der Dockerisierung der einzelnen Dienste.
-Fünftens die Ausführung der Helm-Charts für die Auslieferung und Bereistellung von Kubernetes-Ressourcenobjekte. 
+Fünftens die Implementierung der Anwendung durch Helm-Charts für die Auslieferung und Bereistellung von Kubernetes-Ressourcenobjekte. 
 
 \section{Konfiguration und Einrichtung}\label{konfig}
 
-In diesem Abschnitt geht es um die Einrichtung der Kubernetes Infrastruktur.
-Zuerst die Einrichtung der einzelnen virtuellen privaten Server in Vultr, die als Knotenpunkte in unserem Kubernetes-Cluster funktonieren.
-Zunächst wird eine Domain für den späteren Einsatz der Microservices konfiguriert.
-Abschließend erfolgt die Bereitstellung von Zertifikaten für die Domain.
+In diesem Abschnitt geht es um die Einrichtung und Vorkonfiguration des Kubernetes-Clusters.
+Zuerst die Einrichtung der einzelnen virtuellen privaten Server, die als Knotenpunkte in unserem Kubernetes-Cluster fungieren.
+Danach wird eine Domain für den späteren Einsatz der Microservices konfiguriert.
+Abschließend erfolgt die Bereitstellung von Zertifikaten für die verschlüsselte Kommunikation über die Domain.
 
 \subsubsection{Virtueller privater Server}
 
-Durch die Einschränkungen, beschrieben in Abschnitt \ref{Einschraenkungen},
-werden für die Installation der Kubernetes Plattform virtuelle private Server (VPS) verwendet.
-Ein VPS ist eine virtuelle Maschine, die von Drittanbietern wie Internet-Hosting-Diensten, als Dienst verkauft wird.
-Dies ermöglicht das Mieten von Hardware.
-Die Server dienen als Knotenpunkte für die spätere Kubernetes Installation.
+Durch die Einschränkungen, beschrieben in Abschnitt \ref{Einschraenkungen}, wird die Installation von Kubernetes auf \ac{vps}-Instanzen stattfinden.
+Ein \acs{vps} wird von Drittanbietern als Internet-Hosting-Dienst angeboten und ermöglicht die Vermietung von Rechenleistung.
+Die Server dienen als Knotenpunkte im Kubernetes-Cluster.
 Es werden ingesamt drei VPS-Instanzen gemietet auf denen das Betriebssystem SLE-Micro Enterprise 5.1 bereitgestellt und auf den Serverinstanzen installiert.
+Eine der Knotenpunkte dient im Kubernetes-Cluster als Cluster-Master.
 
 \subsubsection{Domain}\label{Domain}
 Der Zugang zur Webanwendung wird mithilfe einer öffentlichen Domain ermöglicht.
@@ -30,22 +29,23 @@ Der DNS-Eintrag einer Domain ist für die Adressierung zuständig.
 Durch die Veränderung des A-Records leiten alle Anfragen der Domain auf eine IPv4-Adresse um \cite{LearningCoreDNS}.
 Die IPv4 Adresse ist in diesem Fall der Cluster-Master des Kubernetes-Clusters.
 
-\subsection{SSL-Verschlüsselung}
+\subsection{\acs{ssl}-Verschlüsselung}
 
 Der Frontend-Service benötigt für die Gesichtserkennung die Webcam eines Benutzers, jedoch ist dies nur in einem sicheren Kontext möglich.
-Die Kommunikation zwischen einem Client und Ingress muss TLS-Verschlüsselt sein, um JavaScript Methoden wie MediaDevices.getUserMedia() auszuführen.
+Die Kommunikation zwischen einem Client und Ingress muss \acs{tls}-Verschlüsselt sein, um JavaScript Methoden wie MediaDevices.getUserMedia() auszuführen.
 Dafür benötigt der Ingress-Controller ein Zertifikat und einen privaten Schlüssel.
 Dieser kann automatischen mit einem Kubernetes-Issuer erstellt werden und von einem Ingress referenziert werden \cite{certmanager}.
 
-\textbf{Issuer}: 
+\subsubsection{Issuer}
 Das add-on Cert-Manager ist bereits vorinstalliert auf dem Kubernetes-Cluster und ermöglicht die Verwaltung von Zertifikaten.
 Dieser enthält die Kubernetes-Resource Issuer, welche zur Generieriung von privaten Schlüsseln dient.
-Cert-Manager erlaubt die vereinfachte Bereistellung von \ac*{acme} SSL-Zertifikaten für Ingress-Objekte in Kubernetes.
-Die ACME-Zertifikate sind frei verfügbar und werden von den meisten Webbrowsern als Glaubwürdig eingestuft.
-Die Verifizierung des Zertifikats erfolgt über eine ACME-Challenge, welche mit einer HTTP-Anfrage validiert werden kann.
-Dafür wird ein berechneter Schlüssel auf dem Endpunkt der vorgegebenen Domain platziert und von einem öffentlichen ACME-Server abgerufen und bestätigt \cite{certmanageracme}.
+Cert-Manager erlaubt die vereinfachte Bereistellung von \ac{ssl}-Zertifikaten durch das \ac{acme} für Ingress-Objekte in Kubernetes.
+Die \acs{acme}-Zertifikate sind frei verfügbar und werden von den meisten Webbrowsern als Glaubwürdig eingestuft.
+Die Verifizierung des Zertifikats erfolgt über eine \acs{acme}-Challenge, welche mit einer HTTP-Anfrage validiert werden kann.
+Dafür wird ein berechneter Schlüssel auf dem Endpunkt der vorgegebenen Domain platziert und von einem öffentlichen \acs{acme}-Server abgerufen und bestätigt \cite{certmanageracme}.
 Die Grundvoraussetzung dafür war die Änderung des A-Records auf die IPv4-Adresse des Cluster-Masters in Abschnitt \ref{Domain}.
-
+Die Ausführung des Issuers erzeugt einen privaten Schlüssel mit der Bezeichnung letsencrypt-key und dem Kubernetes-Issuer namens letsencrypt-prod. 
+Für die Generieriung des Schlüssels wird die offene Zertifizierungsstelle Let's Encrypt verwendet \cite{letsencrypt} (vgl. Quellcode \ref{lst:issuer}). 
 
 \begin{lstlisting}[caption={issuer.yaml \cite{certmanageracme} },captionpos=b,label={lst:issuer},language=yaml]
     apiVersion: cert-manager.io/v1
@@ -64,11 +64,13 @@ Die Grundvoraussetzung dafür war die Änderung des A-Records auf die IPv4-Adres
 
 \end{lstlisting}
 
-Die Ausführung des Issuers erzeugt einen privaten Schlüssel mit der Bezeichnung letsencrypt-key und dem Kubernetes-Issuer namens letsencrypt-prod.  
 
 
-\textbf{Cert}: 
+\subsubsection{Cert}
 Der nächste Schritt ist die Erzeugung eines Zertifikats mit dem vorher erstellten Issuer.
+Die Ausführung der Cert-YAML-Datei erstellt ein signiertes Zertifikat.
+Dafür ist die Domain mit dem Eintrag des Cluster-Masters notwendig und die Bezeichnung des Issuers.
+Das erzeugte Secret mit der Bezeichnung deploy-secret kann von einem Ingress zur Verschlüsselung der Kommunikation verwendet werden (vgl. Quellcode \ref{lst:cert}). 
 
 \begin{lstlisting}[caption={cert.yaml \cite{certmanageracme} },captionpos=b,label={lst:cert},language=yaml]
     apiVersion: cert-manager.io/v1
@@ -84,9 +86,6 @@ Der nächste Schritt ist die Erzeugung eines Zertifikats mit dem vorher erstellt
 
 \end{lstlisting}
 
-Die Ausführung des Kubernetes-Cert erstellt ein signiertes Zertifikat.
-Dafür ist die Domain mit dem Eintrag des Cluster-Masters notwendig und die Bezeichnung des Issuers.
-Das erzeugte Secret mit der Bezeichnung deploy-secret kann von einem Ingress zur Verschlüsselung der Kommunikation verwendet werden.
 
 \subsection{Node-Affinity} \label{Nodeaffinity}
 Für den Einsatz unterschiedlicher Hardwareressourcen in einem hybriden Kubernetes-Cluster muss eine Kennzeichnung der Nodes erfolgen.
@@ -102,10 +101,10 @@ kubectl label nodes microservice2 hardware=premise
 \end{lstlisting}
 
 Die richtige Zuweisung von Pods auf gekennzeichneten Nodes erfolgt mit einem NodeSelector.
-Diesem können Schlüsselwerte wie die Kennzeichnung der Nodes übergeben werden, um Pods die Bereitstellung zu ermöglichen.
+Dem können Schlüsselwerte wie die Kennzeichnung der Nodes übergeben werden, um Pods die Bereitstellung zu ermöglichen.
 
 \subsection{Taints and Tolerations}
-Taints und Tolerations stellt sicher, das Pods nicht auf einen ungeeigneten Knoten eingeplant werden.
+Taints und Tolerations stellt sicher, das Pods nicht auf einen ungeeigneten Knoten eingeplant oder ausgeführt werden.
 Ein Taint dient zur Markierung von Nodes, demnach akzeptieren diese nur Pods mit der richtigen Toleration.
 Für die erforderliche Nutzung von \acs{gpu}-Nodes einer Anwendung können auch diese gekennzeichnet werden \cite{taintstolerations}.
 
@@ -113,63 +112,95 @@ Für die erforderliche Nutzung von \acs{gpu}-Nodes einer Anwendung können auch 
 kubectl taint nodes microservice2 hardware=gpu:NoSchedule
 \end{lstlisting}
 
-Damit werden nur Pods auf der Node \textit{microservice2} eingeplant die als Toleration den Schlüssel Hardware, Wert gpu und dem Effekt NoSchedule (vgl. Quellcode \ref{lst:taints}).
-Bereits auf der Node laufende Pods sind davon nicht betroffen, dies erfordert den Taint NoExecute \cite{taintstolerations}.
+Damit werden nur Pods auf der Node \textit{microservice2} eingeplant die als Toleration den Schlüssel \textit{hardware}, Wert \textit{gpu} und dem Effekt \textit{NoSchedule} (vgl. Quellcode \ref{lst:taints}).
+Bereits auf der Node laufende Pods sind davon nicht betroffen, dies erfordert den Taint \textit{NoExecute} \cite{taintstolerations}.
 
 Die Ausführung von Node-Affinity und Taints und Tolerations ermöglicht nun die absolute Ausführung von Pods auf spezifischer Hardware.
 Durch die Markierung mit Taint werden keine Pods ohne die Schlüsselwerte einer \acs{gpu} eingeplant.
-Und die Bereitstellung von Pods lässt sich zielgerichtet auf die Nodes mit den spezifizierten Labels bestimmen.
+Und die Bereitstellung von Pods lässt sich zielgerichtet auf die Nodes mit den spezifizierten Label bestimmen.
 
 \section{KubeVision}
 Dieser Abschnitt behandelt die einzelnen Softwarekomponenten der Microservice-Anwendung KubeVision.
 Die Webanwendung ist in drei verschiedene Dienste unterteilt.
-Erstens der Benutzeroberfläche für die Interaktion mit dem Benutzer.
+Erstens einer Benutzeroberfläche für die Interaktion mit dem Benutzer.
 Zweitens dem Authentifizierungsdienst, der für die Registrierung und Anmeldung zuständig ist.
-Drittens der Gesichtserkennungsdienst, welcher eine Zwei-Faktor-Authentifizierung per Gesichtserkennung ermöglicht.
+Drittens einem Gesichtserkennungsdienst, welcher eine Zwei-Faktor-Authentifizierung per Gesichtserkennung ermöglicht.
 
 \subsection{Frontend-Service}
 Frontend-Service ist die Benutzeroberfläche zur Interaktion mit dem Benutzer.
 Der Dienst ist in mehrere Blueprints mit eigenen Endpunkten aufgebaut.
 Jeder dieser Endpunkte gibt einen URL-Pfad für die Interaktion mit dem Frontend-Service oder einem anderen Dienst an.
-Bei Aufruf eines Endpunkts wird eine view aufgerufen und mithilfe der Template Engine Jinja2 eine spezifische HTML-Datei aus dem templates-Verzeichnis ausgegeben.
+Bei Aufruf eines Endpunkts wird eine View aufgerufen und mithilfe der Template Engine Jinja2 eine spezifische HTML-Datei aus dem templates-Verzeichnis ausgegeben.
 Diese spezifische Datei ist ein HTML Code-Block und wird in die Main-View gesetzt.
 
-Es gibt Zwei Blueprints einer im Verzeichnis home, welcher die Funktionalitäten und Endpunkte für das einloggen, registrieren und anzeigen des Profils ausgibt.
-Für die Authentifizierungsmöglichkeiten wird auf die Authentication-Service-Endpunkte umgeleitet.
-Das Zweite Blueprint gibt views zum Interagieren mit dem Facerecognition-Service an.
-Dieser beinhaltet Logik in Form von JavaScript mit der eingebundenen Bibliothek SocketIO und ermöglicht das Senden von Bildern mithilfe einer Webcam.
-
-Für die Kommunikation mit dem Facerecognition-Service wird die Kamera des Benutzers benötigt.
-Das Modul und die enthaltene Klasse Camera.js ist für die Verwendung der Webcam zuständig.
-Die Funktion navigator.mediaDevices.enumerateDevices() listet alle angeschlossenen Peripheregeräte mit Kamerafunktion auf.
-Diese Geräte werden dann in einer Schleife in eine Dropdown-Liste platziert.
-Der Nutzer kann danach eine spezifische Kamera auswählen.
-
-Mit der Klasse socketio.js lässt sich die bidirektionale Kommunikation mit dem Facerecognition-Service aufbauen.
-Es gibt drei unterschiedliche Events für die Kommunikation mit dem Dienst.
-Stream sendet eine bestimmte Anzahl an Bildern an den Dienst und löst im Anschluss das Event traindata aus.
-Dieses Event wird über den Endpunkt train ermöglicht.
-Der Zweite Endpunkt facelogin ermöglicht die Kommunikation über das Event Predict.
-Dieser sendet eine bestimmte Anzahl an Bildern an den Dienst und ermöglicht den Login des Nutzers.
+Es gibt Zwei Blueprints einer im Verzeichnis home, welcher die Funktionalitäten und Authentication-Service-Endpunkte für das einloggen, registrieren und anzeigen des Profils ausgibt (vgl. Abbildung \ref{fig:kubevision_home}).
 
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=1.0\columnwidth]{images/kubevision_home.png}
-  \caption{KubeVision Frontend Dashboard}
+  \caption{Frontend-Service - Home}
   \label{fig:kubevision_home}
 \end{figure}
+
+Das Zweite Blueprint gibt views zum Interagieren mit dem Facerecognition-Service an.
+Der Benutzer wird mit seinem Namen begrüßt und erhält Anweisungen für die Erstellung von Bildern an den Facerecognition-Service.
+Für die Kommunikation mit dem Facerecognition-Service wird die Kamera des Benutzers benötigt.
+Die eingebundene JavaScript-Bibliothek SocketIO ermöglicht das Senden von Bildern mithilfe einer Webcam.
+Das Modul und die enthaltene Klasse Camera.js ist für die Verwendung der Webcam zuständig.
+Die Funktion \textit{navigator.mediaDevices.enumerateDevices()} listet alle angeschlossenen Peripheregeräte mit Kamerafunktion auf.
+Diese Geräte werden dann in einer Schleife in eine Dropdown-Liste platziert.
+Der Nutzer kann danach eine spezifische Kamera auswählen (vgl. Abbildung \ref{fig:kubevision_train}).
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=1.0\columnwidth]{images/Frontend-Service-train.png}
+  \caption{Frontend-Service - Train}
+  \label{fig:kubevision_train}
+\end{figure}
+
+
+
+Mit dem JavaScript-Modul \textit{socketio.js} lässt sich die bidirektionale Kommunikation mit dem Facerecognition-Service aufbauen.
+Es gibt drei unterschiedliche Events für die Kommunikation mit dem Dienst.
+Das Event \textit{stream} sendet 50 Bildern an den Dienst und löst im Anschluss ein Server-Event aus, dass die Bilder des Benutzers auswertet.
+Diese Interaktion ist über den Endpunkt \textit{/train} möglich.
+Der Zweite Endpunkt \textit{/facelogin} ermöglicht die Kommunikation über das Event \textit{predict}.
+Dieser sendet eine bestimmte Anzahl an Bildern an den Dienst und ermöglicht den Login des Nutzers.
 
 
 \subsection{Authentication-Service}
 Der Authentication-Service ist für die Authentifizierung des Benutzers über das Frontend zuständig.
 Dieser Dienst wird mit einer Datenbank bereitgestellt in der Benutzerinformationen gespeichert werden.
-Über ein Blueprint wird eine API mit dem Endpunkt auth bereitgestellt.
-Damit kann sich ein Benutzer einen Benutzeraccount erstellen oder sich einloggen.
+Eine Blueprint stellt die API mit dem Endpunkt \textit{/auth} bereit.
+Die Routen des Endpunktes \textit{/auth} erhalten bis auf \textit{/auth/logout} ein POST-Objekt über den Frontend-Service.
+In diesem steht der Name und das Passwort des Benutzers.
+Damit kann sich ein Benutzer einen Account erstellen oder sich anmelden.
 Der Dienst erstellt bei Registrierung einen Eintrag in die MongoDB-Datenbank oder lest diese aus.
-Bei erfolgreichem Login wird ein Cookie mit dem Benutzernamen gesetzt und weitergeleitet in das Home-Hub.
-Hier kann der Benutzer die Zwei-Faktor-Authentifizierung per Gesichtserkennung aktivieren und mit dem Facerecognition-Service kommunizieren.
+Die Speicherung der Passwörter erfolgt in Form eines Hashes (vgl. Quellcode \ref{lst:auth}).
+Bei erfolgreichem Login wird ein Cookie mit dem Benutzernamen gesetzt und weitergeleitet in das Homemenü.
+Hier kann der angemeldete Benutzer die Zwei-Faktor-Authentifizierung per Gesichtserkennung aktivieren und mit dem Facerecognition-Service kommunizieren.
 Falls das Passwort falsch ist oder der Name bereits in der Datenbank eingetragen ist, wird der Benutzer mit einer Fehlermeldung benachrichtigt.
-Bei der Abmeldung des Benutzers wird der Benutzer-Cookie gelöscht und wieder auf die Home-Page weitergeleitet.
+Bei der Abmeldung des Benutzers wird der Benutzer-Cookie gelöscht und wieder auf das Homemenü weitergeleitet.
+
+
+\begin{lstlisting}[caption={Ausschnit aus auth.py},captionpos=b ,label={lst:auth},language=python]
+  @auth.route('/auth/register', methods=['POST'])
+  def register():
+  
+      user = request.form.get("fullname")
+      password = request.form.get("password")
+  
+      user_exists = records.find_one({"name": user})
+      if user_exists:
+          errorMsg = "Username exists!"
+          return error_entry_exists(homeEndpoint, errorMsg)
+      else:
+          hash = generate_password_hash(password)
+          insert_user = {'name': user, 'password': hash}
+          records.insert_one(insert_user)
+  
+          return successful_redirect_user(homeEndpoint, user)
+\end{lstlisting}
 
 
 \subsection{Facerecognition-Service}
@@ -217,7 +248,7 @@ Das Dockerfile befindet sich im selben Verzeichnis wie die Code-Dateien der Dien
     EXPOSE 5000
     
     CMD ["gunicorn" , "-k" ,"geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "3" , "--bind" , ":5000" , "run:app"]
-    \end{lstlisting}
+\end{lstlisting}
 
 Um Redundanz zu vermeiden wird im Folgenden das Dockerfile zum Facerecognition-Service näher erläutert (vgl. Quellcode~\ref{lst:Dockerfile}).
 Dieser ist ähnlich aufgebaut wie die Dockerfiles der anderen Dienste.

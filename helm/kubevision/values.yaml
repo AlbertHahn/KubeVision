@@ -59,7 +59,7 @@ auth:
     type: ClusterIP
 
 opencvolume:
-  skipuninstall: false
+  skipuninstall: true
   persistence:
     claimName: opencv-images-claimdata
     volumeName: opencv-images-volume

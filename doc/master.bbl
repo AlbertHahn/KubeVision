@@ -418,6 +418,13 @@ J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
   \url{https://cert-manager.io/docs/configuration/acme/}
 \BIBentrySTDinterwordspacing
 
+\bibitem{letsencrypt}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{de-DE}{Über {Let}'s {Encrypt} - {Let}'s {Encrypt} -
+  {Freie} {SSL}/{TLS} {Zertifikate}}.'' [Online]. Available:
+  \url{https://letsencrypt.org/de/about/}
+\BIBentrySTDinterwordspacing
+
 \bibitem{nodeaffinity}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Assign {Pods} to {Nodes} using {Node} {Affinity}},''

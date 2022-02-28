@@ -18,16 +18,6 @@ services:
       - "8000:8000"
     command: gunicorn -w 1 -b 0.0.0.0:8000 run:app
 
-  nginx:
-    build: ./nginx
-    image: albird/nginx:latest
-    container_name: nginx
-    restart: always
-    ports:
-      - "80:80"
-    depends_on:
-      - frontend
-
   facerecognition:
     build: ./facerecognition
     image: albird/facerecognition:latest
