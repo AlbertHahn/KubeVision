@@ -88,18 +88,39 @@ Die Ausführung des Kubernetes-Cert erstellt ein signiertes Zertifikat.
 Dafür ist die Domain mit dem Eintrag des Cluster-Masters notwendig und die Bezeichnung des Issuers.
 Das erzeugte Secret mit der Bezeichnung deploy-secret kann von einem Ingress zur Verschlüsselung der Kommunikation verwendet werden.
 
-\subsection{Node-Affinity}
+\subsection{Node-Affinity} \label{Nodeaffinity}
 Für den Einsatz unterschiedlicher Hardwareressourcen in einem hybriden Kubernetes-Cluster muss eine Kennzeichnung der Nodes erfolgen.
 Node-Affinity ermöglicht die Benutzung von Labels zur Zuweisung von spezifischen Werten.
-Bei einer Auslieferung von Kubernetes-Anwendungen lassen sich diese dann nur auf bestimmte Nodes mit dem vorkonfigurierten Label bereitstellen.
-In einem hybriden Kubernetes-Cluster kann somit die Unterteilung von Labels in Cloud und On-Premise Hardware erfolgen.
-Für die erforderliche Nutzung von \acs{gpu}s einer Anwendung können Nodes auch diese Kennzeichnung erhalten.
+Bei einer Auslieferung von Kubernetes-Anwendungen lassen sich diese dann auf bestimmte Nodes mit dem vorkonfigurierten Label bereitstellen \cite{nodeaffinity}.
+In einem hybriden Kubernetes-Cluster kann somit die Unterteilung von Labels in Cloud und On-Premise Hardware erfolgen (vgl. Quellcode \ref{lst:labelnode}).
 
+
+\begin{lstlisting}[caption={Node-Labels},captionpos=b,label={lst:labelnode},language=bash]
+kubectl label nodes microservice0 hardware=cloud
+kubectl label nodes microservice1 hardware=cloud
+kubectl label nodes microservice2 hardware=premise
+\end{lstlisting}
+
+Die richtige Zuweisung von Pods auf gekennzeichneten Nodes erfolgt mit einem NodeSelector.
+Diesem können Schlüsselwerte wie die Kennzeichnung der Nodes übergeben werden, um Pods die Bereitstellung zu ermöglichen.
 
 \subsection{Taints and Tolerations}
+Taints und Tolerations stellt sicher, das Pods nicht auf einen ungeeigneten Knoten eingeplant werden.
+Ein Taint dient zur Markierung von Nodes, demnach akzeptieren diese nur Pods mit der richtigen Toleration.
+Für die erforderliche Nutzung von \acs{gpu}-Nodes einer Anwendung können auch diese gekennzeichnet werden \cite{taintstolerations}.
 
+\begin{lstlisting}[caption={Node-Taints},captionpos=b,label={lst:taints},language=bash]
+kubectl taint nodes microservice2 hardware=gpu:NoSchedule
+\end{lstlisting}
 
-\subsection{KubeVision}
+Damit werden nur Pods auf der Node \textit{microservice2} eingeplant die als Toleration den Schlüssel Hardware, Wert gpu und dem Effekt NoSchedule (vgl. Quellcode \ref{lst:taints}).
+Bereits auf der Node laufende Pods sind davon nicht betroffen, dies erfordert den Taint NoExecute \cite{taintstolerations}.
+
+Die Ausführung von Node-Affinity und Taints und Tolerations ermöglicht nun die absolute Ausführung von Pods auf spezifischer Hardware.
+Durch die Markierung mit Taint werden keine Pods ohne die Schlüsselwerte einer \acs{gpu} eingeplant.
+Und die Bereitstellung von Pods lässt sich zielgerichtet auf die Nodes mit den spezifizierten Labels bestimmen.
+
+\section{KubeVision}
 Dieser Abschnitt behandelt die einzelnen Softwarekomponenten der Microservice-Anwendung KubeVision.
 Die Webanwendung ist in drei verschiedene Dienste unterteilt.
 Erstens der Benutzeroberfläche für die Interaktion mit dem Benutzer.
@@ -260,26 +281,26 @@ Dadurch können die Kubernetes-Ressourcenobjekte von einer Datei aus vorkonfigur
 Dienste werden mit einem eigenen Kubernetes-Service bereitgestellt, um die Kommunikation zwischen Diensten und Kubernetes-Cluster zu realisieren.
 Bis auf die individuellen Parameter des Helm-Charts, sind die Service-Konfiguration für alle Dienste identisch aufgebaut.
 
-\begin{lstlisting}[caption={auth-service.yaml},captionpos=b,label={lst:service},language=yaml]
+\begin{lstlisting}[caption={face-service.yaml},captionpos=b,label={lst:face-service},language=yaml]
   apiVersion: v1
   kind: Service
   metadata:
-    name: {{ .Values.auth.service.name }}
+    name: {{ .Values.face.service.name }}
     namespace: {{ .Values.namespace }}
   spec:
-    type: {{ .Values.auth.service.type }}
+    type: {{ .Values.face.service.type }}
     ports:
-      - port: {{ .Values.auth.image.port }}
-        targetPort: {{ .Values.auth.image.port }}
+      - port: {{ .Values.face.image.port }}
+        targetPort: {{ .Values.face.image.port }}
         protocol: TCP
         name: http
     selector:
-      server: {{ .Values.auth.name }}
+      server: {{ .Values.face.name }}
 
 \end{lstlisting}
 
 Der Name des Kubernetes-Service ist für die spätere Angabe im Ingress notwendig.
-Type definiert die Service art, zur Kommunikation innerhalb des Clusters wird deshalb ClusterIP gewählt.
+Type definiert den Service-Typen zur Kommunikation innerhalb des Clusters wird deshalb ClusterIP gewählt.
 Die Ports geben an, welcher Port im lokalen Netzwerk des Pods lauscht.
 TargetPort gibt dann den Port an der über den Service erreichbar ist.
 Schließlich wird der zugehörige Pod des Services mit dem Selector ausgewählt.
@@ -349,9 +370,9 @@ Für die Pfade wird kein Prefix wie bei dem Authentication-Service benötigt.
 
 \subsection{Deployment}
 
+Die grundlegende Bereitstellung der Dienste erfolgt mit einem Deployment.
 
-
-\begin{lstlisting}[caption={cert.yaml \cite{certmanageracme} },captionpos=b,label={lst:cert},language=yaml]
+\begin{lstlisting}[caption={deployment.yaml },captionpos=b,label={lst:deploymentauth},language=yaml]
   apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -387,4 +408,72 @@ Für die Pfade wird kein Prefix wie bei dem Authentication-Service benötigt.
 
 \end{lstlisting}
 
+Die Spezifikation des Deployments gibt die Anzahl der Replikationen der Pods an.
+Der Selector ist für die Selektion von Pods durch das Deployment zuständig.
+Das Template bezeichnet eine Menge von Pods mit einem Label, diese können dann von anderen Kubernetes-Objekten, wie Deployments und Services selektiert werden.
+Im \textit{spec} werden die Docker-Images angegeben zur Ausführung auf einem oder mehreren Pods.
+Die \textit{imagePullPolicy} bestimmt die Regeln für das Herunterladen von Images.
+Mit Always wird das gewählte Image immer heruntergeladen auch, wenn es sich bereits auf dem Hostssystem befindet.
+Ports gibt die lauschenden Ports des Containers im Pod an.
+Die Enviornmental-Variables sind für die Definition der Endpunkte des Dienstes.
+\textit{NodeSelector} gibt die in Abschnitt \ref{Nodeaffinity} gekennzeichneten Nodes an, um zu bestimmen auf, welcher Hardware die Pods ausgeführt werden.
 
+
+\subsection{Persistent-Volumes}
+
+Die persistente Speicherung von Benutzerinformationen oder Bildern erfolgt durch Persistent-Volumes.
+Diese werden für die Dienste Authentication-Service und Facerecognition-Service benötigt.
+Ein \ac{pv} ist ein Speicher der in einem Kubernetes-Cluster von Administratoren oder dynamisch über Speicherklassen bereitgestellt wird.
+Ein \ac{pvc} ist eine Anfrage zur Nutzung von \acs{pv}-Ressourcen in einem Kubernetes-Cluster.
+Im Folgenden werden die Persistent-Volumes der MongoDB Kubernetes-Ressourcenobjekte erläutert.
+
+
+\subsubsection{PersistentVolumeClaim}
+
+Ähnlich wie ein Pod, Systemressourcen wie CPU und Hauptspeicher nutzt.
+Benötigt ein \acs{pvc} Systemressourcen in Form von Festplattenspeicher.
+Bei fehlenden \acs{pv} wird durch dynamische Provisionierung für die Anfrage ein \acs{pv} erstellt.
+
+Die YAML-Datei für die MongoDB liegt in einem Unterverzeichnis mit den dazugehörigen Ressourcenobjekten.
+Unter \textit{annotations} wird eine IF-Bedingung gestellt, die das Löschen nach der Nutzung des \acs{pvc} erlaubt, wenn der Wert wahr ist wird es nicht gelöscht.
+Die \textit{annotations: }\textit{"helm.sh/resource-policy": keep} verhindert die Löschung einer Kubernetes-Ressource, wenn ein Helm-Chart deinstalliert wird \cite{helmtipsandtricks}.
+Der \textit{spec} beschreibt die Speicherklassen des \acs{pvc}, dieser ist in dem Test-Cluster standardmäßig local-path.
+Die \textit{accessModes} definieren die Zugriffsmodi des \acs{pv} wie Beispielsweise die Lese- und Schreibrechte mehrerer Clients.
+Für die MongoDB wird der Modus \textit{ReadWriteOnce} verwendet.
+Dieser erlaubt Lese- und Schreibrechte für Pods die sich auf derselben Node befinden.
+\textit{Resources} definiert mit \textit{storage} die Menge an benötigten Speicherplatzes (vgl. Quellcode \ref{lst:pvc}).
+
+\begin{lstlisting}[caption={pvc-claim.yaml },captionpos=b,label={lst:pvc},language=yaml]
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.mongodbvolume.persistence.claimName }}
+  annotations:
+    {{- if .Values.skipuninstall }}
+    "helm.sh/resource-policy": keep
+    {{- end }}
+spec:
+  storageClassName: {{ .Values.mongodbvolume.persistence.storageClassName }}
+  accessModes:
+    {{- toYaml .Values.mongodbvolume.persistence.accessModes | nindent 4  }}
+  resources:
+    requests:
+      storage: {{ .Values.mongodbvolume.persistence.storage }}
+\end{lstlisting}
+
+
+\subsubsection{PersistentVolume}
+
+Der \acs{pvc} kann dann von dem MongoDB-Deployment referenziert werden 
+und als Speicher in den Pod eingebunden werden. 
+Das Standardverzeichnis für die Aufbewahrung von Daten in Mongodb ist \textit{/data/db} \cite{mongodbpath} (vgl. Quellcode \ref{lst:pv}).
+
+\begin{lstlisting}[caption={Ausschnitt aus dem mongodb-deployment.yaml },captionpos=b,label={lst:pv},language=yaml]
+  volumeMounts:
+  - name: "mongo-data-dir"
+    mountPath: "/data/db"
+volumes:
+- name: "mongo-data-dir"
+  persistentVolumeClaim:
+    claimName: "{{ .Values.mongodbvolume.persistence.claimName }}"
+\end{lstlisting}

@@ -9,7 +9,6 @@ spec:
     port: 27017
     protocol: TCP
     targetPort: 27017
-  sessionAffinity: None
   type: ClusterIP
   selector:
     app: mongo

@@ -35,7 +35,7 @@ face:
   tolerations:
     - key: "hardware"
       operator: "Equal"
-      value: "cpu"
+      value: "gpu"
       effect: "NoSchedule"
   
   service:
@@ -59,7 +59,7 @@ auth:
     type: ClusterIP
 
 opencvolume:
-  skipuninstall: true
+  skipuninstall: false
   persistence:
     claimName: opencv-images-claimdata
     volumeName: opencv-images-volume

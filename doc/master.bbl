@@ -418,4 +418,31 @@ J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
   \url{https://cert-manager.io/docs/configuration/acme/}
 \BIBentrySTDinterwordspacing
 
+\bibitem{nodeaffinity}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Assign {Pods} to {Nodes} using {Node} {Affinity}},''
+  section: docs. [Online]. Available:
+  \url{https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{taintstolerations}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Taints and {Tolerations}},'' section: docs. [Online].
+  Available:
+  \url{https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{helmtipsandtricks}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en-us}{Chart {Development} {Tips} and {Tricks}}.''
+  [Online]. Available: \url{https://helm.sh/docs/howto/charts_tips_and_tricks/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{mongodbpath}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Manage mongod {Processes} — {MongoDB} {Manual}}.''
+  [Online]. Available:
+  \url{https://docs.mongodb.com/manual/tutorial/manage-mongodb-processes/}
+\BIBentrySTDinterwordspacing
+
 \end{thebibliography}
