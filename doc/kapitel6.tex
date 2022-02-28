@@ -1,14 +1,17 @@
 \chapter{Umsetzung des Lösungskonzepts}
 
-Das folgende Kapitel beschreibt die Vorgehensweisen der Implementierung.
-Angefangen mit der Konfiguration und Einrichtung der Knotenpunkte für das Kubernetes-Cluster.
+Das folgende Kapitel beschreibt die Vorgehensweisen der Umsetzung des Konzepts.
+Diese sind in mehrere Teile gegliedert.
+Erstens mit der Konfiguration und Einrichtung der Knotenpunkte für das Kubernetes-Cluster.
+Zweitens mit der ausführenden Entwicklung Anwendung im Microservice-Architektur-Stil KubeVision.
+Drittens mit der Beschreibung für die implementierte Gesichtserkennung des Facerecognition-Services.
+Viertens der Dockerisierung der einzelnen Dienste.
+Fünftens die Ausführung der Helm-Charts für die Auslieferung und Bereistellung von Kubernetes-Ressourcenobjekte. 
 
-
-\section{Konfiguration und Einrichtung}
+\section{Konfiguration und Einrichtung}\label{konfig}
 
 In diesem Abschnitt geht es um die Einrichtung der Kubernetes Infrastruktur.
-Zuerst die Einrichtung der einzelnen virtuellen privaten Server in Vultr, die als Knotenpunkte in unserem Kubernetes Cluster funktonieren.
-Danach die Installation der Infrastruktur mit k3s.
+Zuerst die Einrichtung der einzelnen virtuellen privaten Server in Vultr, die als Knotenpunkte in unserem Kubernetes-Cluster funktonieren.
 Zunächst wird eine Domain für den späteren Einsatz der Microservices konfiguriert.
 Abschließend erfolgt die Bereitstellung von Zertifikaten für die Domain.
 
@@ -21,18 +24,87 @@ Dies ermöglicht das Mieten von Hardware.
 Die Server dienen als Knotenpunkte für die spätere Kubernetes Installation.
 Es werden ingesamt drei VPS-Instanzen gemietet auf denen das Betriebssystem SLE-Micro Enterprise 5.1 bereitgestellt und auf den Serverinstanzen installiert.
 
-\subsubsection{Domain}
+\subsubsection{Domain}\label{Domain}
 Der Zugang zur Webanwendung wird mithilfe einer öffentlichen Domain ermöglicht.
 Der DNS-Eintrag einer Domain ist für die Adressierung zuständig.
 Durch die Veränderung des A-Records leiten alle Anfragen der Domain auf eine IPv4-Adresse um \cite{LearningCoreDNS}.
-Die IPv4 Adresse ist in diesem Fall der Cluster Master der späteren k3s-Installation.
+Die IPv4 Adresse ist in diesem Fall der Cluster-Master des Kubernetes-Clusters.
+
+\subsection{SSL-Verschlüsselung}
+
+Der Frontend-Service benötigt für die Gesichtserkennung die Webcam eines Benutzers, jedoch ist dies nur in einem sicheren Kontext möglich.
+Die Kommunikation zwischen einem Client und Ingress muss TLS-Verschlüsselt sein, um JavaScript Methoden wie MediaDevices.getUserMedia() auszuführen.
+Dafür benötigt der Ingress-Controller ein Zertifikat und einen privaten Schlüssel.
+Dieser kann automatischen mit einem Kubernetes-Issuer erstellt werden und von einem Ingress referenziert werden \cite{certmanager}.
+
+\textbf{Issuer}: 
+Das add-on Cert-Manager ist bereits vorinstalliert auf dem Kubernetes-Cluster und ermöglicht die Verwaltung von Zertifikaten.
+Dieser enthält die Kubernetes-Resource Issuer, welche zur Generieriung von privaten Schlüsseln dient.
+Cert-Manager erlaubt die vereinfachte Bereistellung von \ac*{acme} SSL-Zertifikaten für Ingress-Objekte in Kubernetes.
+Die ACME-Zertifikate sind frei verfügbar und werden von den meisten Webbrowsern als Glaubwürdig eingestuft.
+Die Verifizierung des Zertifikats erfolgt über eine ACME-Challenge, welche mit einer HTTP-Anfrage validiert werden kann.
+Dafür wird ein berechneter Schlüssel auf dem Endpunkt der vorgegebenen Domain platziert und von einem öffentlichen ACME-Server abgerufen und bestätigt \cite{certmanageracme}.
+Die Grundvoraussetzung dafür war die Änderung des A-Records auf die IPv4-Adresse des Cluster-Masters in Abschnitt \ref{Domain}.
+
+
+\begin{lstlisting}[caption={issuer.yaml \cite{certmanageracme} },captionpos=b,label={lst:issuer},language=yaml]
+    apiVersion: cert-manager.io/v1
+    kind: Issuer
+    metadata:
+      name: letsencrypt-prod
+    spec:
+      acme:
+        server: https://acme-v02.api.letsencrypt.org/directory
+        privateKeySecretRef:
+          name: letsencrypt-key
+        solvers:
+        - http01:
+           ingress:
+             class: nginx
+
+\end{lstlisting}
+
+Die Ausführung des Issuers erzeugt einen privaten Schlüssel mit der Bezeichnung letsencrypt-key und dem Kubernetes-Issuer namens letsencrypt-prod.  
+
+
+\textbf{Cert}: 
+Der nächste Schritt ist die Erzeugung eines Zertifikats mit dem vorher erstellten Issuer.
+
+\begin{lstlisting}[caption={cert.yaml \cite{certmanageracme} },captionpos=b,label={lst:cert},language=yaml]
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: cert-prod
+    spec:
+      secretName: deploy-secret
+      issuerRef: 
+        name: letsencrypt-prod
+      dnsNames:
+      - "example-domain.com"
+
+\end{lstlisting}
+
+Die Ausführung des Kubernetes-Cert erstellt ein signiertes Zertifikat.
+Dafür ist die Domain mit dem Eintrag des Cluster-Masters notwendig und die Bezeichnung des Issuers.
+Das erzeugte Secret mit der Bezeichnung deploy-secret kann von einem Ingress zur Verschlüsselung der Kommunikation verwendet werden.
+
+\subsection{Node-Affinity}
+Für den Einsatz unterschiedlicher Hardwareressourcen in einem hybriden Kubernetes-Cluster muss eine Kennzeichnung der Nodes erfolgen.
+Node-Affinity ermöglicht die Benutzung von Labels zur Zuweisung von spezifischen Werten.
+Bei einer Auslieferung von Kubernetes-Anwendungen lassen sich diese dann nur auf bestimmte Nodes mit dem vorkonfigurierten Label bereitstellen.
+In einem hybriden Kubernetes-Cluster kann somit die Unterteilung von Labels in Cloud und On-Premise Hardware erfolgen.
+Für die erforderliche Nutzung von \acs{gpu}s einer Anwendung können Nodes auch diese Kennzeichnung erhalten.
+
+
+\subsection{Taints and Tolerations}
+
 
 \subsection{KubeVision}
 Dieser Abschnitt behandelt die einzelnen Softwarekomponenten der Microservice-Anwendung KubeVision.
 Die Webanwendung ist in drei verschiedene Dienste unterteilt.
 Erstens der Benutzeroberfläche für die Interaktion mit dem Benutzer.
 Zweitens dem Authentifizierungsdienst, der für die Registrierung und Anmeldung zuständig ist.
-Drittens der Backend-Dienst, welcher die Authentifizierung per Gesichtserkennung ermöglicht.
+Drittens der Gesichtserkennungsdienst, welcher eine Zwei-Faktor-Authentifizierung per Gesichtserkennung ermöglicht.
 
 \subsection{Frontend-Service}
 Frontend-Service ist die Benutzeroberfläche zur Interaktion mit dem Benutzer.
@@ -59,14 +131,39 @@ Dieses Event wird über den Endpunkt train ermöglicht.
 Der Zweite Endpunkt facelogin ermöglicht die Kommunikation über das Event Predict.
 Dieser sendet eine bestimmte Anzahl an Bildern an den Dienst und ermöglicht den Login des Nutzers.
 
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=1.0\columnwidth]{images/kubevision_home.png}
+  \caption{KubeVision Frontend Dashboard}
+  \label{fig:kubevision_home}
+\end{figure}
 
 
 \subsection{Authentication-Service}
+Der Authentication-Service ist für die Authentifizierung des Benutzers über das Frontend zuständig.
+Dieser Dienst wird mit einer Datenbank bereitgestellt in der Benutzerinformationen gespeichert werden.
+Über ein Blueprint wird eine API mit dem Endpunkt auth bereitgestellt.
+Damit kann sich ein Benutzer einen Benutzeraccount erstellen oder sich einloggen.
+Der Dienst erstellt bei Registrierung einen Eintrag in die MongoDB-Datenbank oder lest diese aus.
+Bei erfolgreichem Login wird ein Cookie mit dem Benutzernamen gesetzt und weitergeleitet in das Home-Hub.
+Hier kann der Benutzer die Zwei-Faktor-Authentifizierung per Gesichtserkennung aktivieren und mit dem Facerecognition-Service kommunizieren.
+Falls das Passwort falsch ist oder der Name bereits in der Datenbank eingetragen ist, wird der Benutzer mit einer Fehlermeldung benachrichtigt.
+Bei der Abmeldung des Benutzers wird der Benutzer-Cookie gelöscht und wieder auf die Home-Page weitergeleitet.
 
 
-
-
-\subsection{Backend-Service}
+\subsection{Facerecognition-Service}
+Der Facerecognition-Service ermöglicht die Anmeldung eines Benutzers per Gesichtserkennung.
+Grundvoraussetzung ist die Registrierung des Nutzers beim Authentication-Service.
+Der Endpunkt wird Komponentenbasiert über eine Blueprint integriert.
+Über den Endpunkt socketio ist die eventbasierte Kommunikation zwischen Frontend-Service Benutzer und Facerecognition-Service möglich.
+Das Event stream, nimmt Bilder in Form von .webp an und speichert diese in einem Verzeichnis.
+Bei der Kommunikation wird nach jeder Anfrage ein Status zurückgeschickt.
+Das Event traindata, erstellt ein Klassenobjekt und führt die Funktion train() aus.
+Diese geht durch das Bilderverzeichnis und erstellt ein Gesichtsdatenmodell zur späteren Validierung.
+Das Event predict, nimmt wie das Event stream, Bilder an, aber vergleicht diese mit dem vorher trainierten Modell für die Gesichtserkennung.
+Bei erfolgreicher Übereinstimmung wird die Datenbank von Facerecognition-Service nach dem vorhandenen Benutzer überprüft.
+Der eigentliche Entwurf sollte den Facerecognition-Service mit einer eigenen Datenbank ausliefern.
+Aus Zeitgründen in der Entwicklung wurde dieser Teil verworfen und es wird die Datenbank eines anderen Dienstes genutzt.
 
 
 \section{Gesichtserkennung}
@@ -77,14 +174,12 @@ Dieser sendet eine bestimmte Anzahl an Bildern an den Dienst und ermöglicht den
 \section{Dockerisierung}
 
 Der nächste Schritt ist die Dockerisierung der losen Dienste.
+Die Dienste liegen in einem eigenen Verzeichnis im Softwareprojekt KubeVision.
 
 \subsection{Dockerfile}
 
 Jeder Dienst verfügt über ein eigenes Dockerfile mit Anweisungen zum Erstellen eines Docker-Images.
-Um Redundanz zu vermeiden wird im folgenden das Dockerfile zum Facerecognition-Service näher erläutert (vgl. Quellcode~\ref{lst:Dockerfile}).
-Dieser ist ähnlich aufgebaut wie die Dockerfiles der anderen Dienste.
-Das Dockerfile befindet sich im selben Verzeichnis, wie die Code-Dateien des Dienstes.
-
+Das Dockerfile befindet sich im selben Verzeichnis wie die Code-Dateien der Dienste.
 
 \begin{lstlisting}[caption={Dockerfile},captionpos=b ,label={lst:Dockerfile},language=Dockerfile]
     FROM python:3.7.2-stretch
@@ -103,8 +198,10 @@ Das Dockerfile befindet sich im selben Verzeichnis, wie die Code-Dateien des Die
     CMD ["gunicorn" , "-k" ,"geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "3" , "--bind" , ":5000" , "run:app"]
     \end{lstlisting}
 
+Um Redundanz zu vermeiden wird im Folgenden das Dockerfile zum Facerecognition-Service näher erläutert (vgl. Quellcode~\ref{lst:Dockerfile}).
+Dieser ist ähnlich aufgebaut wie die Dockerfiles der anderen Dienste.
 Die Basis des Docker-Images ist ein Python-Stretch-Image, welches auf dem leichtgewichtigen Betriebssystem Debian-Stretch aufbaut.
-Zunächst werden die nötigen Bibliotheken zur Ausführung von OpenCV installiert.
+Zunächst werden die nötigen Abhängigkeiten zur Ausführung von OpenCV installiert.
 Danach wird mit pip die notwendigen Pythonbibliotheken installiert.
 In der requirements.txt stehen alle Bibliothekennamen mit der erforderlichen Version.
 Die Enviornmental-Variable ermöglicht die Ausgabe des Python-Buffers im Terminal.
@@ -114,80 +211,180 @@ Letztendlich wird die Webanwendung mit der WSGI-Schnittstelle an den gewählten 
 
 \subsection{Docker-Compose}
 
+Der Build-Vorgang und anschließende Ausführungsprozess mehrerer Dockerfiles kann mit dem Tool Docker-Compose vereinfacht werden.
+Ähnlich wie bei Kubernetes-Ressourcenobjekte werden die Konfigurationen und Installationsansweisungen in einer YAML-Datei gespeichert.
+Die Datei zur Ausführung von Docker-Compose liegt im Root-Verzeichnis des Projekts.
 
+\begin{lstlisting}[caption={Ausschnit aus dem docker-compose.yaml},captionpos=b ,label={lst:docker-compose.yaml},language=Dockerfile]
+  authentication:
+    build: ./authentication
+    image: albird/authentication:latest
+    environment:
+      homeEndpoint: http://localhost:8000/
+      trainEndpoint: http://localhost:8000/train 
+      mongoEndpoint: mongodb://admin:password@localhost:27017/
+    ports:
+      - "5001:5001"
+    command: gunicorn -w 1 -b 0.0.0.0:5001 run:app
 
-\subsection{DockerHub}
+  mongo:
+    image: mongo:4.1.7
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-volume:/data/db
+  \end{lstlisting}
+
+Der Befehl build gibt die Docker-Anweisung zum Bauen eines Images anhand einer vorhanden Dockerfile-Datei.
+Die Webanwendung wurde mit dem Einsatz von Enviornmental-Varibales entwickelt.
+Diese können für eine flexiblen Bereistellung der Dienste angewendet werden, um Endpunkte in Form von String-Variablen in der Webanwendung zu ändern.
+Ports gibt die Ports an auf die der erstellte Container im Netzwerk lauscht.
+Die lokale Anwendung kann so im eigenen Hostnetzwerk erreicht werden.
+Im Kubernetes-Cluster kann der Pod durch einen Service selektiert und mit einem Ingress verbunden werden.
+Bei der MongoDB-Datenbank werden die Enviornmental-Variables zur Übergabe von Passwort und Adminnamen genutzt.
+Der Volume Befehl erstellt ein persistentes Verzeichnis für die Speicherung der Datenbank.
+
 
 \section{Helm-Chart}
 Dieser Abschnitt beschreibt die Entwicklung der Kubernetes-Ressourcenobjekte für die Bereitstellung mit dem Package-Manager Helm.
 Um Redundanz zu vermeiden wird die Umsetzung der Kubernetes-Ressourcenobjekte beispielhaft am Dienst Facerecognition gezeigt.
-Helm-Charts verfügen über eine YAML-Datei namens Values, welche globale Variablen für das Helm-Chart definiert.
+Helm-Charts verfügen über eine YAML-Datei namens Values, welche globale Parameter für das Helm-Chart definiert.
 Dadurch können die Kubernetes-Ressourcenobjekte von einer Datei aus vorkonfiguriert werden.
 
 
+
 \subsection{Service}
-Jeder Dienst verfügt über einen eigenen Kubernetes-Service.
-Dieser gibt die Ports des Dienstes an.
+Dienste werden mit einem eigenen Kubernetes-Service bereitgestellt, um die Kommunikation zwischen Diensten und Kubernetes-Cluster zu realisieren.
+Bis auf die individuellen Parameter des Helm-Charts, sind die Service-Konfiguration für alle Dienste identisch aufgebaut.
+
+\begin{lstlisting}[caption={auth-service.yaml},captionpos=b,label={lst:service},language=yaml]
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: {{ .Values.auth.service.name }}
+    namespace: {{ .Values.namespace }}
+  spec:
+    type: {{ .Values.auth.service.type }}
+    ports:
+      - port: {{ .Values.auth.image.port }}
+        targetPort: {{ .Values.auth.image.port }}
+        protocol: TCP
+        name: http
+    selector:
+      server: {{ .Values.auth.name }}
+
+\end{lstlisting}
+
+Der Name des Kubernetes-Service ist für die spätere Angabe im Ingress notwendig.
+Type definiert die Service art, zur Kommunikation innerhalb des Clusters wird deshalb ClusterIP gewählt.
+Die Ports geben an, welcher Port im lokalen Netzwerk des Pods lauscht.
+TargetPort gibt dann den Port an der über den Service erreichbar ist.
+Schließlich wird der zugehörige Pod des Services mit dem Selector ausgewählt.
+
 
 \subsection{Ingress}
 
 Für die Implementierung der Webanwendung wird ein Nginx-Ingress verwendet.
 Dieser stellt den Endpunkt eines Services in Form einer URL dar.
-Die folgenden Schritte sind zur Bereitstellung des Ingress notwendig.
+Als Nächstes wird wie in Abschnitt \ref{nginx-ingress} beschrieben ein Nginx-Ingress vorkonfiguriert (vgl. Quellcode \ref{lst:kubevisioningress}).
 
 
-\subsubsection{SSL-Verschlüsselung}
-Die Verwendung der Webcam eines Benutzers ist nur in einem sicheren Kontext möglich.
-Die Kommunikation zwischen einem Client und Ingress muss TLS-Verschlüsselt sein, um JavaScript Methoden wie MediaDevices.getUserMedia() auszuführen.
-Dafür benötigt der Ingress-Controller ein Zertifikat und einen privaten Schlüssel.
-Dieser kann automatischen mit einem Kubernetes-Issuer erstellt werden und von einem Ingress referenziert werden \cite{certmanager}.
-
-\textbf{Issuer}: 
-Das add-on Cert-Manager kommt vorinstalliert mit k3s und automatisiert die Verwaltung von Zertifikaten.
-Dieser enthält die Kubernetes-Resource Issuer, welche zur Generieriung von privaten Schlüsseln dient.
-ERKLÄREN WIE ACME FUNKTIONIERT!
-
-\begin{lstlisting}[caption={issuer.yaml \cite{certmanageracme} },captionpos=b,label={lst:issuer},language=yaml]
-    apiVersion: cert-manager.io/v1
-    kind: Issuer
-    metadata:
-      name: letsencrypt-prod
-    spec:
-      acme:
-        server: https://acme-v02.api.letsencrypt.org/directory
-        privateKeySecretRef:
-          name: letsencrypt-key
-        solvers:
-        - http01:
-           ingress:
-             class: nginx
-
-\end{lstlisting}
-
-Die Ausführung des Issuers erzeugt einen privaten Schlüssel mit der Bezeichnung letsencrypt-key und dem Kubernetes-Issuer namens letsencrypt-prod.  
-
-\textbf{Cert}: 
-Der nächste Schritt ist die Erzeugung eines Zertifikats mit dem Issuer.
-
-\begin{lstlisting}[caption={cert.yaml \cite{certmanageracme} },captionpos=b,label={lst:cert},language=yaml]
-    apiVersion: cert-manager.io/v1
-    kind: Certificate
-    metadata:
-      name: cert-prod
-    spec:
+\begin{lstlisting}[caption={kubevision-ingress.yaml},captionpos=b,label={lst:kubevisioningress},language=yaml]
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+   name: kubevision-ingress
+   annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  spec:
+    tls:
+    - hosts:
+      - {{ .Values.envEndpoint.host }}
       secretName: deploy-secret
-      issuerRef: 
-        name: letsencrypt-prod
-      dnsNames:
-      - "your-domain.com"
+    rules:
+    - host: {{ .Values.envEndpoint.host }}
+      http:
+        paths:
+        - backend:
+            service:
+              name: {{ .Values.auth.service.name }}
+              port:
+                number: {{ .Values.auth.image.port }}
+          path: /auth
+          pathType: Prefix
+        - backend:
+            service:
+              name: {{ .Values.face.service.name }}
+              port:
+                number: {{ .Values.face.image.port }}
+          path: /socket.io
+          pathType: Prefix
+        - backend:
+            service:
+              name: {{ .Values.frontend.service.name }}
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+    ingressClassName: nginx
 
 \end{lstlisting}
 
-Die Ausführung des Kubernetes-Cert erstellt ein signiertes Zertifikat.
-Das erzeugte Secret mit der Bezeichnung deploy-secret kann von einem Ingress zur Verschlüsselung der Kommunikation verwendet werden.
+Der Bereich annotations passt das Verhalten des Ingress an.
+Die Optionen zum redirect mit SSL erzwingt die Weiterleitung von HTTP zu einer HTTPS Verbindung mit dem Client.
+Spec bestimmt die TLS-Verbindung und die Regeln für die Endpunkte der Services über den Ingress.
+Als Hostname wird die Domain mit dem A-Record Eintrag auf dem Cluster-Master verwendet.
+In der TLS-Einstellung wird noch das TLS-Zertifikat als Secret referenziert.
+Jedem Service wird ein Endpunkt zugewiesen.
+Der Authentication-Service ist über den Prefix auth erreichbar.
+Facerecognition-Service erhält den Endpunkt socket.io zur Kommunkation mithilfe der gleichnamigen Bibliothek.
+Der Frontend-Service ist über den Hostnamen erreichbar.
+Für die Pfade wird kein Prefix wie bei dem Authentication-Service benötigt.
 
-\subsubsection{Nginx-Ingress}
+
 
 \subsection{Deployment}
+
+
+
+\begin{lstlisting}[caption={cert.yaml \cite{certmanageracme} },captionpos=b,label={lst:cert},language=yaml]
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: {{ .Values.frontend.name }}
+    namespace: {{ .Values.namespace }}
+  spec:
+    replicas: {{ .Values.frontend.replicas }}
+    selector:
+      matchLabels:
+        server: {{ .Values.frontend.name }}
+    template:
+      metadata:
+        labels:
+          server: {{ .Values.frontend.name }}
+      spec:
+        containers:
+          - name: {{ .Values.frontend.name }}
+            image: {{ .Values.frontend.image.name }}:{{ .Values.frontend.image.tag }}
+            imagePullPolicy: Always
+            ports:
+              - containerPort: {{ .Values.frontend.image.port }}
+            env:
+            - name: loginEndpoint
+              value: https://{{ .Values.envEndpoint.host }}/auth/login
+            - name: registerEndpoint
+              value: https://{{ .Values.envEndpoint.host }}/auth/register
+            - name: websocketServer
+              value: https://{{ .Values.envEndpoint.host }}
+            - name: homeEndpoint
+              value: https://{{ .Values.envEndpoint.host }}/
+        nodeSelector:
+          hardware: {{ .Values.frontend.nodeSelector.hardware }}
+
+\end{lstlisting}
 
 

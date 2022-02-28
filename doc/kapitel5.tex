@@ -13,7 +13,8 @@ Dieses beinhaltet nur die wesentlichsten Funktionalitäten für die Webentwicklu
 Dafür bietet das Framework eine hohe Flexibilität, da die nötigen Bibliotheken vom Entwickler gewählt werden können \cite{flaskdocu} und
 vereinfacht die Erstellung von \acs{api}s \cite[S.11]{restfulpython} durch Blueprints.
 
-Die Verwendung von Blueprints ermöglicht die Aufteilung von Endpunkten in views.
+Blueprints sind ein Konzept von Flask, welche die Aufteilung von Komponenten einer Webanwendung ermöglichen.
+Diese Komponenten können in Form von Routen unterschiedliche Endpunkte mit einer view ausgeben.
 Bei Aufrufen eines Endpunkts wird die dazugehörige view ausgegeben \cite{flaskdocu}.
 Dadurch kann man die Funktionalität der Webanwendung nach Endpunkten strukturieren und ist ideal für die Ausführung einer Microservice-Architektur.
 
@@ -75,21 +76,29 @@ sondern in Dokumenten gespeichert wird und zählt damit zu den NoSQL-Datenbanken
 Dies ermöglicht die Darstellung von komplexen hierarchischen Beziehungen mit einem einzigen Eintrag.
 Dokumente sind nach einer Key-Value-Struktur aufgebaut und besitzen kein vorgeschriebenes Schema zur Erstellung von Einträgen.
 
+\subsection{Versionsverwaltungssystem}
+\subsubsection{GitHub}
+Das verwendete Versionsverwaltungssystem für die Entwicklung der Microservices ist GitHub.
+Dieses basiert auf git und fokusiert sich auf Open-Source-Software und bietet gleichzeitig Enterprise Support für Unternehmen \cite{githubpricing}.
+Die Krones AG hat die Möglichkeit dies für zukünftige Entwicklungsprozesse von Microservices zu verwenden.
+
+\subsubsection{DockerHub}
+Wie in Abschnitt \ref{Docker} beschrieben ist das Standard Registry für Docker-Images DockerHub.
+Deshalb werden für die Bereistellung der Docker-Images die kostenfreien und öffentlichen Repositories verwendet.
+Die Entwicklung der Dienste erfolgt durch getrennte Repositories.
 
 \section{Entwicklung}
-In dem folgenden Abschnitt werden die Entwicklungsschritte der Microservice-Anwendung erläutert.
+In dem folgenden Abschnitt werden die Entwicklungsschritte der Microservice-Anwendungen und der Ressourcenobjekte für das Bereitstellen mit Helm näher erläutert.
 
-\subsection{Versionsverwaltung}
 
 \subsection{Microservice-Entwicklung}
-
 Die Abbildung \ref{fig:DevWorkflowDocker} zeigt den Arbeitsablauf der Service-Entwicklung auf.
 Zuerst wird die Funktionalität des Dienstes realisiert und dann mithilfe eines Dockerfiles ein Docker-Image erstellt.
 Dafür wird ein Base-Image entweder aus einem Docker-Registry, wie DockerHub oder aus dem lokalen registry benötigt.
 Um den Container zu starten, kann ein Docker-Befehl auf dem Hostssystem ausgeführt werden.
-Die Nutzung von Docker-Compose erlaubt das Starten mehrerer Container mithilfe von Konfigurationsdateien in Form von YAML-Dateien.
+Die Nutzung von Tools wie Docker-Compose erlauben das Starten mehrerer Container mithilfe von Konfigurationsdateien in Form von YAML-Dateien.
 Nachdem ausführen der Container können diese getestet werden.
-Abschließend kann der Entwicklungsablauf fortgeführt werden oder ein Release für das Versionsverwaltungssystem und dem Container-Registry erstellt werden.
+Abschließend kann der Entwicklungsablauf fortgeführt werden oder ein Release für das Versionsverwaltungssystem und dem Container-Repository erstellt werden.
 
 
 \begin{figure}[!htb]
@@ -120,11 +129,14 @@ Zuletzt wird die Entwicklung am Helm-Chart fortgeführt oder ins Versionsverwalt
 \end{figure}
 
 
-
+\newpage
 \section{Architektur}
 Dieser Abschnitt befasst sich mit der Architektur der zu entwickelnden Anwendung.
-Die Architektur wird in mehrere Abstraktionsschichten abgebildet.
-Dabei geht die Abstraktionsschichten absteigend von der Benutzereingabe bis zu den Diensten.
+Die Aufgaben der einzelnen Dienste der Microservice-Architektur wird konzipiert und dargestellt.
+Danach folgt der Vorgang der Installation der losen Dienste mit Helm auf dem Kubernetes-Cluster.
+
+%Die Architektur wird in mehrere Abstraktionsschichten abgebildet.
+%Dabei geht die Abstraktionsschichten absteigend von der Benutzereingabe bis zu den Diensten.
 
 
 \subsection{Microservices}
@@ -152,13 +164,16 @@ Damit wird das Modell zur Gesichtserkennung trainiert und ermöglicht die späte
 
 Die einzelnen Dienste der Webanwendung werden mithilfe von einem Helm-Chart gleichzeitig auf ein Kubernetes-Cluster installiert.
 Dabei hat jeder Dienst ein eigenes Verzeichnis mit den notwendigen Kubernetes-Ressourcenobjekten.
-Der Befehl helkm install 
-Bei Angabe eines Docker-Images in einer Spezifikationsdatei wird
+Der Zugang erfolgt über eine Kubeconfig die den Zugang zum Kubernetes-Cluster ermöglicht.
+Bei erfolgreichem Zugang kann mit einem Befehl im Verzeichnis die Microservices installiert werden.
+Das Kubernetes-Cluster bezieht dann die benötigten Docker-Images aus den angegebenen Docker-Repositories.
+Die erfolgreiche Bereistellung der Container auf dem Cluster ist dann unabhängig von der Helm-Installation, wenn die Images nicht von den angegebenen Repositories bezogen werden können. 
+Die Bereistellung und Auslieferung der Kubernetes-Ressourcenobjekte ist trotzdem Erfolgreich und gibt auf dem Kubernetes-Cluster lediglich Fehlermeldungen an, bei der versuchten Ausführung der Container in einem Pod an.
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.8\columnwidth]{images/HelmDeployment.png}
-    \caption{Kubernetes Architektur}
+    \includegraphics[width=1.0\columnwidth]{images/BPMNHelm.png}
+    \caption{BPNM Modell - Helm Installation der Microservices}
     \label{fig:HelmInstallation}
 \end{figure}
 

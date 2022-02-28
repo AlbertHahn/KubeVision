@@ -23,21 +23,7 @@ spec:
             name: {{ .Values.auth.service.name }}
             port:
               number: {{ .Values.auth.image.port }}
-        path: /auth/logout
-        pathType: Prefix
-      - backend:
-          service:
-            name: {{ .Values.auth.service.name }}
-            port:
-              number: {{ .Values.auth.image.port }}
-        path: /auth/login
-        pathType: Prefix
-      - backend:
-          service:
-            name: {{ .Values.auth.service.name }}
-            port:
-              number: {{ .Values.auth.image.port }}
-        path: /auth/register
+        path: /auth
         pathType: Prefix
       - backend:
           service:

@@ -389,6 +389,12 @@ S.~Patni, ``\BIBforeignlanguage{en}{Fundamentals of {RESTful} {APIs}},'' in
   [Online]. Available: \url{https://doi.org/10.1007/978-1-4842-2665-0_1}
 \BIBentrySTDinterwordspacing
 
+\bibitem{githubpricing}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Pricing · {Plans} for every developer}.'' [Online].
+  Available: \url{https://github.com/pricing}
+\BIBentrySTDinterwordspacing
+
 \bibitem{dockerappsworkflow}
 \BIBentryALTinterwordspacing
 nishanil, ``\BIBforeignlanguage{de-de}{Entwicklungsworkflow für

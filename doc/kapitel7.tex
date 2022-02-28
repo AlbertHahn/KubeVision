@@ -1,8 +1,14 @@
-% Big picture nicht vergessen, blaupausenartig ein Beispiel nach meiner Art
-\chapter{Ergebnisse}
-\section{Microservice}
-\subsection{Frontend-Serivce}
-\subsection{Backend-Serivce}
-\subsection{Authentifizierungs-Serivce}
-\subsection{Loadbalancer}
-\subsection{Kubernetes Cluster}
+\chapter{Fazit und Ausblick}
+\section{Fazit}
+Das Softwareprojekt hatte das Ziel eine Microservice-Architektur auf eine potenzielle 
+
+
+\section{Einschränkungen}\label{Einschraenkungen}
+Hardware wie Industrierechner die später in Produktionsanlagen eingesetzt werden standen nicht zur Verfügung.
+Die Installation des Kubernetes-Cluster mit k3s wurde auf virtuelle private Server realisiert (siehe Abschnitt~\ref{konfig}).
+Die Implementierung der Microservices konnte deshalb nicht in einem Produktionsumfeld eingesetzt werden.
+Der Anwendungsfall der Webanwendung ist deshalb nur bedingt der Realität entsprechend, da Computer-Vision im Bereich der Anlagentechnik genutzt wird und nicht zur Authorisation von Personal.
+Jedoch sind viele der Schritte, ähnlich ausführbar wie auf einem Kubernetes-Cluster mit on-Premise Geräten anstatt von cloudbasierter Hardware.
+Der blaupausenartige Aufbau der Entwicklungsschritte gilt auch für den Aufbau von Microservices im Produktionsumfeld.
+
+\section{Ausblick}

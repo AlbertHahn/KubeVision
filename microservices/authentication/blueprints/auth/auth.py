@@ -28,7 +28,7 @@ except errors.ServerSelectionTimeoutError as err:
     # catch pymongo.errors.ServerSelectionTimeoutError
     print ("pymongo ERROR:", err)
 
-@auth.route('/auth/login', methods=['GET', 'POST'])
+@auth.route('/auth/login', methods=['POST'])
 def login():
 
     user = request.form.get("fullname")
