@@ -1,0 +1,1 @@
+{"rule":"KOMMA_DASS","sentence":"^\\QDabei wird ein \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q-Operator verwendet das ein Fenster von einer 3*3 Matrix darstellt.\\E$"}

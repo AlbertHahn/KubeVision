@@ -439,6 +439,23 @@ J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
   \url{https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/}
 \BIBentrySTDinterwordspacing
 
+\bibitem{opencvcascade}
+\BIBentryALTinterwordspacing
+``{OpenCV}: {Cascade} {Classifier}.'' [Online]. Available:
+  \url{https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{opencvlbp}
+\BIBentryALTinterwordspacing
+``{OpenCV}: {Face} {Recognition} with {OpenCV}.'' [Online]. Available:
+  \url{https://docs.opencv.org/3.4/da/d60/tutorial_face_main.html#tutorial_face_lbph_algo}
+\BIBentrySTDinterwordspacing
+
+\bibitem{realtimefacerecog}
+X.~Zhao and C.~Wei, ``A real-time face recognition system based on the improved
+  lbph algorithm,'' in \emph{2017 IEEE 2nd International Conference on Signal
+  and Image Processing (ICSIP)}, 2017, pp. 72--76.
+
 \bibitem{helmtipsandtricks}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en-us}{Chart {Development} {Tips} and {Tricks}}.''

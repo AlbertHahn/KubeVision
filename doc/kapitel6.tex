@@ -119,6 +119,43 @@ Die Ausführung von Node-Affinity und Taints und Tolerations ermöglicht nun die
 Durch die Markierung mit Taint werden keine Pods ohne die Schlüsselwerte einer \acs{gpu} eingeplant.
 Und die Bereitstellung von Pods lässt sich zielgerichtet auf die Nodes mit den spezifizierten Label bestimmen.
 
+\section{Gesichtserkennung}
+In diesem Abschnitt werden die zwei Algorithmen der OpenCV-Bibliothek erläutert, welche zur Gesichtserkennung im Facerecognition-Service in Einsatz kommen.
+
+\subsection{Viola-Jones}
+
+Classification ist der Prozess der Vorhersage von gegebenen Datenpunkten.
+Ein Classifier verwendet Trainingsdaten wie Datenpunkte, um den Zusammenhang von Eingabewerten im Kontext des Classifiers zu verstehen.
+
+Die Viola-Jones Methode zur Erkennung von Objekten verwendet einen Classifier,
+zur Erkennung von Bildern mit Gesichtern dieser wird mit positiven Bildern (mit Gesicht) und negativen Bilder (ohne Gesicht) trainiert.
+Dabei werden die benötigten Gesichtsmerkmale in den Bildern extrahiert.
+Dafür wird ein Haar-Feature verwendet, dass ähnlich wie ein Image-Kernel eine kleine Matrix darstellt und über die einzelnen Pixelwerte eines Bildes fährt und mit dem Kernel multipiliziert.
+Dadurch werden Merkmale wie Augen, Mund und Nase klassifiziert.
+Für die schnelle Berechnung wird ein Cascade Classifier verwendet. 
+Bei der Classification werden Bilder in Regionen aufgeteilt, diese werden bei der Erkennung von Merkmalen weiter aufgeteilt, wenn nicht, wird die Region übersprungen und die nächste berechnet, um Redundanz zu vermeiden.
+OpenCV bietet hierfür bereits vortrainierte Modelle zur Erkennung von Gesichtsmerkmalen und wird im Facerecognition-Service verwendet \cite{opencvcascade}.
+
+
+\subsection{ \ac*{lbph} }
+Für die Gesichtserkennung wird der Algorithmus \acs{lbp} verwendet.
+Dieses fasst die lokalen Regionen in einem Bild zusammen, indem jeder Pixel mit Nachbarpixeln verglichen wird.
+Dabei wird ein \acs{lbp}-Operator verwendet, dass ein Fenster von einer 3*3 Matrix darstellt.
+Das Pixel im Zentrum gilt als Schwellenwert zur Berechnung der benachbarten Pixel.
+Wenn ein Nachbarpixel gleich oder größer als der Wert des Pixels im Zentrum ist, wird die Pixelposition mit dem Wert 1 markiert.
+Andernfalls wird der Pixel mit einer 0 markiert \cite{opencvlbp} (vgl. Abbildung \ref{fig:lbp}).
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=1.0\columnwidth]{images/lbp.png}
+  \caption{Local Binary Patterns - Operator \cite{opencvlbp}}
+  \label{fig:lbp}
+\end{figure}
+
+Für die Klassifizierung der räumlichen Information eines Bildes werden die lokalen Regionen als ein Histogram extrahiert, welches die Intensität der einzelnen Pixel ausgibt.
+Dies führt dazu, dass Merkmale auch bei schlecht belichteten Bildern erkannt werden und weniger Fehlern bei der Gesichtserkennung mit dem \acs{lbph} stattfinden \cite{realtimefacerecog}.
+
+
 \section{KubeVision}
 Dieser Abschnitt behandelt die einzelnen Softwarekomponenten der Microservice-Anwendung KubeVision.
 Die Webanwendung ist in drei verschiedene Dienste unterteilt.
@@ -142,7 +179,7 @@ Es gibt Zwei Blueprints einer im Verzeichnis home, welcher die Funktionalitäten
   \label{fig:kubevision_home}
 \end{figure}
 
-Das Zweite Blueprint gibt views zum Interagieren mit dem Facerecognition-Service an.
+Und ein zweites Blueprint mit Views zum Interagieren mit dem Facerecognition-Service, welcher erst nach einer erfolgreichen Anmeldung Aufrufbar ist.
 Der Benutzer wird mit seinem Namen begrüßt und erhält Anweisungen für die Erstellung von Bildern an den Facerecognition-Service.
 Für die Kommunikation mit dem Facerecognition-Service wird die Kamera des Benutzers benötigt.
 Die eingebundene JavaScript-Bibliothek SocketIO ermöglicht das Senden von Bildern mithilfe einer Webcam.
@@ -176,52 +213,42 @@ Die Routen des Endpunktes \textit{/auth} erhalten bis auf \textit{/auth/logout} 
 In diesem steht der Name und das Passwort des Benutzers.
 Damit kann sich ein Benutzer einen Account erstellen oder sich anmelden.
 Der Dienst erstellt bei Registrierung einen Eintrag in die MongoDB-Datenbank oder lest diese aus.
-Die Speicherung der Passwörter erfolgt in Form eines Hashes (vgl. Quellcode \ref{lst:auth}).
-Bei erfolgreichem Login wird ein Cookie mit dem Benutzernamen gesetzt und weitergeleitet in das Homemenü.
+Die Speicherung der Passwörter erfolgt in Form eines Hashes.
+Bei erfolgreichem Login wird ein Cookie mit dem Benutzernamen gesetzt und weitergeleitet in das Homemenü (vgl. Abbildung \ref{fig:authenticationsequence}).
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=1.0\columnwidth]{images/UMLAuthenticationService.png}
+  \caption{Ablauf von der Authentifizierung eines Benutzers}
+  \label{fig:authenticationsequence}
+\end{figure}
+
 Hier kann der angemeldete Benutzer die Zwei-Faktor-Authentifizierung per Gesichtserkennung aktivieren und mit dem Facerecognition-Service kommunizieren.
 Falls das Passwort falsch ist oder der Name bereits in der Datenbank eingetragen ist, wird der Benutzer mit einer Fehlermeldung benachrichtigt.
 Bei der Abmeldung des Benutzers wird der Benutzer-Cookie gelöscht und wieder auf das Homemenü weitergeleitet.
-
-
-\begin{lstlisting}[caption={Ausschnit aus auth.py},captionpos=b ,label={lst:auth},language=python]
-  @auth.route('/auth/register', methods=['POST'])
-  def register():
-  
-      user = request.form.get("fullname")
-      password = request.form.get("password")
-  
-      user_exists = records.find_one({"name": user})
-      if user_exists:
-          errorMsg = "Username exists!"
-          return error_entry_exists(homeEndpoint, errorMsg)
-      else:
-          hash = generate_password_hash(password)
-          insert_user = {'name': user, 'password': hash}
-          records.insert_one(insert_user)
-  
-          return successful_redirect_user(homeEndpoint, user)
-\end{lstlisting}
-
 
 \subsection{Facerecognition-Service}
 Der Facerecognition-Service ermöglicht die Anmeldung eines Benutzers per Gesichtserkennung.
 Grundvoraussetzung ist die Registrierung des Nutzers beim Authentication-Service.
 Der Endpunkt wird Komponentenbasiert über eine Blueprint integriert.
-Über den Endpunkt socketio ist die eventbasierte Kommunikation zwischen Frontend-Service Benutzer und Facerecognition-Service möglich.
-Das Event stream, nimmt Bilder in Form von .webp an und speichert diese in einem Verzeichnis.
+Über den Endpunkt \textit{socketio} ist die eventbasierte Kommunikation zwischen Frontend-Service Benutzer und Facerecognition-Service möglich.
+Das Event \textit{stream}, nimmt Bilder in Form von .webp an und speichert diese in einem Verzeichnis.
 Bei der Kommunikation wird nach jeder Anfrage ein Status zurückgeschickt.
-Das Event traindata, erstellt ein Klassenobjekt und führt die Funktion train() aus.
+Das Event \textit{traindata}, erstellt ein Klassenobjekt und führt die Funktion \textit{train()} aus.
 Diese geht durch das Bilderverzeichnis und erstellt ein Gesichtsdatenmodell zur späteren Validierung.
-Das Event predict, nimmt wie das Event stream, Bilder an, aber vergleicht diese mit dem vorher trainierten Modell für die Gesichtserkennung.
+Das Event \textit{predict}, nimmt wie das Event \textit{stream}, Bilder an, aber vergleicht diese mit dem vorher trainierten Modell für die Gesichtserkennung.
 Bei erfolgreicher Übereinstimmung wird die Datenbank von Facerecognition-Service nach dem vorhandenen Benutzer überprüft.
 Der eigentliche Entwurf sollte den Facerecognition-Service mit einer eigenen Datenbank ausliefern.
-Aus Zeitgründen in der Entwicklung wurde dieser Teil verworfen und es wird die Datenbank eines anderen Dienstes genutzt.
+Aus Zeitgründen in der Entwicklung wurde dieser Teil verworfen und es wird die Datenbank des Authentication-Service genutzt.
 
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=1.0\columnwidth]{images/Frontend-Service-train.png}
+  \caption{Frontend-Service - Train}
+  \label{fig:kubevision_train}
+\end{figure}
 
-\section{Gesichtserkennung}
-\subsection{Alignment}
-\subsection{Training}
-\subsection{Model}
+\subsubsection{Modell}
 
 \section{Dockerisierung}
 
@@ -267,7 +294,7 @@ Der Build-Vorgang und anschließende Ausführungsprozess mehrerer Dockerfiles ka
 Ähnlich wie bei Kubernetes-Ressourcenobjekte werden die Konfigurationen und Installationsansweisungen in einer YAML-Datei gespeichert.
 Die Datei zur Ausführung von Docker-Compose liegt im Root-Verzeichnis des Projekts.
 
-\begin{lstlisting}[caption={Ausschnit aus dem docker-compose.yaml},captionpos=b ,label={lst:docker-compose.yaml},language=Dockerfile]
+\begin{lstlisting}[caption={Ausschnit aus dem docker-compose.yaml},captionpos=b ,label={lst:docker-compose.yaml},language=yaml]
   authentication:
     build: ./authentication
     image: albird/authentication:latest
@@ -288,7 +315,7 @@ Die Datei zur Ausführung von Docker-Compose liegt im Root-Verzeichnis des Proje
       - "27017:27017"
     volumes:
       - ./mongo-volume:/data/db
-  \end{lstlisting}
+\end{lstlisting}
 
 Der Befehl build gibt die Docker-Anweisung zum Bauen eines Images anhand einer vorhanden Dockerfile-Datei.
 Die Webanwendung wurde mit dem Einsatz von Enviornmental-Varibales entwickelt.
@@ -302,7 +329,6 @@ Der Volume Befehl erstellt ein persistentes Verzeichnis für die Speicherung der
 
 \section{Helm-Chart}
 Dieser Abschnitt beschreibt die Entwicklung der Kubernetes-Ressourcenobjekte für die Bereitstellung mit dem Package-Manager Helm.
-Um Redundanz zu vermeiden wird die Umsetzung der Kubernetes-Ressourcenobjekte beispielhaft am Dienst Facerecognition gezeigt.
 Helm-Charts verfügen über eine YAML-Datei namens Values, welche globale Parameter für das Helm-Chart definiert.
 Dadurch können die Kubernetes-Ressourcenobjekte von einer Datei aus vorkonfiguriert werden.
 

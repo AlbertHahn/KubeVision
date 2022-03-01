@@ -127,9 +127,7 @@ Es wird getestet, ob die Containerisierung erfolgreich war und eine Kommmunikati
 Schließlich wird das Image auf ein öffentliches Registry hochgeladen. 
 Jeder Dienst hat dabei einen eigenen Speicherort in Form eines Images.
 
-\textbf{Kubernetes-Deployment}: 
-Das Testcluster wird aufgesetzt, installiert und in eine Orchestrierungsinstanz integriert.
-Skripte für die Vorkonfiguration und Installation des Kubernetes-Clusters, erhalten ein eigenes Verzeichnis im zentralen Repository.
+\textbf{Helm-Charts}: 
 Die Auslieferung der Dienste erfolgt über das Container-Registry und werden von dem Kubernetes-Cluster heruntergeladen.
 Das zentrale Repository beinhaltet ein weiteres Verzeichnis für die Kubernetes-Ressourcenobjekte in Form von Helm-Charts.
 Bei Zugang der Entwicklungsumgebung zu einem Kubernetes-Cluster können diese über den Helm-Package-Manager installiert und ausgeführt werden.

@@ -10,7 +10,6 @@ A level-1 auxiliary file: kapitel4.aux
 A level-1 auxiliary file: kapitel5.aux
 A level-1 auxiliary file: kapitel6.aux
 A level-1 auxiliary file: kapitel7.aux
-A level-1 auxiliary file: kapitel8.aux
 The style file: IEEEtran.bst
 Reallocated singl_function (elt_size=8) to 100 items from 50.
 Reallocated singl_function (elt_size=8) to 100 items from 50.
@@ -25,45 +24,45 @@ Warning--empty booktitle in BuildingMicroservicesNewmanChapter5
 Warning--empty year in microservicesvssoa
 
 Done.
-You've used 68 entries,
+You've used 71 entries,
             4087 wiz_defined-function locations,
-            1107 strings with 16385 characters,
-and the built_in function-call counts, 25272 in all, are:
-= -- 1674
-> -- 266
-< -- 61
-+ -- 156
-- -- 38
-* -- 1176
-:= -- 4008
-add.period$ -- 140
-call.type$ -- 68
-change.case$ -- 87
-chr.to.int$ -- 162
-cite$ -- 70
-duplicate$ -- 2210
-empty$ -- 2729
-format.name$ -- 45
-if$ -- 5683
+            1117 strings with 16822 characters,
+and the built_in function-call counts, 26577 in all, are:
+= -- 1764
+> -- 282
+< -- 67
++ -- 166
+- -- 40
+* -- 1227
+:= -- 4203
+add.period$ -- 146
+call.type$ -- 71
+change.case$ -- 90
+chr.to.int$ -- 177
+cite$ -- 73
+duplicate$ -- 2319
+empty$ -- 2868
+format.name$ -- 48
+if$ -- 5989
 int.to.chr$ -- 0
-int.to.str$ -- 68
-missing$ -- 455
-newline$ -- 341
-num.names$ -- 21
-pop$ -- 1594
+int.to.str$ -- 71
+missing$ -- 476
+newline$ -- 354
+num.names$ -- 22
+pop$ -- 1665
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 1803
+skip$ -- 1905
 stack$ -- 0
-substring$ -- 406
-swap$ -- 1206
-text.length$ -- 7
+substring$ -- 444
+swap$ -- 1269
+text.length$ -- 8
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 68
+type$ -- 71
 warning$ -- 2
-while$ -- 46
-width$ -- 70
-write$ -- 604
+while$ -- 50
+width$ -- 73
+write$ -- 629
 (There were 2 warnings)
