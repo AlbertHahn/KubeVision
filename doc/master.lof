@@ -10,18 +10,17 @@
 \contentsline {figure}{\numberline {2.7}{\ignorespaces Gegen\IeC {\"u}berstellung von Monolithen und Microservices \cite {FowlerMicroservice}\relax }}{16}{figure.caption.21}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Grobentwurf der Infrastruktur\relax }}{26}{figure.caption.43}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Grobentwurf der Awendung\relax }}{27}{figure.caption.44}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Vorgehen des Entwicklungsprozesses in Schichten\relax }}{28}{figure.caption.45}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Grobentwurf der Infrastruktur\relax }}{26}{figure.caption.44}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Grobentwurf der Awendung\relax }}{27}{figure.caption.45}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Vorgehen des Entwicklungsprozesses in Schichten\relax }}{28}{figure.caption.46}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Microservice-Entwicklung in Anlehnung an \cite {dockerappsworkflow}\relax }}{32}{figure.caption.61}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Kubernetes-Entwicklung in Anlehnung an \cite {dockerappsworkflow}\relax }}{33}{figure.caption.62}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Lokale Microservice Entwicklung\relax }}{34}{figure.caption.63}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces BPNM Modell - Helm Installation der Microservices\relax }}{35}{figure.caption.64}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Microservice-Entwicklung in Anlehnung an \cite {dockerappsworkflow}\relax }}{32}{figure.caption.62}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Kubernetes-Entwicklung in Anlehnung an \cite {dockerappsworkflow}\relax }}{33}{figure.caption.63}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Lokale Microservice Entwicklung\relax }}{34}{figure.caption.64}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces BPNM Modell - Helm Installation der Microservices\relax }}{35}{figure.caption.65}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Local Binary Patterns - Operator \cite {opencvlbp}\relax }}{40}{figure.caption.73}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Frontend-Service - Home\relax }}{41}{figure.caption.74}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Frontend-Service - Train\relax }}{41}{figure.caption.75}%
-\contentsline {figure}{\numberline {6.4}{\ignorespaces Ablauf von der Authentifizierung eines Benutzers\relax }}{43}{figure.caption.76}%
-\contentsline {figure}{\numberline {6.5}{\ignorespaces Frontend-Service - Train\relax }}{44}{figure.caption.77}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Local Binary Patterns - Operator \cite {opencvlbp}\relax }}{40}{figure.caption.75}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Frontend-Service - Home\relax }}{41}{figure.caption.76}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Frontend-Service - Train\relax }}{41}{figure.caption.77}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Ablauf von der Authentifizierung eines Benutzers\relax }}{43}{figure.caption.78}%
 \addvspace {10\p@ }

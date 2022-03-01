@@ -1,4 +1,4 @@
-\chapter{Umsetzung des Lösungskonzepts}
+\chapter{Umsetzung des Lösungskonzepts}\label{Umsetzung}
 
 Das folgende Kapitel beschreibt die Vorgehensweisen der Umsetzung des Konzepts.
 Diese sind in mehrere Teile gegliedert.
@@ -10,9 +10,9 @@ Fünftens die Implementierung der Anwendung durch Helm-Charts für die Ausliefer
 
 \section{Konfiguration und Einrichtung}\label{konfig}
 
-In diesem Abschnitt geht es um die Einrichtung und Vorkonfiguration des Kubernetes-Clusters.
+In diesem Abschnitt geht es um die Einrichtung und Vorkonfiguration des Kubernetes-Clusters mit der Distribution k3s.
 Zuerst die Einrichtung der einzelnen virtuellen privaten Server, die als Knotenpunkte in unserem Kubernetes-Cluster fungieren.
-Danach wird eine Domain für den späteren Einsatz der Microservices konfiguriert.
+Danach die Konfiguration einer Domain für den späteren Einsatz der Microservices.
 Abschließend erfolgt die Bereitstellung von Zertifikaten für die verschlüsselte Kommunikation über die Domain.
 
 \subsubsection{Virtueller privater Server}
@@ -21,18 +21,17 @@ Durch die Einschränkungen, beschrieben in Abschnitt \ref{Einschraenkungen}, wir
 Ein \acs{vps} wird von Drittanbietern als Internet-Hosting-Dienst angeboten und ermöglicht die Vermietung von Rechenleistung.
 Die Server dienen als Knotenpunkte im Kubernetes-Cluster.
 Es werden ingesamt drei VPS-Instanzen gemietet auf denen das Betriebssystem SLE-Micro Enterprise 5.1 bereitgestellt und auf den Serverinstanzen installiert.
-Eine der Knotenpunkte dient im Kubernetes-Cluster als Cluster-Master.
 
 \subsubsection{Domain}\label{Domain}
 Der Zugang zur Webanwendung wird mithilfe einer öffentlichen Domain ermöglicht.
 Der DNS-Eintrag einer Domain ist für die Adressierung zuständig.
 Durch die Veränderung des A-Records leiten alle Anfragen der Domain auf eine IPv4-Adresse um \cite{LearningCoreDNS}.
-Die IPv4 Adresse ist in diesem Fall der Cluster-Master des Kubernetes-Clusters.
+Die IPv4 Adresse ist in diesem Fall die Server-Node des Kubernetes-Clusters.
 
 \subsection{\acs{ssl}-Verschlüsselung}
 
 Der Frontend-Service benötigt für die Gesichtserkennung die Webcam eines Benutzers, jedoch ist dies nur in einem sicheren Kontext möglich.
-Die Kommunikation zwischen einem Client und Ingress muss \acs{tls}-Verschlüsselt sein, um JavaScript Methoden wie MediaDevices.getUserMedia() auszuführen.
+Die Kommunikation zwischen einem Client und Ingress muss \acs{tls}-Verschlüsselt sein, um JavaScript Methoden wie \textit{MediaDevices.getUserMedia()} auszuführen.
 Dafür benötigt der Ingress-Controller ein Zertifikat und einen privaten Schlüssel.
 Dieser kann automatischen mit einem Kubernetes-Issuer erstellt werden und von einem Ingress referenziert werden \cite{certmanager}.
 
@@ -138,9 +137,9 @@ OpenCV bietet hierfür bereits vortrainierte Modelle zur Erkennung von Gesichtsm
 
 
 \subsection{ \ac*{lbph} }
-Für die Gesichtserkennung wird der Algorithmus \acs{lbp} verwendet.
+Für die Gesichtserkennung wird der Algorithmus \acs{lbph} verwendet.
 Dieses fasst die lokalen Regionen in einem Bild zusammen, indem jeder Pixel mit Nachbarpixeln verglichen wird.
-Dabei wird ein \acs{lbp}-Operator verwendet, dass ein Fenster von einer 3*3 Matrix darstellt.
+Dabei wird ein \ac{lbp}-Operator verwendet, dass eine Region von einer 3x3 Matrix darstellt.
 Das Pixel im Zentrum gilt als Schwellenwert zur Berechnung der benachbarten Pixel.
 Wenn ein Nachbarpixel gleich oder größer als der Wert des Pixels im Zentrum ist, wird die Pixelposition mit dem Wert 1 markiert.
 Andernfalls wird der Pixel mit einer 0 markiert \cite{opencvlbp} (vgl. Abbildung \ref{fig:lbp}).
@@ -241,15 +240,6 @@ Bei erfolgreicher Übereinstimmung wird die Datenbank von Facerecognition-Servic
 Der eigentliche Entwurf sollte den Facerecognition-Service mit einer eigenen Datenbank ausliefern.
 Aus Zeitgründen in der Entwicklung wurde dieser Teil verworfen und es wird die Datenbank des Authentication-Service genutzt.
 
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=1.0\columnwidth]{images/Frontend-Service-train.png}
-  \caption{Frontend-Service - Train}
-  \label{fig:kubevision_train}
-\end{figure}
-
-\subsubsection{Modell}
-
 \section{Dockerisierung}
 
 Der nächste Schritt ist die Dockerisierung der losen Dienste.
@@ -261,20 +251,20 @@ Jeder Dienst verfügt über ein eigenes Dockerfile mit Anweisungen zum Erstellen
 Das Dockerfile befindet sich im selben Verzeichnis wie die Code-Dateien der Dienste.
 
 \begin{lstlisting}[caption={Dockerfile},captionpos=b ,label={lst:Dockerfile},language=Dockerfile]
-    FROM python:3.7.2-stretch
-    
-    WORKDIR /app
-    ADD . /app
-    
-    RUN apt-get update
-    RUN apt-get install ffmpeg libsm6 libxext6  -y
-    RUN pip install --upgrade pip setuptools wheel
-    RUN pip install -r requirements.txt
-    
-    ENV PYTHONUNBUFFERED 1
-    EXPOSE 5000
-    
-    CMD ["gunicorn" , "-k" ,"geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "3" , "--bind" , ":5000" , "run:app"]
+FROM python:3.7.2-stretch
+
+WORKDIR /app
+ADD . /app
+
+RUN apt-get update
+RUN apt-get install ffmpeg libsm6 libxext6  -y
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install -r requirements.txt
+
+ENV PYTHONUNBUFFERED 1
+EXPOSE 5000
+
+CMD ["gunicorn" , "-k" ,"geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "3" , "--bind" , ":5000" , "run:app"]
 \end{lstlisting}
 
 Um Redundanz zu vermeiden wird im Folgenden das Dockerfile zum Facerecognition-Service näher erläutert (vgl. Quellcode~\ref{lst:Dockerfile}).
@@ -327,7 +317,7 @@ Bei der MongoDB-Datenbank werden die Enviornmental-Variables zur Übergabe von P
 Der Volume Befehl erstellt ein persistentes Verzeichnis für die Speicherung der Datenbank.
 
 
-\section{Helm-Chart}
+\section{Helm-Chart}\label{helmcharts}
 Dieser Abschnitt beschreibt die Entwicklung der Kubernetes-Ressourcenobjekte für die Bereitstellung mit dem Package-Manager Helm.
 Helm-Charts verfügen über eine YAML-Datei namens Values, welche globale Parameter für das Helm-Chart definiert.
 Dadurch können die Kubernetes-Ressourcenobjekte von einer Datei aus vorkonfiguriert werden.

@@ -101,13 +101,6 @@ R.~Morabito, J.~Kjällman, and M.~Komu, ``Hypervisors vs. lightweight
   \url{https://kubernetes.io/docs/concepts/architecture/nodes/}
 \BIBentrySTDinterwordspacing
 
-\bibitem{kubernetesdocker}
-\BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Don't panic: Kubernetes and docker},'' Dec. 2020,
-  section: blog. [Online]. Available:
-  \url{https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/}
-\BIBentrySTDinterwordspacing
-
 \bibitem{kubernetesobjects}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Understanding kubernetes objects},'' section: docs.

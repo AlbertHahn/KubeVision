@@ -1,7 +1,7 @@
 \chapter{Einleitung}
-Die Krones AG bietet Anlagen sowohl für die Getränkeindustrie als auch 
-Nahrungsmittelhersteller, von der Prozesstechnik bis hin zur IT-Lösung. 
-Die Komplettlinie beeinhaltet auch das Bereitstellen von Software auf den einzelnen Produktionsanlagen. 
+Die Krones AG bietet Anlagen sowohl für die Getränkeindustrie als auch für
+Nahrungsmittelhersteller an, von der Prozesstechnik bis hin zur IT-Lösung. 
+Die Komplettlinie beeinhaltet auch das Bereitstellen von Software in den einzelnen Produktionsanlagen. 
 Hierfür werden eine Vielzahl von Produktionslinienanwendungen auf den Anlagen installiert, gewartet
 und verwaltet. Dementsprechend hoch ist der Aufwand, der Fehleranfälligkeiten sowie fehlende Frameworks, Bibliotheken
 und anderer Abhängigkeiten mit sich bringt.
@@ -9,50 +9,47 @@ Eigene Server müssen für die Kommunikation der Anlagen verbaut und gewartet we
 was zusätzlich Ressourcen beansprucht und automatisch die Kosten für die Inbetriebnahme einer solchen
 Linie erhöhen. Die Weiterentwicklung der zukünftigen Bereitstellung von Produktionsanlagensoftware
 erfolgt mithilfe eines \ac*{poc}, welcher die Möglichkeiten einer wartungsfreien Infrastruktur
-durch ein continuous Delivery System evaluiert. Dies verläuft in Zusammenarbeit mit dem
+durch ein Continuous-Delivery-System evaluiert. Dies verläuft in Zusammenarbeit mit dem
 Kooperationspartner und Softwarteunternehmen SUSE GmbH, welches das wartungsfreie Betriebssystem
 SUSE Linux Enterprise Micro und die multi-cluster Orchestrierungsplattform Rancher anbietet.
 
 Als Grundlage hierfür dient das Open-Source-System Kubernetes, welches zur Automatisierung, Skalierung
-und Verwaltung von containerisierten Anwendungen verwendet wird. Künftige Produktionsanlagen sollen mittels zusätzlicher Edge Devices
-als Knotenpunkte in einem Kubernetes-Cluster fungieren, Ressourcen teilen, untereinander kommunizieren und Softwarepakete unkompliziert bereitstellen.
-Die Integration der kompakten Linux-Rechner ermöglichen den variablen Einsatz von Hardwareressourcen des Kunden, der je nach Leistungsanspruch Knotenpunkte erweitern kann.
+und Verwaltung von containerisierten Anwendungen verwendet wird. Künftige Produktionsanlagen sollen mittels zusätzlicher Virtual-Edge-Devices
+als Knotenpunkte in einem Kubernetes-Cluster fungieren, sich Ressourcen teilen, untereinander kommunizieren und Softwarepakete unkompliziert bereitstellen.
+Die Integration von kompakten Linux-Rechner ermöglichen den variablen Einsatz von Hardwareressourcen des Kunden, der je nach Leistungsanspruch Knotenpunkte erweitern kann.
 Dabei soll es für die einzelnen Anwendungen möglich sein, sowohl auf cloudbasierten als auch auf on-premise Hardware zur Verfügung gestellt zu werden.
 Ein hybrides Kubernetes-Cluster ermöglicht es somit, lokale Rechenleistung oder öffentliche Cloudressourcen in der selben Softwareumgebung zu nutzen.
 \section{Motivation}
 Die Vorteile von Kubernetes und dem stetigen Paradigmenwechsel der Softwarelandschaft im Cloudbereich, welcher
 den Wechsel von monolithischen Architekturen zu flexibleren Microservice-Architekturen
 bevorzugt, sind das Hauptmotiv der Auswertung neuer, agiler Distributionsmöglichkeiten.
-Die Containerisierung von Anwendungen ermöglicht erst die Aufteilung großer Projekte
-in kleine unabängige Services, die mittels Orchestrierungsplattformen adäquat konzentiert werden können.
+Die Containerisierung von Anwendungen erleichtert die Aufteilung großer Projekte
+in kleine unabängige Services, die mittels Orchestrierungsplattformen adäquat kombiniert werden können.
 Namhafte Unternehmen wie Netflix, Amazon und Uber entwickeln und verwenden
 bereits robuste und komplexe Microservices die containerisiert auf Kubernetes-Plattformen
 verwaltet werden \cite{microservice}. 
-%Absatz nochmal durchgehen
 
 Durch die Flexibiltät einer solchen Infrastuktur ist es möglich Anwendungsfälle im Bereich
 der künstlichen Intelligenz
-für die Industrie zu testen. Die Anlage Linatronic AI der Krones AG nutzt bereits Deep-Learning-Technologie,
+für die Industrie zu konzipieren. Die Anlage Linatronic AI der Krones AG nutzt bereits Computer-Vision-Technologie,
 um in der Linie mittels Vollinspektion Schäden, Dichtflächen oder Seitenwanddicken
 zu erkennen und Prozesse zu optimieren \cite{linatronic}. Allgemein sind Anwendungen mit künstlicher Intelligenz durch ihre Komplexität
 und Vielzahl an Abhängigkeiten schwierig zu entwickeln und bereitzustellen. 
 Eine passende Plattform für Anwendungsfälle mit Bezug zur künstlichen Intelligenz
-muss eine Vielzahl an Services anbieten. Zu diesen gehören die Verwaltung von Ressourcen wie Speicher,
-Rechenleistung und Verbindungsgeschwindigkeit,
-für die Datenübertragung bei der Ausführung einzelner Phasen von der Informationsverarbeitung bis hin zur Evaluierung und Entwicklung von Modellen
-im Bereich der künstlichen Intelligenz.
-\cite{mlops}. 
+muss eine Vielzahl an Services anbieten. Zu diesen gehören die Verwaltung von Ressourcen, wie Speicher,
+Rechenleistung und Verbindungsgeschwindigkeit
+für die Datenübertragung bei der Ausführung einzelner Phasen der Informationsverarbeitung, und die Evaluierung und Entwicklung von Modellen
+im Bereich der künstlichen Intelligenz \cite{mlops}. 
 
 \section{Zielsetzung}
 Ziel dieser Arbeit ist die Entwicklung einer Microservice-Architektur in einem hybriden Kubernetes-Cluster. 
-Das Endresultat soll eine Anwendung werden, die mittels einer Weboberfläche, welche über eine Domain erreichbar ist,
-ein Login-Verfahren mittels einem Backend-Service ermöglichen der ein Authentifierzungsverfahren
-per Gesichtserkennung verwendet. 
+Das Endresultat soll eine Anwendung werden, mit einer Weboberfläche, welche über eine Domain erreichbar ist.
+Ein Anmeldeverfahren mit 2-Faktor-Authentifizierung soll über einen Backend-Service mit Gesichtserkennung die Autorisierung eines Nutzers ermöglichen.
 Diese Daten sollen schließlich verarbeitet und persistent 
 gespeichert werden, um bei erneutem Aufruf der Website bestehen zu bleiben.
-Die Konzeption der Anwendung findet containerisiert auf mehreren Software und Hardwareschichten
+Die Konzeption der Anwendung findet containerisiert auf mehreren Software- und Hardwareschichten
 statt. 
-Das ganze System wird auf einem Kubernetes-Cluster bereitgestellt und verwaltet.
+Das gesamte System wird auf einem Kubernetes-Cluster bereitgestellt und verwaltet.
 Das Bereitstellen eines Services kann bei Vorkonfiguration auf on-premise oder cloudbasierten Ressourcen stattfinden.
 Ein Ingress-Controller dient dabei als Loadbalancer und verteilt die Last beim 
 Aufrufen der Website und der Kommunikation zwischen den Backend-Services.

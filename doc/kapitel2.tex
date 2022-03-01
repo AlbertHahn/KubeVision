@@ -2,7 +2,7 @@
 Dieses Kapitel erläutert die grundlegenden Begriffe und Konzepte, die zum 
 Verständnis dieser Bachelorarbeit notwendig sind. 
 Dabei wird der Technologie-Stack aufsteigend beschrieben.
-Als Fundament dient die Container Technologie Docker.
+Als Fundament dient die Container-Technologie Docker.
 Orchestriert wird diese durch die Containerplattform Kubernetes.
 Abschließend folgt ein Abschnitt zu Microservices.
 
@@ -11,16 +11,9 @@ Abschließend folgt ein Abschnitt zu Microservices.
 \section{Docker} \label{Docker}
 
 In diesem Abschnitt wird die Technologie Docker näher erläutert und
-nicht das Unternehmen Docker, Inc. ,welches für die maßgebliche Entwicklung dessen verantwortlich ist \cite[S.11]{dockerdeep}.
+nicht das Unternehmen Docker, Inc., welches für die Entwicklung dessen maßgeblich verantwortlich ist \cite[S.11]{dockerdeep}.
 Es folgt eine aufsteigende Erklärung der Architektur hin zum Aufbau eines Containers.
 
-%\subsection{Terminologie}
-%\begin{itemize}
-%    \item \textbf{Container}: Isolierter Prozess mit einer laufenden Anwendung.
-%    \item \textbf{Volumes}: Persistente Daten eines Containers.
-%    \item \textbf{Image}: Einheit mit ausführbaren Code, Abhängigkeiten und Betriebssystem. Aufgeteilt in mehreren Schichten.
-%    \item \textbf{Dockerfile}: Textdatei zum erstellen eines Docker-Images.    
-%\end{itemize}
 
 \subsection{Architektur}
 Die Docker-Technologie ist in der Programmiersprache GO geschrieben und nutzt Funktionalitäten des
@@ -29,12 +22,12 @@ Namespaces ermöglichen die Isolation von Prozessen in sogenannte Container, wel
 Diese beeinhalten alle nötigen Abhängigkeiten zur Ausführung der vordefinierten Anwendungen.
 Container gewinnen dadurch an Portabilität,
 sodass sie auf allen Infrastrukturen mit Docker-Laufzeit bereitgestellt werden können.
-Die Laufzeit setzt sich aus \glqq runc\grqq{} einer low-level-Laufzeit und \glqq containerd\grqq{} einer higher-level-Laufzeit zusammen (vgl. Abbildung~\ref{fig:dockerarch}).
+Die Laufzeit-Umgebung setzt sich aus \glqq runc\grqq{} einer low-level-Laufzeit und \glqq containerd\grqq{} einer higher-level-Laufzeit zusammen (vgl. Abbildung~\ref{fig:dockerarch}).
 Runc dient als Schnittstelle zum Betriebssystem und startet und stoppt Container.
 Containerd verwaltet die Lebenszyklen eines Containers, das Ziehen von Images, das Erstellen von Netzwerken und die Verwaltung von runc.
 Die allgemeine Aufgabe des Docker-Daemons ist es, eine vereinfachte Schnittstelle für die Abstraktion
 der darunterliegenden Schicht zu gewährleisten, wie zum Beispiel dem Verwalten von Images, Volumes und Netzwerken \cite[S.12]{dockerdeep}.
-Auf die Orchestrierung mit Swarm wird nicht weiter eingeganen, da sie zum Verständnis nicht nötig ist.
+Auf die Orchestrierung mit Swarm wird nicht weiter eingeganen, da diese zum Verständnis nicht nötig ist.
 
 \begin{figure}
     \centering
@@ -44,22 +37,22 @@ Auf die Orchestrierung mit Swarm wird nicht weiter eingeganen, da sie zum Verst�
 \end{figure}
 
 \subsection{Images und Container}
-Ein Docker-Image ist ein Objekt, das alle Abhängigkeiten, wie Quellcode, Bibliotheken und Betriebssystemfunktionen für eine Anwendung beeinhaltet. 
+Ein Docker-Image ist ein Objekt, das alle Abhängigkeiten, wie Quellcode, Bibliotheken und Betriebssystemfunktionen, für eine Anwendung beeinhaltet. 
 
 \subsubsection{Registrys}
-Das beziehen von Images erfolgt über sogenannte \glqq Image Registries\grqq{}.
+Das beziehen von Images erfolgt über sogenannte Image Registrys.
 Bei Docker ist dies standardmäßig \url{https://hub.docker.com} und das eigene lokale Registry. 
-Es ist auch möglich, eigene zu hosten oder diejenigen von Drittanbietern zu nutzen.
+Es ist auch möglich, eigene Registrys zu hosten oder diejenigen von Drittanbietern zu nutzen.
 
 \subsubsection{Schichten}
-Docker Images bestehen aus mehreren Schichten, jede davon abhängig von der Schicht unter ihr und
+Docker-Images bestehen aus mehreren Schichten, jede davon abhängig von der Schicht unter ihr und
 erkennbar durch IDs in Form von \acs{sha}256-Hashes (vgl. Abbildung~\ref{fig:dockerlayer}).
-Docker kann dadurch beim Bauen oder Updaten von neuen Images vorhandene Schichten erneut verwenden. 
+Docker kann dadurch beim Bauen oder Updaten von neuen Images bereits vorhandene Schichten erneut verwenden. 
 Die feste Reihenfolge ermöglicht eine ressourceneffiziente Verwaltung von Builds,
-indem man oft wechselnde Schichten oben platziert. 
+indem man oft wechselnde Schichten oben platziert und somit weniger volatile Schichten häufiger wiederverwendet. 
 Die Leistung beim Erstellen und Zusammenführen von Schichtem hängt vom Dateisystem des Hostsystems ab.
 Eine Schicht kann aus mehreren Dateien bestehen
-und einzelne Dateien aus der unterliegenden Schicht mit einer neuen ersetzen.
+und einzelne Dateien aus der unterliegenden Schicht durch neue ersetzen.
 
 \begin{figure}
     \centering
@@ -72,7 +65,7 @@ und einzelne Dateien aus der unterliegenden Schicht mit einer neuen ersetzen.
 
 %nicht alle dockerfile anweisungen erstellen layer ENV expose usw.
 Das Starten eines Containers fügt auf die bereits bestehenden Schichten einen \glqq Thin R/W layer\grqq{} 
-- \glqq Container layer\grqq{} genannt - hinzu. Dieser gewährt Schreib- und Leserechte während der Laufzeit des Prozesses. 
+-- \glqq Container layer\grqq{} genannt -- hinzu. Dieser gewährt Schreib- und Leserechte während der Laufzeit des Prozesses. 
 Jeder dieser Container hat somit einen individuellen Zustand, der unähnlich vom abstammendem Image ist.
 Bei Löschung des Containers verschwindet auch die dazugewonnene Schicht.
 Das Entfernen eines Images ist durch die Konzeption des Schichtensystem erst möglich, wenn alle darauf
@@ -137,7 +130,7 @@ gestellt und baut auf 15 Jahre Erfahrungen mit Produktions-Workloads auf \cite{k
 Die Zusammensetzung der beschriebenen Kubernetes-Komponenten ergeben ein Kubernetes-Cluster (vgl. Abbildung~\ref{fig:cluster}).
 
 
-\begin{figure}
+\begin{figure}[!htb]
     \centering
     \includegraphics[width=1.0\columnwidth]{images/KubernetesKomponenten.png}
     \caption{Komponenten eines Kubernetes Cluster in Anlehnung an \cite{kuberneteskomponenten}.}
@@ -158,7 +151,7 @@ Die Kubernetes-Dokumentation beschreibt diese Komponenten wie folgt \cite{kubern
 \end{itemize}
 
 \subsubsection{Node}
-Eine Node\footnote{Um den Sprachfluss zu wahren wird der englische Begriff Node, als Kubernetes-Ressourcenobjekt nicht übersetzt. 
+Eine Kubernetes-Node\footnote{Um den Sprachfluss zu wahren wird der englische Begriff Node, als Kubernetes-Ressourcenobjekt nicht übersetzt. 
 Die Übersetzung Knoten findet lediglich als Hardwareinstanz statt.} 
 ist eine Hardware-Einheit, die je nach Kubernetes-Einrichtung eine \acs{vm}, eine physische Maschine oder 
 eine Instanz in einer privaten oder öffentlichen Cloud darstellen kann.
@@ -166,8 +159,6 @@ Diese umfasst folgende Komponenten \cite{kubernetesnodes}:
 
 \subsubsection{\textit{Container Laufzeit}}
 Die Laufzeit wurde bereits in Abschnitt \hyperref[Docker]{2.1} ausführlich besprochen.
-Desweiteren ist es erwähnenswert, dass Containerd als Container-Laufzeit von Kubernetes nach Version 1.20 auslaufen wird \cite{kubernetesdocker}.
-Dies beeinträchtigt die spätere Implementierung dieser Arbeit jedoch nicht, da k3s Containerd als Standard Laufzeit weiterhin unterstützt.
 
 \subsubsection{\textit{Kubelet}}
 Kubelet fungiert als \glqq node agent\grqq{} und registriert die Node mit dem
@@ -183,7 +174,7 @@ Ein Pod stellt die kleinste Einheit eines Kubernetes-Clusters dar und ist eine G
 Pods erlauben Containern die gemeinsame Nutzung von Speicher- und Netzwerkressourcen.
 
 \subsection{Deployment}
-Ein Deployment ist ein Ressourcenobjekt, das mit einem Deployment-Controller den gewünschten Zustand einer Anwendung aufrechterhält.
+Ein Deployment in Kubernetes, ist ein Ressourcenobjekt, das mit einem Deployment-Controller den gewünschten Zustand einer Anwendung aufrechterhält.
 Diese Spezifikationen sind in Form von \acs{yaml}-Dateien definiert (vgl. Quellcode~\ref{lst:deployment}).
 Im Folgenden ist eine kurze Aufschlüsselung der einzelnen Instruktionen \cite{kubernetesobjects}.
 \begin{itemize}
@@ -254,7 +245,7 @@ Die einzelnen Spezifikationen werden folgendermaßen definiert \cite{kubernetess
     \end{lstlisting}
 
 
-Bei der Erstellung eines Services entsteht ein \acs{rest} Objekt. 
+Bei der Erstellung eines Services entsteht ein Endpunkt für \acs{rest}-Aufrufe. 
 Der zugehörige Service-Controller lauscht auf die Endpunkte des selektierten Pods und konfiguriert den Service dementsprechend. 
 
 
@@ -262,9 +253,9 @@ Der zugehörige Service-Controller lauscht auf die Endpunkte des selektierten Po
 
 Ein Ingress ist ein Kubernetes-Ressourcenobjekt, das die Bereitstellung von internen Services auf öffentliche Endpunkte ermöglicht.
 Diese Routen werden mittels \acs{http} oder \acs{https} freigegeben und können in Form einer URL verwendet werden \cite{kubernetesingress}.
-Die Anforderung für die Implementierung eines Ingress ist der Ingress-Controller, eine Vielzahl an Optionen dafür wird in der 
-Dokumentation aufgelistet \cite{kubernetesingresscontroller}. Für die Realisierung des Prototyps kommt ein NGINX-Ingress-Controller in Einsatz, weshalb
-dieser näher erläutert wird.
+Die Anforderung für die Implementierung eines Ingress ist der Ingress-Controller, welcher nicht automatisch mit einem Cluster gestartet wird. 
+In der Dokumentation werden deshalb eine Vielzahl an Third-Party Implementierungen aufgelistet \cite{kubernetesingresscontroller}. 
+Für die Realisierung des Prototyps kommt ein NGINX-Ingress-Controller in Einsatz, weshalb dieser näher erläutert wird.
 
 \subsubsection{NGINX-Ingress-Controller}
 Der Ingress-Controller ist für die Umsetzung einer vorgegebenen Objektspezifikation zuständig \cite{kubernetesingress}.
@@ -398,8 +389,8 @@ Als Hauptquelle dient der häufig zitierte Artikel \cite{FowlerMicroservice} von
 \subsection{Begriffserklärung}
 Fowler und Lewis beschreiben den Microservice-Architektur-Stil als Entwicklung einer einzigen Anwendung, die aus einer Reihe unabhängiger Dienste besteht. 
 Die Kommunikation der einzelnen Dienste untereinander wird häufig durch \acs{api}-Aufrufe über \acs{http} realisiert. 
-Diese Dienste sind vollautomatisch auszuliefern und orientieren sich bei der Entwicklung um Business-Capabilities\footnote{Business-capability bezeichnet ein Konzept, das aus Sicht der Geschäftsarchitektur modelliert wird \cite{MicroservicePattern}}. 
-Zusammenhängende Dienste werden minimal zentral gehalten und können in unterschiedlichen Programmiersprachen oder Technologien realisiert werden \cite{FowlerMicroservice}.
+Diese Dienste sind vollautomatisch auszuliefern und orientieren sich bei der Entwicklung um Business-Capabilities\footnote{Business-capability bezeichnet ein Konzept, das aus Sicht der Geschäftsarchitektur modelliert \\ wird \cite{MicroservicePattern}.}. 
+Zusammenhängende Dienste werden dezentral gehalten und können in unterschiedlichen Programmiersprachen oder Technologien realisiert werden \cite{FowlerMicroservice}.
 
 \begin{figure}[!htb]
   \centering
@@ -409,7 +400,7 @@ Zusammenhängende Dienste werden minimal zentral gehalten und können in untersc
 \end{figure}
 
 Sinnvoll ist es hierbei, den Vergleich zu monolithischer Softwareentwicklung zu ziehen. 
-Ein Monolith folgt hierbei der Grundprämisse mittels, der verwendeten Programmiersprache die Anwendung in einzelne Klassen, Funktionen und Namensräume aufzuteilen. 
+Ein Monolith folgt hierbei der Grundprämisse mittels der verwendeten Programmiersprache die Anwendung in einzelne Klassen, Funktionen und Namensräume aufzuteilen. 
 Dieser Ansatz ist gängig und erfolgsversprechend. 
 Jedoch argumentieren Fowler und Lewis, dass mit dem Zuwachs an Cloud-Technologien dieser Ansatz immer frustrierender für Entwickler ist, denn bereits kleine Änderungen an einem Modul benötigen einen neuen Software-Build und Auslieferungsprozess. 
 Weiterhin merken Fowler und Lewis an, dass die Skalierbarkeit einer solchen Architektur mehr Ressourcen erfordert, da nicht einzelne Teile der Anwendung repliziert werden, sondern der vollständige Monolith (vgl. Abbildung~\ref{fig:monlithmicroservice}).
@@ -425,7 +416,7 @@ Die folgenden Unterabschnitte erläutern diese Charakteristika etwas näher.
 \subsubsection{Komponententrennung durch Dienste}\label{TrennungdurchDienste}
 Fowler definiert Komponenten einer Software wie folgt: \begin{quote}\glqq Eine Komponente ist eine Softwareeinheit, die unabhängig austauschbar und erweiterbar ist.\grqq{} \cite{FowlerSoftwareComponent} \end{quote}
 
-Dienste einer Microservice-Architektur stellen Softwarekomponenten dar, die mittels Web-Service-Anfragen oder Remote-Procedure-Calls\footnote{Remote-Procedure-Calls bezeichnet die Ausführung eines lokalen Aufrufs auf einem anderen Dienst \cite{BuildingMicroservicesNewmanChapter5}.} interagieren.
+Dienste einer Microservice-Architektur stellen Softwarekomponenten dar, die mittels Web-Service-Anfragen oder \acp{rpc}\footnote{\acs{rpc} bezeichnet die Ausführung eines lokalen Aufrufs auf einem anderen Dienst \cite{BuildingMicroservicesNewmanChapter5}.} interagieren.
 Bibliotheken hingegen beschreiben einen Verbund aus mehreren Komponenten, die lokale Funktionsaufrufe nutzen. 
 Der resultierende Vorteil ist, dass Dienste unabhängig voneinander verändert und ausgeliefert werden können. 
 Denn bei Prozessen mit mehreren eingebundenen Bibliotheken, muss die gesamte Anwendung neu ausgeliefert werden \cite{FowlerMicroservice}. 

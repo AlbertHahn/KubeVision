@@ -209,22 +209,42 @@ einem hybriden kubernetes Cluster für industrielle KI-Anwendungsfälle}
 \newcommand*{\IhrTitelEN}{Conceptual Design and Implementation of a Microservice Architecture
 in a Hybrid Kubernetes Cluster for Industrial AI Use Cases}
 \newcommand*{\IhrBearbeitungszeitraumVON}{4. Oktober 2021}
-\newcommand*{\IhrBearbeitungszeitraumBIS}{3. März 2022}
+\newcommand*{\IhrBearbeitungszeitraumBIS}{  3. März 2022}
 \newcommand*{\IhrErstpruefer}{Prof. Dr.-Ing. Christoph Neumann}
 \newcommand*{\IhrZweitpruefer}{Prof. Dr. Dieter Meiller}
 \newcommand*{\IhreFirma}{Krones AG, Neutraubling}
-\newcommand*{\IhrFirmenbetreuer}{Ottmar Amann}
-\newcommand*{\IhreZusammenfassung}{%
-Das Ziel dieser Bachelorarbeit ist es, eine flexible
-und nahtlose Lösung für ein Hybrides Cluster aus on-premise Edge Devices und Cloud
-Ressourcen bereitzustellen. Produktionslinienanwendungen/Microservices sollen
-zukünftig beliebig skalierbar und agil sein, dabei sollen für die Anwendungen generell
-keine Differenzierung zwischen offline und online Ressource getroffen werden. Im Zuge
-dessen wird die Umsetzbarkeit und Relevanz von cloudbasierten Microservices im
-Bereich der künstlichen Intelligenz auf einer zukünftigen Produktionsanlage untersucht.
+\newcommand*{\IhrFirmenbetreuer}{Herr Ottmar Amann}
+\newcommand*{\IhreZusammenfassung}{
+Das Ziel dieser Arbeit ist die Konzeption und Implementierung einer prototypischen Anwendung im Microservice-Architektur-Stil.
+Die Software soll dabei einen Anwendungsfall im Bereich der künstlichen Intelligenz abdecken.
+Die Auslieferung und Bereitstellung der Anwendung soll auf einer hybriden-Umgebung in Kubernetes stattfinden.
+
+Das erste Kapitel widmet sich mit der Motivation und Zielsetzung für die Entwicklung der Software.
+Im zweiten Kapitel werden die Grundlagen zum Verständnis der folgenden Kapitel erklärt.
+Danach werden im dritten Kapitel die derzeitigen Bestrebungen der Krones AG im Bereich der Modernisierung von Infrastrukturen durch Cloud-Technologien analysiert.
+Darauf aufbauend folgt das vierte Kapitel, welche einen Lösungsansatz in Form von Konzepten und Entwürfen formuliert.
+Im fünften Kapitel wird dann das Lösungskonzept ausgearbeitet und die Vorgehensweisen hinsichtlich Design, Entwicklung und der Architektur definiert.
+Das sechste Kapitel ist die technische Umsetzung des Konzepts und beschreibt den Aufbau der Implementierung.
+Abschließend werden die Vorgehensweisen und Ergebnisse in Kapitel sieben zusammgefasst und ein Ausblick für die Zukunft artikuliert. 
 }
-\newcommand*{\IhreSchluesselwoerter}{}
+\newcommand*{\IhreSchluesselwoerter}{Docker, Kubernetes, Rancher, OpenCV, Helm, Flask, Microservice}
 \newcommand{\secref}[1]{\autoref{#1}. \nameref{#1}}
+
+\newcommand*{\IhreAbstract}{%
+The goal of this thesis is the design and implementation of a prototypical application using the microservice architecture style.
+This prototype has to cover a use case in the area of artificial intelligence.
+The appliaction will be deployed and delivered on a hybrid Kubernetes cluster.
+
+The first chapter is dedicated with the motivation and objective for the development of the software.
+The second chapter explains the basics to understand the following chapters.
+Chapter three analyzes Krones AG's current efforts in the area of infrastructure modernization through cloud technologies.
+This is followed by the fourth chapter, which formulates a solution approach in the form of concepts and designs.
+Furthermore, the fifth chapter then elaborates the solution concept and defines the approach in terms of design, development and architecture.
+Based on this, the sixth chapter describes the technical realization of the concept and the structure of the implementation.
+Finally, chapter seven summarizes the procedures and results and articulates an outlook for the future. 
+}
+\newcommand*{\IhreKeywords}{Docker, Kubernetes, Rancher, OpenCV, Helm, Flask, Microservice}
+
 
 \usepackage[bookmarks, raiselinks, pageanchor, % PDF-Einstellungen
             hyperindex, colorlinks,
@@ -305,6 +325,7 @@ Bereich der künstlichen Intelligenz auf einer zukünftigen Produktionsanlage un
     \acro{vm}[VM]{Virtuelle Maschine}
     \acro{sha}[SHA]{Secure Hash Algorithm}
     \acro{api}[API]{Application Programming Interface}
+    \acro{rpc}[RPC]{Remote Procedure Call}
     \acro{vps}[VPS]{Virtual Private Server}
     \acro{rest}[REST]{Representational State Transfer}
     \acro{osi}[OSI]{Open Systems Interconnection}
@@ -313,7 +334,7 @@ Bereich der künstlichen Intelligenz auf einer zukünftigen Produktionsanlage un
     \acro{https}[HTTPS]{Hypertext Transfer Protocol Secure}
     \acro{iot}[IoT]{Internet of Things}
     \acro{aws}[AWS]{Amazon Web Services}
-    \acro{hmi}[HMI]{Human Interface}
+    \acro{hmi}[HMI]{Human Machine Interface}
     \acro{ssh}[SSH]{Secure Shell}
     \acro{wsgi}[WSGI]{Web Server Gateway Interface}
     \acro{html}[HTML]{Hypertext Markup Language}
