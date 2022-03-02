@@ -260,8 +260,18 @@ Die Dienste liegen in einem eigenen Verzeichnis im Softwareprojekt KubeVision.
 
 Jeder Dienst verfügt über ein eigenes Dockerfile mit Anweisungen zum Erstellen eines Docker-Images.
 Das Dockerfile befindet sich im selben Verzeichnis wie die Code-Dateien der Dienste.
+Um Redundanz zu vermeiden, wird im Folgenden das Dockerfile zum Facerecognition-Service näher erläutert (vgl. Quellcode~\ref{lst:Dockerfile}).
+Dieses ist ähnlich aufgebaut wie die Dockerfiles der anderen Dienste.
+Die Basis des Docker-Images ist ein Python-Stretch-Image, welches auf dem leichtgewichtigen Betriebssystem Debian-Stretch aufbaut.
+Zunächst werden die nötigen Abhängigkeiten zur Ausführung von OpenCV installiert.
+Danach wird mit pip die notwendigen Pythonbibliotheken installiert.
+In der Datei requirements.txt stehen alle Bibliothekennamen mit der erforderlichen Version.
+Die umgebungsvariablen ermöglicht die Ausgabe des Python-Buffers im Terminal.
+Die \textit{CMD}-Anweisung weist Docker an, den Containers immer mit dem Befehl, einen Gunicorn-Webserver auszuführen, zu starten.
+Die zusätzlichen Flags geben die Art und Anzahl der Worker-Prozesse an.
+Letztendlich wird die Webanwendung mit der WSGI-Schnittstelle an dem gewählten Port 5000 ausgeführt.
 
-\begin{lstlisting}[caption={Dockerfile},captionpos=b ,label={lst:Dockerfile},language=Dockerfile,float,floatplacement=H]
+\begin{lstlisting}[caption={Dockerfile},captionpos=b ,label={lst:Dockerfile},language=Dockerfile]
 FROM python:3.7.2-stretch
 
 WORKDIR /app
@@ -278,16 +288,6 @@ EXPOSE 5000
 CMD ["gunicorn" , "-k" ,"geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "3" , "--bind" , ":5000" , "run:app"]
 \end{lstlisting}
 
-Um Redundanz zu vermeiden, wird im Folgenden das Dockerfile zum Facerecognition-Service näher erläutert (vgl. Quellcode~\ref{lst:Dockerfile}).
-Dieses ist ähnlich aufgebaut wie die Dockerfiles der anderen Dienste.
-Die Basis des Docker-Images ist ein Python-Stretch-Image, welches auf dem leichtgewichtigen Betriebssystem Debian-Stretch aufbaut.
-Zunächst werden die nötigen Abhängigkeiten zur Ausführung von OpenCV installiert.
-Danach wird mit pip die notwendigen Pythonbibliotheken installiert.
-In der Datei requirements.txt stehen alle Bibliothekennamen mit der erforderlichen Version.
-Die umgebungsvariablen ermöglicht die Ausgabe des Python-Buffers im Terminal.
-Die \textit{CMD}-Anweisung weist Docker an, den Containers immer mit dem Befehl, einen Gunicorn-Webserver auszuführen, zu starten.
-Die zusätzlichen Flags geben die Art und Anzahl der Worker-Prozesse an.
-Letztendlich wird die Webanwendung mit der WSGI-Schnittstelle an dem gewählten Port 5000 ausgeführt.
 
 \subsection{Docker-Compose}
 
@@ -372,7 +372,7 @@ Dieser stellt den Endpunkt eines Services in Form einer URL dar.
 Als Nächstes wird wie in Abschnitt \ref{nginx-ingress} beschrieben, ein Nginx-Ingress vorkonfiguriert (vgl. Quellcode \ref{lst:kubevisioningress}).
 
 
-\begin{lstlisting}[caption={kubevision-ingress.yaml},captionpos=b,label={lst:kubevisioningress},language=yaml,float,floatplacement=H]
+\begin{lstlisting}[caption={kubevision-ingress.yaml},captionpos=b,label={lst:kubevisioningress},language=yaml]
   apiVersion: networking.k8s.io/v1
   kind: Ingress
   metadata:
@@ -430,6 +430,17 @@ Für die Pfade wird kein Präfix wie bei dem Authentication-Service benötigt.
 \subsection{Deployment}
 
 Die grundlegende Bereitstellung der Dienste erfolgt mit einem Deployment.
+Die Spezifikation des Deployments gibt die Anzahl der Replikationen der Pods an.
+Der Selector ist für die Selektion von Pods durch das Deployment zuständig.
+Das Template bezeichnet eine Menge von Pods mit einem Label.
+Diese können dann von anderen Kubernetes-Objekten, wie Deployments und Services, selektiert werden.
+Im \textit{spec} werden die Docker-Images zur Ausführung auf einem oder mehreren Pods angegeben.
+Die \textit{imagePullPolicy} bestimmt die Regeln für das Herunterladen von Images.
+Mit Always wird das gewählte Image immer heruntergeladen, auch wenn es sich bereits auf dem Hostssystem befindet.
+\textit{Ports} gibt die lauschenden Ports des Containers im Pod an.
+Die umgebungsvariablen definieren die Endpunkte des Dienstes.
+\textit{NodeSelector} gibt die in Abschnitt \ref{Nodeaffinity} gekennzeichneten Nodes an, um zu bestimmen auf, welcher Hardware die Pods ausgeführt werden(vgl. Quellcode \ref{lst:deploymentauth}).
+
 
 \begin{lstlisting}[caption={frontend-deployment.yaml },captionpos=b,label={lst:deploymentauth},language=yaml]
   apiVersion: apps/v1
@@ -467,16 +478,6 @@ Die grundlegende Bereitstellung der Dienste erfolgt mit einem Deployment.
 
 \end{lstlisting}
 
-Die Spezifikation des Deployments gibt die Anzahl der Replikationen der Pods an.
-Der Selector ist für die Selektion von Pods durch das Deployment zuständig.
-Das Template bezeichnet eine Menge von Pods mit einem Label.
-Diese können dann von anderen Kubernetes-Objekten, wie Deployments und Services, selektiert werden.
-Im \textit{spec} werden die Docker-Images zur Ausführung auf einem oder mehreren Pods angegeben.
-Die \textit{imagePullPolicy} bestimmt die Regeln für das Herunterladen von Images.
-Mit Always wird das gewählte Image immer heruntergeladen, auch wenn es sich bereits auf dem Hostssystem befindet.
-\textit{Ports} gibt die lauschenden Ports des Containers im Pod an.
-Die umgebungsvariablen definieren die Endpunkte des Dienstes.
-\textit{NodeSelector} gibt die in Abschnitt \ref{Nodeaffinity} gekennzeichneten Nodes an, um zu bestimmen auf, welcher Hardware die Pods ausgeführt werden.
 
 
 \subsection{PersistentVolumes}

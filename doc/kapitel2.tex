@@ -6,8 +6,6 @@ Als Fundament dient die Container-Technologie Docker.
 Orchestriert wird diese durch die Containerplattform Kubernetes.
 Abschließend folgt ein Abschnitt zu Microservices.
 
-%TEXT!!!!
-
 \section{Docker} \label{Docker}
 
 In diesem Abschnitt wird die Technologie Docker näher erläutert und
@@ -46,7 +44,7 @@ Es ist auch möglich, eigene Registrys zu hosten oder diejenigen von Drittanbiet
 
 \subsubsection{Schichten}
 Docker-Images bestehen aus mehreren Schichten, jede davon abhängig von der Schicht unter ihr und
-erkennbar durch IDs in Form von \acs{sha}256-Hashes (vgl. Abbildung~\ref{fig:dockerlayer}).
+erkennbar durch IDs in Form von \ac{sha}256-Hashes (vgl. Abbildung~\ref{fig:dockerlayer}).
 Docker kann dadurch beim Bauen oder Updaten von neuen Images bereits vorhandene Schichten erneut verwenden. 
 Die feste Reihenfolge ermöglicht eine ressourceneffiziente Verwaltung von Builds,
 indem man oft wechselnde Schichten oben platziert und somit weniger volatile Schichten häufiger wiederverwendet. 
@@ -91,7 +89,7 @@ Diese hingegen fügen nur Metadaten hinzu \cite{dockerbestpracticedockerfile}.
 \subsection{Containervirtualisierung}
 Aus dem Wissen des letzten Abschnitts lässt sich schlussfolgern, dass
 ein Container eine laufende Instanz eines Images ist.
-Vergleichbar ist dieses Konzept mit dem einer \acs{vm}.
+Vergleichbar ist dieses Konzept mit dem einer \ac{vm}.
 Denn Images ermöglichen ähnlich wie \acs{vm}-Templates die Erstellung von mehreren Instanzen durch eine Vorkonfiguration.
 Ein Unterschied ist, dass die Einrichtung von \acs{vm}s arbeitsintensiver ist und weitaus mehr Ressourcen
 beansprucht, da sie ein ganzes Betriebssystem ausführt \cite{hypervisorcontainer}. Container-Technologien bauen hingegen nur auf 
@@ -252,7 +250,7 @@ Die Verantwortung des Service-Controllers ist die Erstellung, Aktualisierung und
 \subsection{Ingress} \label{nginx-ingress}
 
 Ein Ingress ist ein Kubernetes-Ressourcenobjekt, das die Bereitstellung von internen Services auf öffentliche Endpunkte ermöglicht.
-Diese Routen werden mittels \acs{http} oder \acs{https} freigegeben und können in Form einer URL verwendet werden \cite{kubernetesingress}.
+Diese Routen werden mittels \ac{http} oder \ac{https} freigegeben und können in Form einer URL verwendet werden \cite{kubernetesingress}.
 Die Anforderung für die Implementierung eines Ingress ist der Ingress-Controller, welcher nicht automatisch mit einem Cluster gestartet wird. 
 In der Dokumentation werden deshalb eine Vielzahl an Third-Party Implementierungen aufgelistet \cite{kubernetesingresscontroller}. 
 Für die Realisierung des Prototyps kommt ein NGINX-Ingress-Controller in Einsatz, weshalb dieser näher erläutert wird.
@@ -260,9 +258,9 @@ Für die Realisierung des Prototyps kommt ein NGINX-Ingress-Controller in Einsat
 \subsubsection{NGINX-Ingress-Controller}
 Der Ingress-Controller ist für die Umsetzung einer vorgegebenen Objektspezifikation zuständig \cite{kubernetesingress}.
 Die übliche Verwendung eines Controllers beeinhaltet die Lastenverteilung durch Weiterleiten des Datenverkehrs an Services. 
-Diese Kommunikation findet, wie auch bei dem NGINX-Ingress-Controller \cite{kubernetesingresscontrollerlayer}, in der Anwendungsschicht des \acs{osi}-Schichtenmodells statt und ermöglicht dadurch die 
+Diese Kommunikation findet, wie auch bei dem NGINX-Ingress-Controller \cite{kubernetesingresscontrollerlayer}, in der Anwendungsschicht des \ac{osi}-Schichtenmodells statt und ermöglicht dadurch die 
 Lastenverteilung von öffentlichen Endpunkten zu internen Pods in einem Cluster \cite{kubernetesingressibm}.
-Wie für alle anderen Kubernetes-Objekte auch werden vordefinierte Aufgaben des Ingress-Controllers durch \acs{yaml}-Dateien abgebildet (vgl. Beispiel~\ref{lst:ingress}).
+Wie für alle anderen Kubernetes-Objekte auch werden vordefinierte Aufgaben des Ingress-Controllers durch \ac{yaml}-Dateien abgebildet (vgl. Beispiel~\ref{lst:ingress}).
 Im Folgenden finden sich wichtige Optionen, die genauer erklärt werden \cite{kubernetesingress}:
 
 \begin{itemize}
@@ -299,7 +297,7 @@ Im Folgenden finden sich wichtige Optionen, die genauer erklärt werden \cite{ku
 Ligthweight Kubernetes auch k3s genannt ist eine Open-Source-Kubernetes-Distributi\-on des Unternehmens
 Rancher. Der größte Unterschied der Distribution ist die Speichernutzung 
 auf Hostsystemen mit einer einzelnen Binärdatei von nur 40MB.
-Durch die Verschlankung der Distribution ist der ideale Anwendungszweck \acs{iot}-Geräte mit wenig Rechenleistung.
+Durch die Verschlankung der Distribution ist der ideale Anwendungszweck \ac{iot}-Geräte mit wenig Rechenleistung.
 Denn die minimalen Systemanforderungen für Hostsysteme liegen bei 512MB Hauptspeicher und einer Pi4B-BCM2711-CPU mit 1,50 GHz\footnote{Einplatinencomputer Raspberry Pi 4B, basierend auf ARM \cite{pi4}.} \cite{k3sAnforderung}.
 Der hauptsächliche Verwendungszweck von k3s sind \acs{iot}-Geräte, da sekundäre Kubernetes-Inhalte entfernt wurden. \cite{k3s}.
 Trotz dieser Reduzierung bleiben die Kernfunktionalitäten von Kubernetes erhalten und werden, 
@@ -332,7 +330,7 @@ Die Speicherung der Netzwerkkonfiguration erfolgt über etcd oder der Kubernetes
 \subsection{Rancher}
 In diesem Unterabschnitt wird die Open-Source-Lösung Rancher von dem gleichnamigen Unternehmen zur Orchestierung von Kubernetes-Clustern näher behandelt.
 Sie ermöglicht das Verwalten von Kubernetes-Clustern auf der eigenen Infrastruktur, sowohl vor Ort als auch in der Cloud.
-Die Bereitstellung von Clustern mittels Rancher ist unabhängig von Cloud-Anbietern, weshalb Cluster in der Praxis mit derselben Rancher-Instanz auf \acs{aws}, Azure oder anderen Cloud-Anbietern betreut werden können \cite{rancher}.
+Die Bereitstellung von Clustern mittels Rancher ist unabhängig von Cloud-Anbietern, weshalb Cluster in der Praxis mit derselben Rancher-Instanz auf \ac{aws}, Azure oder anderen Cloud-Anbietern betreut werden können \cite{rancher}.
 
 Die Rancher-Benutzeroberfläche vereinfacht das Steuern von Arbeitslasten auf einer zentralen administrativen Instanz, welche gleichzeitig Authentifizierung und Rechteverteilung von Benutzern anbietet.
 Das grundsätzliche Verwalten von Arbeitslasten verlangt kein tiefgründiges Wissen bezüglich Kubernetes-Konzepte. 
