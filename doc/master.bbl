@@ -415,6 +415,13 @@ nishanil, ``\BIBforeignlanguage{de-de}{Entwicklungsworkflow für
 J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
   0.4em\relax Farnham, England: O'Reilly UK, Sep. 2019.
 
+\bibitem{MediaDevicesgetUserMedia}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en-US}{{MediaDevices}.{getUserMedia}() - {Web} {APIs}
+  {\textbar} {MDN}},'' Mar. 2022. [Online]. Available:
+  \url{https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia}
+\BIBentrySTDinterwordspacing
+
 \bibitem{certmanager}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Issuer},'' Feb. 2022, section: docs. [Online].

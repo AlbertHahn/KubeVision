@@ -1,20 +1,15 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  #Which name should the persistenceVolumeClaim have?
   name: {{ .Values.opencvolume.persistence.claimName }}
   annotations:
-    #If skipuninstall is true persistentVolumeClaim won't be deleted, when the deployment will get uninstalled
     {{- if .Values.skipuninstall }}
     "helm.sh/resource-policy": keep
     {{- end }}
 spec:
-  # Define the storage class name
   storageClassName: {{ .Values.opencvolume.persistence.storageClassName }}
   accessModes:
-    # Define accessmode
     {{- toYaml .Values.opencvolume.persistence.accessModes | nindent 4  }}
   resources:
     requests:
-      # Define storage
       storage: {{ .Values.opencvolume.persistence.storage }}

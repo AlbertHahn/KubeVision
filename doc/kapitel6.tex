@@ -31,7 +31,7 @@ Die IPv4-Adresse ist in diesem Fall die Server-Node des Kubernetes-Clusters.
 \subsection{\acs{ssl}-Verschlüsselung}
 
 Der Frontend-Service benötigt für die Gesichtserkennung die Webcam eines Benutzers, jedoch ist dies nur in einem sicheren Kontext möglich.
-Die Kommunikation zwischen einem Client und Ingress muss \acs{tls}-Verschlüsselt sein, um JavaScript Methoden wie \textit{MediaDevices.getUserMedia()} auszuführen.
+Die Kommunikation zwischen einem Client und Ingress muss \acs{tls}-Verschlüsselt sein, um JavaScript Methoden wie \textit{MediaDevices.getUserMedia()} auszuführen \cite{MediaDevicesgetUserMedia}.
 Dafür benötigt der Ingress-Controller ein Zertifikat und einen privaten Schlüssel.
 Dieser kann automatischen mit einem Kubernetes-Issuer erstellt werden und von einem Ingress referenziert werden \cite{certmanager}.
 
