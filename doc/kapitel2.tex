@@ -66,7 +66,7 @@ und einzelne Dateien aus der unterliegenden Schicht durch neue ersetzen.
 %nicht alle dockerfile anweisungen erstellen layer ENV expose usw.
 Das Starten eines Containers fügt auf die bereits bestehenden Schichten einen \glqq Thin R/W layer\grqq{} 
 -- \glqq Container layer\grqq{} genannt -- hinzu. Dieser gewährt Schreib- und Leserechte während der Laufzeit des Prozesses. 
-Jeder dieser Container hat somit einen individuellen Zustand, der unähnlich vom abstammendem Image ist.
+Jeder dieser Container hat somit einen individuellen Zustand, der unähnlich vom abstammenden Image ist.
 Bei Löschung des Containers verschwindet auch die dazugewonnene Schicht.
 Das Entfernen eines Images ist durch die Konzeption des Schichtensystem erst möglich, wenn alle darauf
 basierenden Container gelöscht sind \cite{dockerstoragedriver}.
@@ -93,13 +93,13 @@ Aus dem Wissen des letzten Abschnitts lässt sich schlussfolgern, dass
 ein Container eine laufende Instanz eines Images ist.
 Vergleichbar ist dieses Konzept mit dem einer \acs{vm}.
 Denn Images ermöglichen ähnlich wie \acs{vm}-Templates die Erstellung von mehreren Instanzen durch eine Vorkonfiguration.
-Mit dem Unterschied, dass die Einrichtung von \acs{vm}s arbeitsintensiver ist und weitaus mehr Ressourcen
-beansprucht, da sie ein ganzes Betriebssystem ausführt \cite{hypervisorcontainer}. Containertechnologien bauen hingegen nur auf 
-bestimmte Funktionalitäten des Kernels auf und sparen damit an Rechenleistung (vgl. Abbildung~\ref{fig:containervm}).
+Ein Unterschied ist, dass die Einrichtung von \acs{vm}s arbeitsintensiver ist und weitaus mehr Ressourcen
+beansprucht, da sie ein ganzes Betriebssystem ausführt \cite{hypervisorcontainer}. Container-Technologien bauen hingegen nur auf 
+bestimmten Funktionalitäten des Kernels auf und sparen damit an Rechenleistung (vgl. Abbildung~\ref{fig:containervm}).
 
-Durch die Vorteile eines geteilten Kernels und dessen Betriebssystemabhängigkeiten,
-erzielen Virtualisierungen basierend auf Containern eine höhere Anzahl an 
-virtuellen Instanzen. Images beanspruchen weniger Speicherplatz als hypervisor-basierende Ansätze \cite{hypervisorcontainer}.
+Durch die Vorteile eines gemeinsam genutzten Kernels und dessen Betriebssystemabhängigkeiten,
+unterstützen Virtualisierungen basierend auf Containern eine höhere Anzahl an 
+virtuellen Instanzen. Images beanspruchen weniger Speicherplatz als Hypervisor-basierende Ansätze \cite{hypervisorcontainer}.
 
 \begin{figure}
     \centering
@@ -108,7 +108,7 @@ virtuellen Instanzen. Images beanspruchen weniger Speicherplatz als hypervisor-b
     \label{fig:containervm}
 \end{figure}
 
-Die Einsparung von Ressourcen und dem einfachen Bereitstellen auf Hostsystemen
+Die Einsparung von Ressourcen und das einfache Bereitstellen auf Hostsystemen
 prädestinieren containerisierte Anwendungen für die Verwendung von Microservices
 auf Containerplattformen, wie Kubernetes.
 
@@ -123,8 +123,8 @@ K8s ist eine Abkürzung, die durch Ersetzen der 8 Buchstaben \dq ubernete\dq{} m
 Dieser Abschnitt befasst sich zunächst mit den einzelnen Komponenten der Kubernetes-Architektur.
 Hinleitend werden spezielle Themen wie k3s, Hybrid Cloud und Rancher näher erläutert.
 Kubernetes ermöglicht die Orchestrierung von containerisierten Arbeitslasten
-und Diensten. Seit 2014 hat Google das Open-Source-Projekt zur Verfügung
-gestellt und baut auf 15 Jahre Erfahrungen mit Produktions-Workloads auf \cite{kubernetes}.
+und Diensten. Seit 2014 stellt Google das Open-Source-Projekt zur Verfügung,
+das auf 15 Jahre Erfahrungen mit Produktions-Workloads aufbaut \cite{kubernetes}.
 
 \subsection{Cluster}
 Die Zusammensetzung der beschriebenen Kubernetes-Komponenten ergeben ein Kubernetes-Cluster (vgl. Abbildung~\ref{fig:cluster}).
@@ -161,12 +161,12 @@ Diese umfasst folgende Komponenten \cite{kubernetesnodes}:
 Die Laufzeit wurde bereits in Abschnitt \hyperref[Docker]{2.1} ausführlich besprochen.
 
 \subsubsection{\textit{Kubelet}}
-Kubelet fungiert als \glqq node agent\grqq{} und registriert die Node mit dem
+Kubelet fungiert als \glqq node agent\grqq{} und registriert die Nodes mit dem
 \acs{api}-Server eines Clusters und stellt dabei sicher, dass Container innerhalb eines Pods
 funktionieren.
 
 \subsubsection{\textit{Kube-Proxy}}
-Ein Kube-Proxy ist ein Netzwerk Proxy und verwaltet die Netzwerkzugriffe auf Nodes.
+Ein Kube-Proxy ist ein Netzwerk-Proxy und verwaltet die Netzwerkzugriffe auf Nodes.
 Kube-Proxys erlauben die Kommunikation zwischen Pods inner- und außerhalb des Clusters.
 
 \subsection{Pods}
@@ -202,7 +202,7 @@ Im Folgenden ist eine kurze Aufschlüsselung der einzelnen Instruktionen \cite{k
             image: nginx:1.14.2
             ports:
             - containerPort: 80
-    \end{lstlisting}
+\end{lstlisting}
 
 \subsubsection{Deployments und Pods}
 Das Einbinden von Pods in Deployments ermöglicht Kubernetes das Beziehen von Metadaten für die Verwaltung von Skalierung,
@@ -215,7 +215,7 @@ Ein Service ist für die Zuweisung von Netzwerkdiensten zu einer logischen Grupp
 Services dienen als Abstraktion von Pods und ermöglichen die Replizierung und Entfernung
 von Pods ohne Beeinträchtigung der laufenden Anwendung \cite{kubernetesservice}.
 
-Pods beanspruchen Netzwerkressourcen, wie IP-Adresse und DNS-Name 
+Pods beanspruchen Netzwerkressourcen, wie IP-Adressen und DNS-Namen 
 innerhalb ihres Clusters. Der Ausfall oder die Zerstörung eines Pods führt zu Beeinträchtigung der Kommunikation
 zwischen Anwendungen. Services können dies präventiv verhindern, indem sie mit
 selector und labeler eine Kommunikation zwischen zwei Kubernetes Objekten etablieren.
@@ -242,12 +242,12 @@ Die einzelnen Spezifikationen werden folgendermaßen definiert \cite{kubernetess
         - protocol: TCP
           port: 80
           targetPort: 9376
-    \end{lstlisting}
+\end{lstlisting}
 
 
 Bei der Erstellung eines Services entsteht ein Endpunkt für \acs{rest}-Aufrufe. 
-Der zugehörige Service-Controller lauscht auf die Endpunkte des selektierten Pods und konfiguriert den Service dementsprechend. 
-
+Der zugehörige Service-Controller lauscht auf den Endpunkten des selektierten Pods und konfiguriert den Service dementsprechend. 
+Die Verantwortung des Service-Controllers ist die Erstellung, Aktualisierung und Löschung von Services \cite{kubernetesservice}. 
 
 \subsection{Ingress} \label{nginx-ingress}
 
@@ -283,6 +283,7 @@ Im Folgenden finden sich wichtige Optionen, die genauer erklärt werden \cite{ku
   spec:
     ingressClassName: nginx
     rules:
+    - host: "nginx-example.com"
     - http:
         paths:
         - path: /testpath
@@ -292,15 +293,15 @@ Im Folgenden finden sich wichtige Optionen, die genauer erklärt werden \cite{ku
               name: nginx-service
               port:
                 number: 80
-  \end{lstlisting}
+\end{lstlisting}
 %%ÜBERARBEITEN
 \subsection{Lightweight Kubernetes} \label{k3s}
-Ligthweight Kubernetes auch K3s genannt ist eine Open-Source-Kubernetes-Distributi\-on des Unternehmens
+Ligthweight Kubernetes auch k3s genannt ist eine Open-Source-Kubernetes-Distributi\-on des Unternehmens
 Rancher. Der größte Unterschied der Distribution ist die Speichernutzung 
 auf Hostsystemen mit einer einzelnen Binärdatei von nur 40MB.
 Durch die Verschlankung der Distribution ist der ideale Anwendungszweck \acs{iot}-Geräte mit wenig Rechenleistung.
-Denn die minimalen Systemanforderungen für Hostsysteme liegen bei 512MB Hauptspeicher und einer Pi4B BCM2711, 1.50 GHz CPU\footnote{Einplatinencomputer Raspberry Pi 4B, basierend auf ARM \cite{pi4} } \cite{k3sAnforderung}.
-Der hauptsächliche Verwendungszweck von k3s liegt in \acs{iot}-Geräte, da sekundäre Kubernetes-Inhalte entfernt wurden. \cite{k3s}.
+Denn die minimalen Systemanforderungen für Hostsysteme liegen bei 512MB Hauptspeicher und einer Pi4B-BCM2711-CPU mit 1,50 GHz\footnote{Einplatinencomputer Raspberry Pi 4B, basierend auf ARM \cite{pi4}.} \cite{k3sAnforderung}.
+Der hauptsächliche Verwendungszweck von k3s sind \acs{iot}-Geräte, da sekundäre Kubernetes-Inhalte entfernt wurden. \cite{k3s}.
 Trotz dieser Reduzierung bleiben die Kernfunktionalitäten von Kubernetes erhalten und werden, 
 soweit möglich, parallel auf dem neusten Stand gehalten \cite{k3sgit}.
 
@@ -313,28 +314,27 @@ soweit möglich, parallel auf dem neusten Stand gehalten \cite{k3sgit}.
 
 \subsubsection{Besonderheiten}
 Die Abbildung \ref{fig:k3sarchitektur} zeigt die Architektur von k3s auf. Das Kubernetes-Äquivalent zur Control Plane und Node
-sind Server und Agent. Eine Besonderheit hiervon ist, dass Server parallel einen Agent-Prozess auf dem selben Knoten starten und
+sind Server und Agent. Eine Besonderheit hiervon ist, dass Server parallel einen Agent-Prozess auf demselben Knoten starten und
 somit Arbeitslasten mithilfe von Kubelet ausführen \cite{k3sServerAgent}. Weiterhin wird, im Gegensatz zu Kubernetes, containerd weiterhin unterstüzt und
 kommt mit Kubelet vorinstalliert \cite{k3s}. Zwei weitere Unterschiede werden näher erläutert:
 
 \textbf{Kine}
 das Akronym steht für \glqq Kine is not etcd\grqq{} und ist eine Abstraktionsschicht für die etcd \acs{api} und übersetzt die Aufrufe von Kubernetes in sqlite, Postgress, Mysql und dqlite \cite{k3sgit}.
-Dadurch kann der Backend Speicher des Clusters durch die oben genannten Datenbanksysteme ersetzt werden.
+Dadurch kann der Backend-Speicher des Clusters durch die oben genannten Datenbanksysteme ersetzt werden.
 
 \textbf{Flannel}
-ist ein überlagerndes Netzwerkmodell in k3s und ermöglicht IPv4 Netzwerke innerhalb eines Clusters mit mehreren Knoten.
-Dazu wird eine einzelne Binärdatei gestartet, welche Agents auf Hostssystemen startet. Dieser alloziert Subnetze in einem vorkonfigurierten Adressraum.
+ist ein überlagerndes Netzwerkmodell in k3s und ermöglicht IPv4-Netzwerke innerhalb eines Clusters mit mehreren Knoten.
+Dazu wird eine einzelne Binärdatei gestartet, welche wiederum Agents auf Hostssystemen startet. Flannel alloziert Subnetze in einem vorkonfigurierten Adressraum.
 Das Modell ist dabei für die Übertragungsart des Datenverkehrs zwischen unterschiedlichen Knotenpunkten zuständig.
 Die Speicherung der Netzwerkkonfiguration erfolgt über etcd oder der Kubernetes-\acs{api} \cite{flannel}.
 
 
 \subsection{Rancher}
-In diesem Unterabschnitt wird die Open-Source-Lösung Rancher von dem gleichnamigen Unternehmen zur Orchestierung von Kubernetes Clustern näher behandelt.
+In diesem Unterabschnitt wird die Open-Source-Lösung Rancher von dem gleichnamigen Unternehmen zur Orchestierung von Kubernetes-Clustern näher behandelt.
 Sie ermöglicht das Verwalten von Kubernetes-Clustern auf der eigenen Infrastruktur, sowohl vor Ort als auch in der Cloud.
-Die Bereitstellung von Clustern mittels Rancher ist Cloud-Anbieter unabhängig,
-weshalb Cluster in der Praxis mit derselben Rancher Instanz auf \acs{aws}, Azure oder anderen Cloud-Anbietern betreut werden können \cite{rancher}.
+Die Bereitstellung von Clustern mittels Rancher ist unabhängig von Cloud-Anbietern, weshalb Cluster in der Praxis mit derselben Rancher-Instanz auf \acs{aws}, Azure oder anderen Cloud-Anbietern betreut werden können \cite{rancher}.
 
-Die Rancher-Benutzeroberfläche vereinfacht das Steuern von Arbeitslasten, auf einer zentralen administrativen Instanz, welche gleichzeitig Authentifizierung und Rechteverteilung von Benutzern anbietet.
+Die Rancher-Benutzeroberfläche vereinfacht das Steuern von Arbeitslasten auf einer zentralen administrativen Instanz, welche gleichzeitig Authentifizierung und Rechteverteilung von Benutzern anbietet.
 Das grundsätzliche Verwalten von Arbeitslasten verlangt kein tiefgründiges Wissen bezüglich Kubernetes-Konzepte. 
 Die mitgelieferten Tools ermöglichen die Auslieferung und Verbindung von Kubernetes-Objekten und abstrahieren die Komplexität, die für die Betreuung eines solchen Systems notwendig sind \cite{rancher,AzureKubernetesService}.
 
@@ -344,7 +344,7 @@ Wie auch in Kubernetes ist der Zugang auf ein Kubernetes-Cluster von einer lokal
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.8\columnwidth]{images/RancherArchitekturClusterController.png}
-  \caption{Rancher Server Kommunikation mit einem downstream k3s Cluster, überarbeitete Abbildung von \cite{rancherArchitecture}. (Im Sinne der späteren Architektur nachgebildet)}
+  \caption{Rancher-Server-Kommunikation mit einem downstream-k3s-Cluster, überarbeitete Abbildung von \cite{rancherArchitecture}. (Im Sinne der späteren Architektur nachgebildet)}
   \label{fig:rancherarchitektur}
 \end{figure}
 
@@ -373,23 +373,23 @@ Dies ermöglicht die Verwendung von Befehlszeilentools, wie Kubectl und Helm.
 
 %\section{Distributed Clouds}
 %\subsection{Edge Computing}
-\subsection{Hybrid Cloud}
-Eine Hybrid-Cloud ist eine Kombination aus öffentlichen und privaten Cloud-Diensten, die auf einer einzigen Infrastruktur laufen.
+\subsection{Hybrid-Cloud}
+Eine Hybrid-Cloud ist eine Kombination aus öffentlichen und privaten Cloud-Diensten, die auf einer gemeinsamen Infrastruktur laufen.
 Dies ermöglicht die flexible Orchestrierung von Anwendungen auf Hostssystemen vor Ort oder in der Cloud \cite{ibmHybrid}.
 
-Der Schwerpunkt solcher Hybrid-Clouds liegt dabei bei der Portierbarkeit der Arbeitslasten auf allen Cloud-Umgebungen.
-Dafür ist die Aufbereitung oder Entwicklung alter oder neuer Anwendungen für cloudnative Technologien nötig; mehr dazu im Abschnitt \ref{Microservice} zu Microservices.
-Private-Clouds können auch von Drittanbietern, durch externe Rechnzentren, als Enterprise Modell angeboten werden. Dabei ist die Nutzung eines einzigen Betriebssystems ratsam, um Abhängigkeiten bei der Automatisierung von cloud-nativen Anwendungen zu verhindern.
-Die Verwaltung erfolgt, dabei mit einer Container-Orchestierungsplattform, wie Kubernetes und ermöglicht die nahtlose Implementierung von Cloud-Umgebungen \cite{ibmHybrid}.
+Der Schwerpunkt solcher Hybrid-Clouds liegt dabei bei der Portierbarkeit der Arbeitslasten auf alle Cloud-Umgebungen.
+Dafür ist die Aufbereitung oder Entwicklung alter oder neuer Anwendungen für cloud-native Technologien nötig; mehr dazu im Abschnitt \ref{Microservice} zu Microservices.
+Private-Clouds können auch von Drittanbietern, durch externe Rechenzentren, als Enterprise-Modell angeboten werden. Dabei ist die Nutzung eines einzigen Betriebssystems ratsam, um Abhängigkeiten bei der Automatisierung von cloud-nativen Anwendungen zu verhindern.
+Die Verwaltung erfolgt dabei mit einer Container-Orchestierungsplattform, wie Kubernetes, und ermöglicht die nahtlose Implementierung von Cloud-Umgebungen \cite{ibmHybrid}.
 
 \section{Microservice}\label{Microservice}
-Im Folgenden wird der Microservice Architektur-Stil und dessen Eigenschaften näher erläutert.
+Im Folgenden wird der Microservice-Architektur-Stil und dessen Eigenschaften näher erläutert.
 Als Hauptquelle dient der häufig zitierte Artikel \cite{FowlerMicroservice} von Fowler und Lewis.
 
 \subsection{Begriffserklärung}
 Fowler und Lewis beschreiben den Microservice-Architektur-Stil als Entwicklung einer einzigen Anwendung, die aus einer Reihe unabhängiger Dienste besteht. 
 Die Kommunikation der einzelnen Dienste untereinander wird häufig durch \acs{api}-Aufrufe über \acs{http} realisiert. 
-Diese Dienste sind vollautomatisch auszuliefern und orientieren sich bei der Entwicklung um Business-Capabilities\footnote{Business-capability bezeichnet ein Konzept, das aus Sicht der Geschäftsarchitektur modelliert \\ wird \cite{MicroservicePattern}.}. 
+Diese Dienste sind vollautomatisch auszuliefern und orientieren sich bei der Entwicklung an Business-Capabilities\footnote{Business-capability bezeichnet ein Konzept, das aus Sicht der Geschäftsarchitektur modelliert \\ wird \cite{MicroservicePattern}.}. 
 Zusammenhängende Dienste werden dezentral gehalten und können in unterschiedlichen Programmiersprachen oder Technologien realisiert werden \cite{FowlerMicroservice}.
 
 \begin{figure}[!htb]
@@ -419,11 +419,11 @@ Fowler definiert Komponenten einer Software wie folgt: \begin{quote}\glqq Eine K
 Dienste einer Microservice-Architektur stellen Softwarekomponenten dar, die mittels Web-Service-Anfragen oder \acp{rpc}\footnote{\acs{rpc} bezeichnet die Ausführung eines lokalen Aufrufs auf einem anderen Dienst \cite{BuildingMicroservicesNewmanChapter5}.} interagieren.
 Bibliotheken hingegen beschreiben einen Verbund aus mehreren Komponenten, die lokale Funktionsaufrufe nutzen. 
 Der resultierende Vorteil ist, dass Dienste unabhängig voneinander verändert und ausgeliefert werden können. 
-Denn bei Prozessen mit mehreren eingebundenen Bibliotheken, muss die gesamte Anwendung neu ausgeliefert werden \cite{FowlerMicroservice}. 
+Denn bei Prozessen mit mehreren eingebundenen Bibliotheken muss die gesamte Anwendung neu ausgeliefert werden \cite{FowlerMicroservice}. 
 
 Dadurch wird der Fokus auf die Entwicklung von unabhängigen Diensten umso wichtiger, da die Veränderung an kooperierenden Schnittstellen zum Ausfall anderer Dienste führt. 
-Um dem entgegenzuwirken, müssen Schnittstellen gut koordiniert werden und eine starke Kohäsion gewährleisten. Service Contracts\footnote{Service Contracts bezeichnen die Vereinbarung zwischen zwei Diensten, darin werden die Übertragungsformate von Daten festgelegt \cite{microservicesvssoa}.} der jeweiligen Dienste müssen sinnvoll gestaltet werden. 
-Weiterhin müssen Schnittstellen grobkörniger entworfen werden, um den höheren Ressourcenverbrauch der lokalen Variante auszugleichen \cite{FowlerMicroservice, BuildingMicroservicesNewman}. 
+Um dem entgegenzuwirken, müssen Schnittstellen gut koordiniert werden und eine starke Kohäsion gewährleisten. Service Contracts\footnote{Service Contracts bezeichnen die Vereinbarung zwischen zwei Diensten. Darin werden die Übertragungsformate von Daten festgelegt \cite{microservicesvssoa}.} der jeweiligen Dienste müssen sinnvoll gestaltet werden. 
+Weiterhin müssen Schnittstellen grobkörniger entworfen werden, um den höheren Ressourcenverbrauch gegenüber der lokalen Variante auszugleichen \cite{FowlerMicroservice, BuildingMicroservicesNewman}. 
 
 Ein Dienst kann jedoch aus mehreren Prozessen bestehen. Ein Beispiel wäre ein Anwendungsprozess mit einer Datenbank, die nur von dieser Anwendung genutzt wird \cite{FowlerMicroservice, BuildingMicroservicesNewman}.
 
@@ -450,7 +450,7 @@ Ein weiterer Ansatz ist der Nachrichtenaustausch über leichtgewichtige Bussyste
 Die gewählte Infrastruktur muss hier nicht mehr als einen rudimentären Informationsaustausch gewährleisten. 
 Die Dienste sind so konzipiert, den größten Mehrwert über Endpunkte zu erreichen und Redundanz beim Nachrichtenaustausch zu vermeiden.
 
-\subsubsection{Dezentrale-Governance}
+\subsubsection{Dezentrale Governance}
 Die Dezentralisierung einer Anwendung in Softwarekomponenten ermöglicht den Einsatz von unterschiedlichen Technologien. 
 Da die einzelnen Anwendungskomponenten über Endpunkte kommunizieren, ist die Wahl der Programmiersprache weniger relevant als bei einer monolithischen Architektur. 
 Entwicklerteams gewinnen so an Handlungsspielraum und können bessere Werkzeuge für spezifische Probleme verwenden \cite{FowlerMicroservice}.

@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 import os
 mongoEndpoint = os.environ['mongoEndpoint']
 
@@ -8,21 +8,21 @@ class mongodb:
         self
     
     def erstablish_connnection(self):
-        client = MongoClient(mongoEndpoint)
+        try:
+            client = MongoClient(mongoEndpoint)
 
-        # print the version of MongoDB server if connection successful
-        print ("server version:", client.server_info()["version"])
+            # print the version of MongoDB server if connection successful
+            print ("server version:", client.server_info()["version"])
+            db = client.get_database('total_records')
 
-        # get the database_names from the MongoClient()
-        database_names = client.list_database_names()
+            return db.register  
 
-        print(database_names)
+        except errors.ServerSelectionTimeoutError as err:
+            # catch pymongo.errors.ServerSelectionTimeoutError
+            print ("pymongo ERROR:", err)#
 
-        db = client.get_database('total_records')
+            return err
 
-        #for document in db.register.find():
-        #    print(document) # iterate the cursor
-
-
-        return db.register   
+             
      
+

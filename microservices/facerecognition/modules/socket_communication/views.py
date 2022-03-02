@@ -6,7 +6,7 @@ from . import face_training
 
 @socket_communication.route('/socketio')
 def index():
-        return "Hello"
+        return "socketio"
 
 @sio.on('traindata')
 def my_message(sid, data):

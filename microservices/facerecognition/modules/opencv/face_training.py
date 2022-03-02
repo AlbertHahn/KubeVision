@@ -14,20 +14,26 @@ class face_training:
         Function for training the LBPHFaceRecognizer Model of OpenCV
         """
 
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        image_dir = os.path.join(BASE_DIR, "images")
+        # Declares absolute and image path for saved images
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        image_dir = os.path.join(base_dir, "images")
 
+        # Loads Cascade Classifier with Haar-Features for facial feature extraction
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+        # Method to create local binary pattern histogram object for face recognition
         recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 12,grid_x = 8,grid_y = 8)     
 
-        current_id = 0
+        # Variables for data classification
+        current_id = 0 
         label_ids = {}
         y_labels = []
         x_labels = []
         counter= 0
 
+        # Creates mongodb-Object
         mongo = mongodb()
 
+        
         print("Training data if available...")
         records = mongo.erstablish_connnection()
 
