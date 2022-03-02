@@ -40,25 +40,25 @@ Docker and Docker-Compose Installation on the local machine.
 `make [COMMAND]`\
 e.g. `make build-push-facerecognition`
 
-### Build Services locally without docker
+# Build Services locally without docker
 Every service directory has a script for exporting enviromental-variables
 e.g. flaskStartupFrontend.sh
 
-#### Frontend
+### Frontend
 `cd microservices`\
 `cd frontend`\
 `source flaskStartupFrontend.sh`\
 `flask run --port=8000`
 `docker-compose up`
 
-#### Facerecognition
+### Facerecognition
 `cd microservices`\
 `cd facerecognition`\
 `source flaskStartupfacerecognition.sh`\
 `gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -b 0.0.0.0:5000 run:app`
 `docker-compose up`
 
-#### Authentication
+### Authentication
 `cd microservices`\
 `cd authentication`\
 `source flaskStartupAuth.sh`\
