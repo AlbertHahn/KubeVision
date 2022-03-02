@@ -74,3 +74,11 @@ e.g. flaskStartupFrontend.sh
 `mongo`\
 `use admin`\
 `db.createUser({user: 'admin',pwd: 'password',roles: [ { role: 'root', db: 'admin' } ]})`
+
+# DockerHub Repositorys
+https://hub.docker.com/repository/docker/albird/frontend
+
+https://hub.docker.com/repository/docker/albird/facerecognition
+
+https://hub.docker.com/repository/docker/albird/authentication
+
