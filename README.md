@@ -13,6 +13,12 @@ Commands for applying the kubeconfig, export the config as ENV.
 
 `export KUBECONFIG=~/your/path/to/KubeVision/kubeconfig_poc`
 
+### Certs and Secrets are already on the cluster! If not they can be installed with following commands.
+`cd helm/certs`\
+`kubectl apply -f issuer.yaml`
+`kubectl apply -f cert.yaml`
+`kubectl apply -f mongodb-secret.yaml`
+
 ### Deploying KubeVision through Helm.
 `cd helm/kubevision`\
 `helm install kubevision .`
