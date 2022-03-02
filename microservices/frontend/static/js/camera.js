@@ -1,10 +1,14 @@
+//camera.js
 
-
+// development logger
 function log(msg) {
     logElement.innerHTML += msg + "<br>";
 }
 
-
+/*
+Starts camera stream
+with a fixed resolution for same image size 
+*/
 function startStream(CameraID) {
     navigator.mediaDevices.getUserMedia({
             audio: false,
@@ -22,8 +26,8 @@ function startStream(CameraID) {
         .catch(err => log(err.name + ": " + err.message));
 }
 /*
-Loops through 
-
+Loops through the set of devices available for die client
+Matches the ID with the device labels to identify them by name
 */
 
 
@@ -70,31 +74,8 @@ function matchDevice(deviceLabel) {
 }
 
 
-
+/* Captures the video stream and draws it to a canvas, which  */
 function Draw(video, context) {
     context.drawImage(video, 0, 0, videoElement.width, videoElement.height);
 }
 
-
-
-function sendFramesPerSecond(intervalTime, maxTime, event) {
-
-    let counter = 0;
-    var connectionAlive;
-
-    let timerID = setInterval(() => {
-        counter += 1;
-        Draw(videoElement, context)
-        connectionAlive = sendFrames(canvas, counter, event)
-        console.log("connection?: " + connectionAlive)
-        if (!connectionAlive) {
-            clearInterval(timerID);
-        }
-        console.log(counter)
-    }, intervalTime)
-
-    setTimeout(() => {
-        clearInterval(timerID);
-    }, maxTime);
-
-}

@@ -1,47 +1,46 @@
 \chapter{Analyse}\label{Analyse}
 
-Das vorherige Kapitel widmete sich dem Aufbau von Containern und der Verwaltung dessen.
-Darauf aufbauend auch die mögliche Realisierung von Anwendungen im Micorservice-Architektur-Stil. 
-Dieser Teil widmet sich den Innovationsforschungen der Krones AG in Form eines Proof of Concepts.
+Das vorherige Kapitel widmete sich dem Aufbau von Containern und deren Verwaltung.
+Darauf aufbauend wurde auch die mögliche Realisierung von Anwendungen im Micorservice-Architektur-Stil besprochen. 
+Dieses Kapitel widmet sich den Innovationsforschungen der Krones AG in Form eines Proof of Concepts.
 Abschließend folgen die Resultate und möglichen neuen Anwendungsgebiete im Bereich Cloud-Technologie.
 
 
 \section{Proof of Concept}\label{moderninfra}
 Die Krones AG entwickelt neue Konzepte, um Produktionsanlagen standortübergreifend zu modernisieren. 
 In einem davon wurde ein \ac{poc} mit dem Software-Unternehmen SUSE durchgeführt, um die Umsetzung neuer Cloud-Technologien zu evaluieren. 
-Die folgenden Punkte behandeln die Kernthemen des \acs{poc} wie dem Edge-Computing und Kubernetes.
+Die folgenden Punkte behandeln die Kernthemen des \acs{poc} sowie dem Edge-Computing und Kubernetes.
 
 \subsection{Edge-Computing}
 Edge-Computing bezeichnet die dezentrale Verarbeitung von Daten in direkter Nähe der Datenquelle. 
 Das verringert den Bedarf an lokale Rechenzentren und senkt die Latenzzeiten bei der Übertragung von Daten. 
-Betrachtungsgenstand des PoC war die Virtualisierung der bereits vorhandenen Industrierechner der Firma B\&R, um sie als Virtual-Edge-Devices zu verwenden.
-Auf den Virtual-Edge-Devices werden dann Operationen wie Erfassen, Aggregieren und Aufbereiten von Daten direkt an der Anlage ausgeführt. 
+Betrachtungsgenstand des PoC war die Virtualisierung der bereits vorhandenen Industrierechner der Firma B\&R, um diese als Virtual-Edge-Devices zu verwenden.
+Auf den Virtual-Edge-Devices werden dann Operationen, wie Erfassen, Aggregieren und Aufbereiten von Daten, direkt an der Anlage ausgeführt. 
 Die derzeitigen Anwendungen der Krones AG sind für das Betriebssystem Windows konzipiert und entwickelt worden.
 Für das Edge-Szenario soll aber ein auf Linux basierendes Betriebssystem verwendet werden,
 weshalb die Integration über Virualisierungsmöglichkeiten realisiert wird.
 
 \subsubsection{Virtualisierung}
-Das Unternehmen B\&R steht in Kooperation mit der Firma Real-Time-Systems (RTS), welches Technologien für die Virtualisierung von Echtzeit Betriebssystemen anbietet \cite{rtosandbundr}.
-Dafür wird ein Hypervisor genutzt, um gleichzeitig unterschiedliche Echtzeit Betriebssysteme in Form von VMs auszuführen.
-Dies ermöglicht auch die Zuteilung von Hardwareressourcen auf den laufenden VMs.
-Ein Vorteil ist das keine zusätzliche Hardware benötigt wird.
-Die Zuweisung für Hardwareschnittstelen wie Ethernet USB-Ports ist durch diesen Ansatz auch möglich.
-Virtuelle Netzwerke erlauben die Zuweisung von IPv4 und Mac-Adressen einzelner Prozessorkerne, welche
-eine direkte Kommunikation über Internetprotokolle wie TCP/IP oder COBRA ermöglichen.
-Weiter kann jedes virtualisierte Betriebssystem Daten über eine gemeinsame Speicherpartitionen verwaltet werden \cite{rtos}.
+Das Unternehmen B\&R steht in Kooperation mit der Firma Real Time Systems, welches Technologien für die Virtualisierung von Echtzeit Betriebssystemen anbietet \cite{rtosandbundr}.
+Dafür wird ein Hypervisor genutzt, um gleichzeitig unterschiedliche Echtzeitbetriebssysteme in Form von VMs auszuführen.
+Dies ermöglicht auch die Zuteilung von Hardwareressourcen auf die laufenden VMs.
+Ein Vorteil ist, dass keine zusätzliche Hardware benötigt wird.
+Die Zuweisung für Hardwareschnittstellen, wie Ethernet und USB-Ports, ist durch diesen Ansatz auch möglich.
+Virtuelle Netzwerke erlauben die Zuweisung von IPv4- und Mac-Adressen zu einzelnen Prozessorkernen, welche
+eine direkte Kommunikation über Internetprotokolle, wie TCP/IP oder COBRA, ermöglichen.
+Weiter kann jedes virtualisierte Betriebssystem Daten über eine gemeinsame Speicherpartition verwalten \cite{rtos}.
 
 \subsubsection{Connected \ac{hmi}}
-%%Umformulieren!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-Die Produktionsanlagen nutzen Windows 10 Embedded als Betriebssytem.
-Darauf läuft das \acs{hmi} mit einer Touch-Oberfläche für Benutzereingaben.
-Dies ist für die zentrale Überwachung und Steuerung von Analagenprozessen zuständig.
-Und erlaubt die Einteilung von Produktionsrelevanten Aufgaben wie Wartungsarbeiten, Materialversorgung und Qualitätskontrollen \cite{hmi}.
+Als Betriebssystem nutzt die Produktionsanlage \textit{Windows 10 Embedded}, welches mit einem \acs{hmi} über eine Touch-Oberfläche Bedienbar ist.
+Dieses ist für die zentrale Überwachung, Steuerung und Parametrisierung von Anlagenprozessen zuständig.
+Und erlaubt die Einteilung von produktionsrelevanten Aufgaben, wie Wartungsarbeiten, Materialversorgung und Qualitätskontrollen \cite{hmi}.
 
 \subsubsection{SUSE Linux Enterprise Micro}
-Das für Edge-Szenarien entwickelte Open-Source-Betriebssystem SUSE Linux Enterprise Micro ist das zweite virtualisierte Betriebssystem, dass auf dem Hypervisor laufen soll.
-Es arbeitet mit transactional-updates, welche Updates erst aktivieren, wenn das Betriebssystem neu gestartet wurde. 
-Erfolgt das Update nicht wird ein Rollback zum vorherigen Versionszustand durchgeführt und ermöglicht wartungsfreie Zustände der Geräte.
-Basierend auf der Idee von containerisierten Arbeistlasten und Microservices wurde das Betriebssystem entwickelt.
+Basierend auf der Idee von containerisierten Arbeistlasten und Microservices wurde das Betriebssystem \textit{SUSE Linux Enterprise Micro} entwickelt.
+Das für Edge-Szenarien entwickelte Open-Source-Betriebssystem ist das zweite virtualisierte Betriebssystem, das auf dem Hypervisor laufen soll.
+Es arbeitet mit \textit{transactional-updates}, welche Updates erst aktivieren, wenn das Betriebssystem neu gestartet wurde. 
+Erfolgt das Update nicht, wird ein Rollback zum vorherigen Versionszustand durchgeführt. Dies ermöglicht wartungsfreie Zustände der Geräte.
+
 
 
 \subsection{Kubernetes}
@@ -50,44 +49,44 @@ Dabei sollen die einzelnen Virtual-Edge-Devices in Zukunft als Knotenpunkte für
 Dafür wird die für Edge-Szenarien entworfene Kubernetes-Distribution k3s installiert.
 
 Auf dieser sollen containerisierte Anwendungen ausgeliefert und bereitgestellt werden.
-Anwendungen wie Mircoservices können innerhalb des Cluster über Endpunkte oder Kubernetes-Objekte kommunizieren.
+Anwendungen, wie Mircoservices, können innerhalb des Cluster über Endpunkte oder Kubernetes-Objekte kommunizieren.
 Dadurch müssen Hostssysteme und die darauf laufende Software nicht mit deren Netzwerkadresse angesprochen werden,
 und zustätzlich entfällt die Vorkonfiguration von Anwendungen durch die Architektur von Containern.
 
 
 \subsubsection{Rancher}
-Zur Orchestrierung der Kubernetes-Cluster Instanzen wurde die Orchestrierungsplattform Rancher näher untersucht. 
+Zur Orchestrierung der Kubernetes-Cluster-Instanzen wurde die Orchestrierungsplattform Rancher näher untersucht. 
 Diese ermöglicht die zentrale Verwaltung mehrerer Kubernetes-Cluster in Produktionsumgegebungen.
 Weiterhin wurde die Bedienbarkeit der Benutzeroberfläche untersucht und es wurden Tests durchgeführt, bei welchen
-containerisierte Arbeitslasten verwaltet und Kubernetes-Objekte erstellt und miteinander verbunden.
-Ein weiterer Vorteil ist die Auslieferung von Kubernetes-Anwendungen durch den Apps \& Marketplace von Rancher. 
+containerisierte Arbeitslasten verwaltet und Kubernetes-Objekte erstellt und miteinander verbunden wurden.
+Ein weiterer Vorteil ist die Auslieferung von Kubernetes-Anwendungen durch den \textit{Apps \& Marketplace von Rancher}. 
 
 \subsubsection{Helm}
-Helm ist ein Kubernetes-Package-Manager und ermöglicht die Erstellung, Installation und das Updaten von Kubernetes Anwendungen.
-Wichtige Konzepte von Helm sind Charts, diese sind eine Ansammlung von Informationen zur Erstellung von Anwendungen als Kubernetes-Instanz. 
+Helm ist ein Kubernetes-Package-Manager und ermöglicht die Erstellung, die Installation und das Updaten von Kubernetes-Anwendungen.
+Wichtige Konzepte von Helm sind Charts, die eine Ansammlung von Informationen zur Erstellung von Anwendungen als Kubernetes-Instanz sind. 
 Configs beinhalten die Informationen der Konfiguration von Charts und erstellen oder verpacken diese.
-Release bezeichnet eine laufende Instanz eines Chart in Kombination mit einer spezifischen Config \cite{helm}.
+Ein Release bezeichnet eine laufende Instanz eines Charts in Kombination mit einer spezifischen Config \cite{helm}.
 
 Helm ist eine ausführbare Datei, die aus einem Kommandozeilentool besteht, dem Helm-Client.
-Dieser erlaubt die lokale Entwicklung von Charts und dem verwalteten von Repositories und unterschiedlicher Versionen.
+Dieser erlaubt die lokale Entwicklung von Charts und dem Verwalten von Repositoriy und unterschiedlichen Versionen.
 Weiterhin dient der Client als Schnittstelle zur Helm-Library, welche Operationen mit dem Kubernetes-API-Server ermöglichen.
 Dadurch können Charts und Konfigurationen als ein Release gebildet
 und Charts in einem Kubernetes-Cluster installiert, deinstalliert und aktualisiert werden.
 Die Konfigurationsdateien von Helm werden in der Regel, wie auch bei Kubernetes-Ressourcenobjekten üblich, in YAML geschrieben \cite{helm}.
 
-Der Anwendungsfall in Bezug auf Krones AG ist die kundenindividuelle Konfiguration von Kubernetes Anwendungen die in einem Kunden Repository gespeichert werden.
+Der Anwendungsfall in Bezug auf die Krones AG ist die kundenindividuelle Konfiguration von Kubernetes-Anwendungen, die in einem Kunden Repository gespeichert werden.
 Die Kundenkonfigurationen stehen dabei als Helm-Charts verfügbar und ermöglichen eine vereinfachte Auslieferung und Bereitstellung durch Helm-Repositories.
-Der Rancher Apps \& Marketplace ist hierbei eine Möglichkeit Helm-Charts, über eine Benutzeroberfläche zu konfigurieren und installieren.
+Der Rancher \textit{Apps \& Marketplace} ist hierbei eine Möglichkeit, Helm-Charts über eine Benutzeroberfläche zu konfigurieren und installieren.
 
 \newpage
 
 \section{Resultate}
-Die Bestrebungen des PoC zeigten neue Anwendungsgebiete für die weitere Untersuchung von Kubernetes relevanten Themen.
+Die Bestrebungen des PoC zeigten neue Anwendungsgebiete für die weitere Untersuchung von relevanten Themen im Zusammenhang mit Kubernetes.
 Während der Umsetzungsphase zeigten folgende Themen Potenzial.
 
-\subsubsection{Hybrid Cloud}
+\subsubsection{Hybrid-Cloud}
 Die zukünftige Kubernetes-Infrastruktur kann die Integration von On-Premise und Cloud-Ressourcen in einer Softwareumgegbung ermöglichen.
-Kunden können sensible Daten in Ihrer eigenen privaten Cloud oder einem lokalen Rechenzentrum speichern und gleichzeitig die
+Kunden können sensible Daten in ihrer eigenen privaten Cloud oder einem lokalen Rechenzentrum speichern und gleichzeitig die
 Vorteile von den erhöhten Rechenressourcen einer verwalteten Public-Cloud nutzen.
 Kubernetes verfügt über Funktionen, die eine Aufteilung der Arbeitslasten in spezifische Cloud-Umgebungen ermöglicht.
 
@@ -95,35 +94,19 @@ Die Modularität des Kubernetes-Cluster ermöglicht die Steigerung der Gesamtlei
 Dies erfordert auch die gegebene Modularität der Softwarekomponenten auf dem Kubernetes-Cluster.
 
 \subsubsection{Microservices}
-Wie in Abschnitt \ref{Microservice} behandelt werden die Kernfunktionalitäten der zu entwickelnden Anwendung in einzelne Dienste aufgeteilt.
+Wie in Abschnitt \ref{Microservice} behandelt, werden die Kernfunktionalitäten der zu entwickelnden Anwendung in einzelne Dienste aufgeteilt.
 Anwendungen können in Zukunft auf Virtual-Edge-Devices oder in der Cloud bereitgestellt werden.
-Die modulare Entwicklung von Anwendungen, ermöglicht die geringe Rechenleistung von Virtual-Edge-Devices aufzuteilen.
-Der zukünftige Kunde kann bei diesem Ansatz nur die Dienste wählen die er für seine Anlage benötigt.
+Die modulare Entwicklung von Anwendungen ermöglicht es, die geringe Rechenleistung von Virtual-Edge-Devices zu kombinieren.
+Der zukünftige Kunde kann bei diesem Ansatz eine Auswahl an Diensten treffen, die er für seine Anlage benötigt.
 
-Ein weiterer Vorteil ist das eine modulare Architektur auf Containern die Auslieferung und Bereistellung erleichtert.
+Ein weiterer Vorteil ist, dass eine modulare Architektur auf Containern die Auslieferung und Bereistellung erleichtert.
 Der Package-Manager Helm kann dabei die Vorkonfiguration der einzelnen Dienste gewährleisten.
 
 
 \subsubsection{Künstliche Intelligenz}
 Das Kubernetes-Cluster bietet eine Infrastruktur für Anwendungen mit Bezug zu Themen aus der künstlichen Intelligenz.
-Datensätze von Produktionsanlagen können in Echtzeit- oder aggregierte Form verschickt oder gesammelt werden.
-Diese können dann zur Auswertzung von Computer-Vision-Modellen verwendet werden.
-Die Auswertung der Modelle kann dann von Cloud-Ressourcen oder On-Premise Hardware mit Grafikkarten übernommen werden. 
-
-%\subsection{Anwendungsfälle}
-%Darauf aufbauend, wird im nächsten Schritt das fachliche Vorgehen zur Realisierung des Konzepts festgelegt.
-
-%\subsubsection{Komponententrennung von Diensten}
-%Wie in Abschnitt \ref{Microservice} behandelt werden die Kernfunktionalitäten der zu entwickelnden Anwendung  in einzelne Dienste aufgeteilt.
-%Im Systementwurf muss definiert werden über welche Schnittstellen die Dienste verfügen und über welche Endpunkte diese Erreichbar sind.
-%Folgend müssen auch die Service-Contracts zwischen den Diensten definiert werden.
-
-%\subsubsection{Auslieferungsstrategie}
-%Die Dienste müssen unabhängig voneinander auslieferbar sein.
-%Dienste verfügen über einem eigenen Speicherort, die aus dem Kubernetes-Cluster erreichbar ist.
-
-%\subsubsection{Bereitstellungsstrategie}
-%Bei der Bereistellung des Dienstes muss das Zielsystem über die notwendigen 
-
-%\subsubsection{Vorkonfiguration}
-
+Denn die Verwaltung von Prozessen im Bereich Machine Learning umfasst Lebenszyklen mit mehreren Phasen.
+Diese beinhalten beispielsweise die Datenverarbeitung, Merkmalsextraktion, Modelltraining und Anwendungsbereitstellung.
+Die Ausführung der Phasen erzeugt Artefakte in Form von Datensätzen, Modellen und Anwendungskonfigurationen.
+Plattformen mit dieser Arbeitslast benötigen eine erhebliche Menge an Systemressourcen und ein stabiles Netzwerk \cite{mlops}.
+Die Verarbeitung der Arbeitslast kann von Cloud-Ressourcen oder On-Premise Hardware mit \acp{gpu} übernommen werden.

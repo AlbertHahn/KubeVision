@@ -20,9 +20,3 @@ def train_home():
 @train.route("/facelogin")
 def face_login():
     return render_template('facelogin.html', socketioEndpoints=socketioEndpoints)
-
-    
-
-"""@mainpage.app_errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404"""

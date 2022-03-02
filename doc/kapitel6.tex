@@ -2,16 +2,16 @@
 
 Das folgende Kapitel beschreibt die Vorgehensweisen der Umsetzung des Konzepts.
 Diese sind in mehrere Teile gegliedert.
-Erstens mit der Konfiguration und Einrichtung der Knotenpunkte für das Kubernetes-Cluster.
-Zweitens mit der ausführenden Entwicklung der Anwendung im Microservice-Architektur-Stil mit dem Namen KubeVision.
-Drittens mit der Beschreibung für die implementierte Gesichtserkennung des Facerecognition-Services.
-Viertens der Dockerisierung der einzelnen Dienste.
+Erstens die Konfiguration und Einrichtung der Knotenpunkte des Kubernetes-Cluster.
+Zweitens die ausführende Entwicklung der Anwendung im Microservice-Architektur-Stil mit dem Namen KubeVision.
+Drittens die Beschreibung der implementierten Gesichtserkennung des Facerecognition-Services.
+Viertens die Dockerisierung der einzelnen Dienste.
 Fünftens die Implementierung der Anwendung durch Helm-Charts für die Auslieferung und Bereistellung von Kubernetes-Ressourcenobjekte. 
 
 \section{Konfiguration und Einrichtung}\label{konfig}
 
 In diesem Abschnitt geht es um die Einrichtung und Vorkonfiguration des Kubernetes-Clusters mit der Distribution k3s.
-Zuerst die Einrichtung der einzelnen virtuellen privaten Server, die als Knotenpunkte in unserem Kubernetes-Cluster fungieren.
+Zuerst folgt die Einrichtung der einzelnen virtuellen privaten Server, die als Knotenpunkte in unserem Kubernetes-Cluster fungieren.
 Danach die Konfiguration einer Domain für den späteren Einsatz der Microservices.
 Abschließend erfolgt die Bereitstellung von Zertifikaten für die verschlüsselte Kommunikation über die Domain.
 
@@ -25,8 +25,8 @@ Es werden ingesamt drei VPS-Instanzen gemietet auf denen das Betriebssystem SLE-
 \subsubsection{Domain}\label{Domain}
 Der Zugang zur Webanwendung wird mithilfe einer öffentlichen Domain ermöglicht.
 Der DNS-Eintrag einer Domain ist für die Adressierung zuständig.
-Durch die Veränderung des A-Records leiten alle Anfragen der Domain auf eine IPv4-Adresse um \cite{LearningCoreDNS}.
-Die IPv4 Adresse ist in diesem Fall die Server-Node des Kubernetes-Clusters.
+Durch die Veränderung des A-Records werden alle Anfragen der Domain auf eine IPv4-Adresse umgeleitet \cite{LearningCoreDNS}.
+Die IPv4-Adresse ist in diesem Fall die Server-Node des Kubernetes-Clusters.
 
 \subsection{\acs{ssl}-Verschlüsselung}
 
@@ -36,13 +36,13 @@ Dafür benötigt der Ingress-Controller ein Zertifikat und einen privaten Schlü
 Dieser kann automatischen mit einem Kubernetes-Issuer erstellt werden und von einem Ingress referenziert werden \cite{certmanager}.
 
 \subsubsection{Issuer}
-Das add-on Cert-Manager ist bereits vorinstalliert auf dem Kubernetes-Cluster und ermöglicht die Verwaltung von Zertifikaten.
-Dieser enthält die Kubernetes-Resource Issuer, welche zur Generieriung von privaten Schlüsseln dient.
+Das Add-On Cert-Manager ist bereits auf dem Kubernetes-Cluster vorinstalliert und ermöglicht die Verwaltung von Zertifikaten.
+Cert-Manager enthält die Kubernetes-Resource Issuer, welche zur Generieriung von privaten Schlüsseln dient.
 Cert-Manager erlaubt die vereinfachte Bereistellung von \ac{ssl}-Zertifikaten durch das \ac{acme} für Ingress-Objekte in Kubernetes.
-Die \acs{acme}-Zertifikate sind frei verfügbar und werden von den meisten Webbrowsern als Glaubwürdig eingestuft.
+Die \acs{acme}-Zertifikate sind frei verfügbar und werden von den meisten Webbrowsern als glaubwürdig eingestuft.
 Die Verifizierung des Zertifikats erfolgt über eine \acs{acme}-Challenge, welche mit einer HTTP-Anfrage validiert werden kann.
 Dafür wird ein berechneter Schlüssel auf dem Endpunkt der vorgegebenen Domain platziert und von einem öffentlichen \acs{acme}-Server abgerufen und bestätigt \cite{certmanageracme}.
-Die Grundvoraussetzung dafür war die Änderung des A-Records auf die IPv4-Adresse des Cluster-Masters in Abschnitt \ref{Domain}.
+Die Grundvoraussetzung dafür war die Änderung des A-Records auf die IPv4-Adresse der Server-Node in Abschnitt \ref{Domain}.
 Die Ausführung des Issuers erzeugt einen privaten Schlüssel mit der Bezeichnung letsencrypt-key und dem Kubernetes-Issuer namens letsencrypt-prod. 
 Für die Generieriung des Schlüssels wird die offene Zertifizierungsstelle Let's Encrypt verwendet \cite{letsencrypt} (vgl. Quellcode \ref{lst:issuer}). 
 
@@ -68,7 +68,7 @@ Für die Generieriung des Schlüssels wird die offene Zertifizierungsstelle Let'
 \subsubsection{Cert}
 Der nächste Schritt ist die Erzeugung eines Zertifikats mit dem vorher erstellten Issuer.
 Die Ausführung der Cert-YAML-Datei erstellt ein signiertes Zertifikat.
-Dafür ist die Domain mit dem Eintrag des Cluster-Masters notwendig und die Bezeichnung des Issuers.
+Dafür ist die Domain mit dem Eintrag der Server-Node und der Bezeichnung des Issuers notwendig.
 Das erzeugte Secret mit der Bezeichnung deploy-secret kann von einem Ingress zur Verschlüsselung der Kommunikation verwendet werden (vgl. Quellcode \ref{lst:cert}). 
 
 \begin{lstlisting}[caption={cert.yaml \cite{certmanageracme} },captionpos=b,label={lst:cert},language=yaml]
@@ -90,7 +90,7 @@ Das erzeugte Secret mit der Bezeichnung deploy-secret kann von einem Ingress zur
 Für den Einsatz unterschiedlicher Hardwareressourcen in einem hybriden Kubernetes-Cluster muss eine Kennzeichnung der Nodes erfolgen.
 Node-Affinity ermöglicht die Benutzung von Labels zur Zuweisung von spezifischen Werten.
 Bei einer Auslieferung von Kubernetes-Anwendungen lassen sich diese dann auf bestimmte Nodes mit dem vorkonfigurierten Label bereitstellen \cite{nodeaffinity}.
-In einem hybriden Kubernetes-Cluster kann somit die Unterteilung von Labels in Cloud und On-Premise Hardware erfolgen (vgl. Quellcode \ref{lst:labelnode}).
+In einem hybriden Kubernetes-Cluster kann somit die Unterteilung von Labels in Cloud- und On-Premise-Hardware erfolgen (vgl. Quellcode \ref{lst:labelnode}).
 
 
 \begin{lstlisting}[caption={Node-Labels},captionpos=b,label={lst:labelnode},language=bash]
@@ -100,21 +100,22 @@ kubectl label nodes microservice2 hardware=premise
 \end{lstlisting}
 
 Die richtige Zuweisung von Pods auf gekennzeichneten Nodes erfolgt mit einem NodeSelector.
-Dem können Schlüsselwerte wie die Kennzeichnung der Nodes übergeben werden, um Pods die Bereitstellung zu ermöglichen.
+Diesem können Schlüsselwerte, wie die Kennzeichnung der Nodes übergeben werden, um Pods die Bereitstellung zu ermöglichen.
 
-\subsection{Taints and Tolerations}
-Taints und Tolerations stellt sicher, das Pods nicht auf einen ungeeigneten Knoten eingeplant oder ausgeführt werden.
-Ein Taint dient zur Markierung von Nodes, demnach akzeptieren diese nur Pods mit der richtigen Toleration.
+\subsection{Taints und Tolerations}
+Taints und Tolerations stellt sicher, dass Pods nicht auf einen ungeeigneten Knoten eingeplant oder ausgeführt werden.
+Ein Taint dient zur Markierung von Nodes.
+Demnach akzeptieren diese nur Pods mit der richtigen Toleration.
 Für die erforderliche Nutzung von \acs{gpu}-Nodes einer Anwendung können auch diese gekennzeichnet werden \cite{taintstolerations}.
 
 \begin{lstlisting}[caption={Node-Taints},captionpos=b,label={lst:taints},language=bash]
 kubectl taint nodes microservice2 hardware=gpu:NoSchedule
 \end{lstlisting}
 
-Damit werden nur Pods auf der Node \textit{microservice2} eingeplant die als Toleration den Schlüssel \textit{hardware}, Wert \textit{gpu} und dem Effekt \textit{NoSchedule} (vgl. Quellcode \ref{lst:taints}).
+Damit werden nur Pods auf der Node \textit{microservice2} eingeplant, die als Toleration den Schlüssel \textit{hardware}, Wert \textit{gpu} und dem Effekt \textit{NoSchedule} (vgl. Quellcode \ref{lst:taints}) besitzt.
 Bereits auf der Node laufende Pods sind davon nicht betroffen, dies erfordert den Taint \textit{NoExecute} \cite{taintstolerations}.
 
-Die Ausführung von Node-Affinity und Taints und Tolerations ermöglicht nun die absolute Ausführung von Pods auf spezifischer Hardware.
+Die Ausführung von Node-Affinity und Taints und Tolerations ermöglicht nun die eindeutige Ausführung von Pods auf spezifischer Hardware.
 Durch die Markierung mit Taint werden keine Pods ohne die Schlüsselwerte einer \acs{gpu} eingeplant.
 Und die Bereitstellung von Pods lässt sich zielgerichtet auf die Nodes mit den spezifizierten Label bestimmen.
 
@@ -123,25 +124,24 @@ In diesem Abschnitt werden die zwei Algorithmen der OpenCV-Bibliothek erläutert
 
 \subsection{Viola-Jones}
 
-Classification ist der Prozess der Vorhersage von gegebenen Datenpunkten.
-Ein Classifier verwendet Trainingsdaten wie Datenpunkte, um den Zusammenhang von Eingabewerten im Kontext des Classifiers zu verstehen.
-
-Die Viola-Jones Methode zur Erkennung von Objekten verwendet einen Classifier,
-zur Erkennung von Bildern mit Gesichtern dieser wird mit positiven Bildern (mit Gesicht) und negativen Bilder (ohne Gesicht) trainiert.
-Dabei werden die benötigten Gesichtsmerkmale in den Bildern extrahiert.
-Dafür wird ein Haar-Feature verwendet, dass ähnlich wie ein Image-Kernel eine kleine Matrix darstellt und über die einzelnen Pixelwerte eines Bildes fährt und mit dem Kernel multipiliziert.
-Dadurch werden Merkmale wie Augen, Mund und Nase klassifiziert.
-Für die schnelle Berechnung wird ein Cascade Classifier verwendet. 
-Bei der Classification werden Bilder in Regionen aufgeteilt, diese werden bei der Erkennung von Merkmalen weiter aufgeteilt, wenn nicht, wird die Region übersprungen und die nächste berechnet, um Redundanz zu vermeiden.
-OpenCV bietet hierfür bereits vortrainierte Modelle zur Erkennung von Gesichtsmerkmalen und wird im Facerecognition-Service verwendet \cite{opencvcascade}.
+Die Viola-Jones Methode zur Erkennung von Objekten verwendet einen Klassifizierer.
+Ein Klassifizierer verwendet Trainingsdaten, wie Datenpunkte, um den Zusammenhang von Eingabewerten im Kontext des Klassifizierers zu verstehen.
+Für die Erkennung von Bildern mit Gesichtsmerkmalen wird dieser, mit positiven Bildern (mit Gesicht) und negativen Bildern (ohne Gesicht) trainiert.
+Dabei werden die benötigten Gesichtsmerkmale aus den Bildern extrahiert.
+Dafür wird ein Haar-Feature verwendet, das ähnlich wie ein Image-Kernel eine kleine Matrix darstellt und über die einzelnen Pixelwerte eines Bildes fährt und diese mit dem Kernel multipliziert.
+Dadurch werden Merkmale, wie Augen, Mund und Nase, klassifiziert.
+Für die schnelle Berechnung wird ein Cascade-Classifier verwendet. 
+Bei der Klassifikation werden Bilder in Regionen aufgeteilt, die dann bei der Erkennung von Merkmalen weiter aufgeteilt werden. 
+Wenn nicht, wird die Region übersprungen und die nächste berechnet, um Redundanz zu vermeiden.
+OpenCV bietet hierfür bereits vortrainierte Modelle zur Erkennung von Gesichtsmerkmalen, die im Facerecognition-Service verwendet werden \cite{opencvcascade}.
 
 
 \subsection{ \ac*{lbph} }
 Für die Gesichtserkennung wird der Algorithmus \acs{lbph} verwendet.
 Dieses fasst die lokalen Regionen in einem Bild zusammen, indem jeder Pixel mit Nachbarpixeln verglichen wird.
-Dabei wird ein \ac{lbp}-Operator verwendet, dass eine Region von einer 3x3 Matrix darstellt.
-Das Pixel im Zentrum gilt als Schwellenwert zur Berechnung der benachbarten Pixel.
-Wenn ein Nachbarpixel gleich oder größer als der Wert des Pixels im Zentrum ist, wird die Pixelposition mit dem Wert 1 markiert.
+Dabei wird ein \ac{lbp}-Operator verwendet, das eine Region von einer 3x3-Matrix darstellt.
+Das Pixel im Zentrum gilt als Schwellwert zur Berechnung der benachbarten Pixel.
+Wenn der Wert eines Nachbarpixels gleich oder größer als der Wert des Pixels im Zentrum ist, wird die Pixelposition mit dem Wert 1 markiert.
 Andernfalls wird der Pixel mit einer 0 markiert \cite{opencvlbp} (vgl. Abbildung \ref{fig:lbp}).
 
 \begin{figure}[!htb]
@@ -164,12 +164,21 @@ Drittens einem Gesichtserkennungsdienst, welcher eine Zwei-Faktor-Authentifizier
 
 \subsection{Frontend-Service}
 Frontend-Service ist die Benutzeroberfläche zur Interaktion mit dem Benutzer.
-Der Dienst ist in mehrere Blueprints mit eigenen Endpunkten aufgebaut.
+Der Dienst ist aus mehreren Blueprints mit eigenen Endpunkten aufgebaut.
 Jeder dieser Endpunkte gibt einen URL-Pfad für die Interaktion mit dem Frontend-Service oder einem anderen Dienst an.
 Bei Aufruf eines Endpunkts wird eine View aufgerufen und mithilfe der Template Engine Jinja2 eine spezifische HTML-Datei aus dem templates-Verzeichnis ausgegeben.
-Diese spezifische Datei ist ein HTML Code-Block und wird in die Main-View gesetzt.
+Diese spezifische Datei ist ein HTML-Code-Block und wird in die Main-View gesetzt.
 
-Es gibt Zwei Blueprints einer im Verzeichnis home, welcher die Funktionalitäten und Authentication-Service-Endpunkte für das einloggen, registrieren und anzeigen des Profils ausgibt (vgl. Abbildung \ref{fig:kubevision_home}).
+Es gibt zwei Blueprints. 
+Der erste befindet sich im Verzeichnis home und stellt die Funktionalitäten und Authentication-Service-Endpunkte für das Anmelden, Registrieren und Anzeigen des Profils bereit (vgl. Abbildung \ref{fig:kubevision_home}).
+Der zweite Blueprint besteht aus mit Views zur Interaktion mit dem Facerecognition-Service, welche erst nach einer erfolgreichen Anmeldung aufrufbar sind.
+Der Benutzer wird mit seinem Namen begrüßt und erhält Anweisungen für die Erstellung von Bildern für den Facerecognition-Service.
+Für die Nutzung des Facerecognition-Services wird die Kamera des Benutzers benötigt.
+Die eingebundene JavaScript-Bibliothek SocketIO ermöglicht das Senden von Bildern, die von einer Webcam aufgenommen wurden.
+Das Modul und die enthaltenen Funktionen in der Datei \textit{Camera.js} ist für die Verwendung der Webcam zuständig.
+Die Funktion \textit{navigator.mediaDevices.enumerateDevices()} listet alle angeschlossenen Peripheregeräte mit Kamerafunktion auf.
+Diese Geräte werden dann in eine Dropdown-Liste platziert.
+Der Nutzer kann danach eine spezifische Kamera auswählen (vgl. Abbildung \ref{fig:kubevision_train}).
 
 \begin{figure}[!htb]
   \centering
@@ -178,14 +187,7 @@ Es gibt Zwei Blueprints einer im Verzeichnis home, welcher die Funktionalitäten
   \label{fig:kubevision_home}
 \end{figure}
 
-Und ein zweites Blueprint mit Views zum Interagieren mit dem Facerecognition-Service, welcher erst nach einer erfolgreichen Anmeldung Aufrufbar ist.
-Der Benutzer wird mit seinem Namen begrüßt und erhält Anweisungen für die Erstellung von Bildern an den Facerecognition-Service.
-Für die Kommunikation mit dem Facerecognition-Service wird die Kamera des Benutzers benötigt.
-Die eingebundene JavaScript-Bibliothek SocketIO ermöglicht das Senden von Bildern mithilfe einer Webcam.
-Das Modul und die enthaltene Klasse Camera.js ist für die Verwendung der Webcam zuständig.
-Die Funktion \textit{navigator.mediaDevices.enumerateDevices()} listet alle angeschlossenen Peripheregeräte mit Kamerafunktion auf.
-Diese Geräte werden dann in einer Schleife in eine Dropdown-Liste platziert.
-Der Nutzer kann danach eine spezifische Kamera auswählen (vgl. Abbildung \ref{fig:kubevision_train}).
+
 
 \begin{figure}[!htb]
   \centering
@@ -198,7 +200,7 @@ Der Nutzer kann danach eine spezifische Kamera auswählen (vgl. Abbildung \ref{f
 
 Mit dem JavaScript-Modul \textit{socketio.js} lässt sich die bidirektionale Kommunikation mit dem Facerecognition-Service aufbauen.
 Es gibt drei unterschiedliche Events für die Kommunikation mit dem Dienst.
-Das Event \textit{stream} sendet 50 Bildern an den Dienst und löst im Anschluss ein Server-Event aus, dass die Bilder des Benutzers auswertet.
+Das Event \textit{stream} sendet 50 Bildern an den Dienst und löst im Anschluss ein Server-Event aus, das die Bilder des Benutzers auswertet.
 Diese Interaktion ist über den Endpunkt \textit{/train} möglich.
 Der Zweite Endpunkt \textit{/facelogin} ermöglicht die Kommunikation über das Event \textit{predict}.
 Dieser sendet eine bestimmte Anzahl an Bildern an den Dienst und ermöglicht den Login des Nutzers.
@@ -207,38 +209,47 @@ Dieser sendet eine bestimmte Anzahl an Bildern an den Dienst und ermöglicht den
 \subsection{Authentication-Service}
 Der Authentication-Service ist für die Authentifizierung des Benutzers über das Frontend zuständig.
 Dieser Dienst wird mit einer Datenbank bereitgestellt in der Benutzerinformationen gespeichert werden.
-Eine Blueprint stellt die API mit dem Endpunkt \textit{/auth} bereit.
+Ein Blueprint stellt die API über dem Endpunkt \textit{/auth} bereit.
 Die Routen des Endpunktes \textit{/auth} erhalten bis auf \textit{/auth/logout} ein POST-Objekt über den Frontend-Service.
 In diesem steht der Name und das Passwort des Benutzers.
 Damit kann sich ein Benutzer einen Account erstellen oder sich anmelden.
-Der Dienst erstellt bei Registrierung einen Eintrag in die MongoDB-Datenbank oder lest diese aus.
+Der Dienst erstellt bei Registrierung einen Eintrag in die MongoDB-Datenbank oder liest diese aus.
 Die Speicherung der Passwörter erfolgt in Form eines Hashes.
-Bei erfolgreichem Login wird ein Cookie mit dem Benutzernamen gesetzt und weitergeleitet in das Homemenü (vgl. Abbildung \ref{fig:authenticationsequence}).
+Bei erfolgreichem Login wird ein Cookie mit dem Benutzernamen gesetzt und der Benutzer wird in das Homemenü weitergeleitet (vgl. Abbildung \ref{fig:authenticationsequence}).
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=1.0\columnwidth]{images/UMLAuthenticationService.png}
+  \includegraphics[width=0.8\columnwidth]{images/UMLAuthenticationService.png}
   \caption{Ablauf von der Authentifizierung eines Benutzers}
   \label{fig:authenticationsequence}
 \end{figure}
 
 Hier kann der angemeldete Benutzer die Zwei-Faktor-Authentifizierung per Gesichtserkennung aktivieren und mit dem Facerecognition-Service kommunizieren.
 Falls das Passwort falsch ist oder der Name bereits in der Datenbank eingetragen ist, wird der Benutzer mit einer Fehlermeldung benachrichtigt.
-Bei der Abmeldung des Benutzers wird der Benutzer-Cookie gelöscht und wieder auf das Homemenü weitergeleitet.
+Bei der Abmeldung des Benutzers wird das Benutzer-Cookie gelöscht und der Benutzer wieder auf das Homemenü weitergeleitet.
 
 \subsection{Facerecognition-Service}
 Der Facerecognition-Service ermöglicht die Anmeldung eines Benutzers per Gesichtserkennung.
 Grundvoraussetzung ist die Registrierung des Nutzers beim Authentication-Service.
-Der Endpunkt wird Komponentenbasiert über eine Blueprint integriert.
+Der Endpunkt wird komponentenbasiert über einen Blueprint realisiert.
 Über den Endpunkt \textit{socketio} ist die eventbasierte Kommunikation zwischen Frontend-Service Benutzer und Facerecognition-Service möglich.
-Das Event \textit{stream}, nimmt Bilder in Form von .webp an und speichert diese in einem Verzeichnis.
+Das Event \textit{stream}, nimmt Bilder im webp-Format an und speichert diese in einem Verzeichnis.
 Bei der Kommunikation wird nach jeder Anfrage ein Status zurückgeschickt.
 Das Event \textit{traindata}, erstellt ein Klassenobjekt und führt die Funktion \textit{train()} aus.
-Diese geht durch das Bilderverzeichnis und erstellt ein Gesichtsdatenmodell zur späteren Validierung.
-Das Event \textit{predict}, nimmt wie das Event \textit{stream}, Bilder an, aber vergleicht diese mit dem vorher trainierten Modell für die Gesichtserkennung.
-Bei erfolgreicher Übereinstimmung wird die Datenbank von Facerecognition-Service nach dem vorhandenen Benutzer überprüft.
+Diese durchläuft das Bilderverzeichnis und erstellt ein Gesichtsdatenmodell zur späteren Validierung.
+Das Event \textit{predict}, nimmt wie das Event \textit{stream} Bilder an, aber vergleicht diese mit dem vorher trainierten Modell für die Gesichtserkennung.
+Bei erfolgreicher Übereinstimmung wird die Datenbank von Facerecognition-Service nach dem vorhandenen Benutzer überprüft (vgl. Quellcode \ref{fig:facerecognitioncomponents}).
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=1.0\columnwidth]{images/FaceRecognitionDiagramm.png}
+  \caption{Komponentendiagramm der Facerecognition-Service Kommunikation }
+  \label{fig:facerecognitioncomponents}
+\end{figure}
+
 Der eigentliche Entwurf sollte den Facerecognition-Service mit einer eigenen Datenbank ausliefern.
 Aus Zeitgründen in der Entwicklung wurde dieser Teil verworfen und es wird die Datenbank des Authentication-Service genutzt.
+
 
 \section{Dockerisierung}
 
@@ -250,7 +261,7 @@ Die Dienste liegen in einem eigenen Verzeichnis im Softwareprojekt KubeVision.
 Jeder Dienst verfügt über ein eigenes Dockerfile mit Anweisungen zum Erstellen eines Docker-Images.
 Das Dockerfile befindet sich im selben Verzeichnis wie die Code-Dateien der Dienste.
 
-\begin{lstlisting}[caption={Dockerfile},captionpos=b ,label={lst:Dockerfile},language=Dockerfile]
+\begin{lstlisting}[caption={Dockerfile},captionpos=b ,label={lst:Dockerfile},language=Dockerfile,float,floatplacement=H]
 FROM python:3.7.2-stretch
 
 WORKDIR /app
@@ -267,24 +278,24 @@ EXPOSE 5000
 CMD ["gunicorn" , "-k" ,"geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "3" , "--bind" , ":5000" , "run:app"]
 \end{lstlisting}
 
-Um Redundanz zu vermeiden wird im Folgenden das Dockerfile zum Facerecognition-Service näher erläutert (vgl. Quellcode~\ref{lst:Dockerfile}).
-Dieser ist ähnlich aufgebaut wie die Dockerfiles der anderen Dienste.
+Um Redundanz zu vermeiden, wird im Folgenden das Dockerfile zum Facerecognition-Service näher erläutert (vgl. Quellcode~\ref{lst:Dockerfile}).
+Dieses ist ähnlich aufgebaut wie die Dockerfiles der anderen Dienste.
 Die Basis des Docker-Images ist ein Python-Stretch-Image, welches auf dem leichtgewichtigen Betriebssystem Debian-Stretch aufbaut.
 Zunächst werden die nötigen Abhängigkeiten zur Ausführung von OpenCV installiert.
 Danach wird mit pip die notwendigen Pythonbibliotheken installiert.
-In der requirements.txt stehen alle Bibliothekennamen mit der erforderlichen Version.
-Die Enviornmental-Variable ermöglicht die Ausgabe des Python-Buffers im Terminal.
-Die CMD Anweisung des Containers startet immer mit dem Befehl einen Gunicorn-Webserver auszuführen.
+In der Datei requirements.txt stehen alle Bibliothekennamen mit der erforderlichen Version.
+Die umgebungsvariablen ermöglicht die Ausgabe des Python-Buffers im Terminal.
+Die \textit{CMD}-Anweisung weist Docker an, den Containers immer mit dem Befehl, einen Gunicorn-Webserver auszuführen, zu starten.
 Die zusätzlichen Flags geben die Art und Anzahl der Worker-Prozesse an.
-Letztendlich wird die Webanwendung mit der WSGI-Schnittstelle an den gewählten Port 5000 ausgeführt.
+Letztendlich wird die Webanwendung mit der WSGI-Schnittstelle an dem gewählten Port 5000 ausgeführt.
 
 \subsection{Docker-Compose}
 
-Der Build-Vorgang und anschließende Ausführungsprozess mehrerer Dockerfiles kann mit dem Tool Docker-Compose vereinfacht werden.
-Ähnlich wie bei Kubernetes-Ressourcenobjekte werden die Konfigurationen und Installationsansweisungen in einer YAML-Datei gespeichert.
+Der Build-Vorgang und der anschließende Ausführungsprozess mehrerer Dockerfiles kann mit dem Tool Docker-Compose vereinfacht werden.
+Ähnlich zu Kubernetes-Ressourcenobjekten werden die Konfigurationen und Installationsansweisungen in einer YAML-Datei gespeichert.
 Die Datei zur Ausführung von Docker-Compose liegt im Root-Verzeichnis des Projekts.
 
-\begin{lstlisting}[caption={Ausschnit aus dem docker-compose.yaml},captionpos=b ,label={lst:docker-compose.yaml},language=yaml]
+\begin{lstlisting}[caption={Ausschnit aus dem docker-compose.yaml},captionpos=b ,label={lst:docker-compose.yaml},language=yaml,float,floatplacement=H]
   authentication:
     build: ./authentication
     image: albird/authentication:latest
@@ -308,12 +319,12 @@ Die Datei zur Ausführung von Docker-Compose liegt im Root-Verzeichnis des Proje
 \end{lstlisting}
 
 Der Befehl build gibt die Docker-Anweisung zum Bauen eines Images anhand einer vorhanden Dockerfile-Datei.
-Die Webanwendung wurde mit dem Einsatz von Enviornmental-Varibales entwickelt.
-Diese können für eine flexiblen Bereistellung der Dienste angewendet werden, um Endpunkte in Form von String-Variablen in der Webanwendung zu ändern.
-Ports gibt die Ports an auf die der erstellte Container im Netzwerk lauscht.
+Die Webanwendung wurde mit dem Einsatz von umgebungsvariablen entwickelt.
+Diese können für eine flexible Bereistellung der Dienste verwendet werden, um Endpunkte über String-Variablen in der Webanwendung zu ändern.
+Ports gibt die Ports an, auf denen der erstellte Container im Netzwerk lauscht.
 Die lokale Anwendung kann so im eigenen Hostnetzwerk erreicht werden.
 Im Kubernetes-Cluster kann der Pod durch einen Service selektiert und mit einem Ingress verbunden werden.
-Bei der MongoDB-Datenbank werden die Enviornmental-Variables zur Übergabe von Passwort und Adminnamen genutzt.
+Bei der MongoDB-Datenbank werden die umgebungsvariablen zur Übergabe von Passwort und Benutzernamen genutzt.
 Der Volume Befehl erstellt ein persistentes Verzeichnis für die Speicherung der Datenbank.
 
 
@@ -328,7 +339,7 @@ Dadurch können die Kubernetes-Ressourcenobjekte von einer Datei aus vorkonfigur
 Dienste werden mit einem eigenen Kubernetes-Service bereitgestellt, um die Kommunikation zwischen Diensten und Kubernetes-Cluster zu realisieren.
 Bis auf die individuellen Parameter des Helm-Charts, sind die Service-Konfiguration für alle Dienste identisch aufgebaut.
 
-\begin{lstlisting}[caption={face-service.yaml},captionpos=b,label={lst:face-service},language=yaml]
+\begin{lstlisting}[caption={face-service.yaml},captionpos=b,label={lst:face-service},language=yaml,float,floatplacement=H]
   apiVersion: v1
   kind: Service
   metadata:
@@ -347,20 +358,21 @@ Bis auf die individuellen Parameter des Helm-Charts, sind die Service-Konfigurat
 \end{lstlisting}
 
 Der Name des Kubernetes-Service ist für die spätere Angabe im Ingress notwendig.
-Type definiert den Service-Typen zur Kommunikation innerhalb des Clusters wird deshalb ClusterIP gewählt.
-Die Ports geben an, welcher Port im lokalen Netzwerk des Pods lauscht.
-TargetPort gibt dann den Port an der über den Service erreichbar ist.
-Schließlich wird der zugehörige Pod des Services mit dem Selector ausgewählt.
+\textit{Type} definiert den Service-Typ zur Kommunikation. 
+Innerhalb des Clusters wird deshalb \textit{ClusterIP} gewählt.
+Die \textit{Ports} geben an, welcher Port im lokalen Netzwerk des Pods lauscht.
+\textit{Targetport} gibt dann den Port an, über den der Service erreichbar ist.
+Schließlich wird der zugehörige Pod des Services mit dem \textit{Selector} ausgewählt.
 
 
 \subsection{Ingress}
 
 Für die Implementierung der Webanwendung wird ein Nginx-Ingress verwendet.
 Dieser stellt den Endpunkt eines Services in Form einer URL dar.
-Als Nächstes wird wie in Abschnitt \ref{nginx-ingress} beschrieben ein Nginx-Ingress vorkonfiguriert (vgl. Quellcode \ref{lst:kubevisioningress}).
+Als Nächstes wird wie in Abschnitt \ref{nginx-ingress} beschrieben, ein Nginx-Ingress vorkonfiguriert (vgl. Quellcode \ref{lst:kubevisioningress}).
 
 
-\begin{lstlisting}[caption={kubevision-ingress.yaml},captionpos=b,label={lst:kubevisioningress},language=yaml]
+\begin{lstlisting}[caption={kubevision-ingress.yaml},captionpos=b,label={lst:kubevisioningress},language=yaml,float,floatplacement=H]
   apiVersion: networking.k8s.io/v1
   kind: Ingress
   metadata:
@@ -402,16 +414,16 @@ Als Nächstes wird wie in Abschnitt \ref{nginx-ingress} beschrieben ein Nginx-In
 
 \end{lstlisting}
 
-Der Bereich annotations passt das Verhalten des Ingress an.
-Die Optionen zum redirect mit SSL erzwingt die Weiterleitung von HTTP zu einer HTTPS Verbindung mit dem Client.
-Spec bestimmt die TLS-Verbindung und die Regeln für die Endpunkte der Services über den Ingress.
-Als Hostname wird die Domain mit dem A-Record Eintrag auf dem Cluster-Master verwendet.
-In der TLS-Einstellung wird noch das TLS-Zertifikat als Secret referenziert.
+Der Bereich \textit{annotations} passt das Verhalten des Ingress an.
+Die Optionen zum redirect mit SSL erzwingt die Weiterleitung von \acs{http} zu einer \acs{https} Verbindung mit dem Client.
+Spec bestimmt die \acs{tls}-Verbindung und die Regeln für die Endpunkte der Services über den Ingress.
+Als Hostname wird die Domain mit dem A-Record-Eintrag auf der Server-Node verwendet.
+In der \acs{tls}-Einstellung wird noch das \acs{tls}-Zertifikat als Secret referenziert.
 Jedem Service wird ein Endpunkt zugewiesen.
-Der Authentication-Service ist über den Prefix auth erreichbar.
-Facerecognition-Service erhält den Endpunkt socket.io zur Kommunkation mithilfe der gleichnamigen Bibliothek.
+Der Authentication-Service ist über das Präfix \textit{auth} erreichbar.
+Facerecognition-Service erhält den Endpunkt \textit{socket.io} zur Kommunkation mithilfe der gleichnamigen Bibliothek.
 Der Frontend-Service ist über den Hostnamen erreichbar.
-Für die Pfade wird kein Prefix wie bei dem Authentication-Service benötigt.
+Für die Pfade wird kein Präfix wie bei dem Authentication-Service benötigt.
 
 
 
@@ -419,7 +431,7 @@ Für die Pfade wird kein Prefix wie bei dem Authentication-Service benötigt.
 
 Die grundlegende Bereitstellung der Dienste erfolgt mit einem Deployment.
 
-\begin{lstlisting}[caption={deployment.yaml },captionpos=b,label={lst:deploymentauth},language=yaml]
+\begin{lstlisting}[caption={frontend-deployment.yaml },captionpos=b,label={lst:deploymentauth},language=yaml]
   apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -457,40 +469,41 @@ Die grundlegende Bereitstellung der Dienste erfolgt mit einem Deployment.
 
 Die Spezifikation des Deployments gibt die Anzahl der Replikationen der Pods an.
 Der Selector ist für die Selektion von Pods durch das Deployment zuständig.
-Das Template bezeichnet eine Menge von Pods mit einem Label, diese können dann von anderen Kubernetes-Objekten, wie Deployments und Services selektiert werden.
-Im \textit{spec} werden die Docker-Images angegeben zur Ausführung auf einem oder mehreren Pods.
+Das Template bezeichnet eine Menge von Pods mit einem Label.
+Diese können dann von anderen Kubernetes-Objekten, wie Deployments und Services, selektiert werden.
+Im \textit{spec} werden die Docker-Images zur Ausführung auf einem oder mehreren Pods angegeben.
 Die \textit{imagePullPolicy} bestimmt die Regeln für das Herunterladen von Images.
-Mit Always wird das gewählte Image immer heruntergeladen auch, wenn es sich bereits auf dem Hostssystem befindet.
-Ports gibt die lauschenden Ports des Containers im Pod an.
-Die Enviornmental-Variables sind für die Definition der Endpunkte des Dienstes.
+Mit Always wird das gewählte Image immer heruntergeladen, auch wenn es sich bereits auf dem Hostssystem befindet.
+\textit{Ports} gibt die lauschenden Ports des Containers im Pod an.
+Die umgebungsvariablen definieren die Endpunkte des Dienstes.
 \textit{NodeSelector} gibt die in Abschnitt \ref{Nodeaffinity} gekennzeichneten Nodes an, um zu bestimmen auf, welcher Hardware die Pods ausgeführt werden.
 
 
-\subsection{Persistent-Volumes}
+\subsection{PersistentVolumes}
 
 Die persistente Speicherung von Benutzerinformationen oder Bildern erfolgt durch Persistent-Volumes.
 Diese werden für die Dienste Authentication-Service und Facerecognition-Service benötigt.
-Ein \ac{pv} ist ein Speicher der in einem Kubernetes-Cluster von Administratoren oder dynamisch über Speicherklassen bereitgestellt wird.
+Ein \ac{pv} ist ein Speicher, der in einem Kubernetes-Cluster von Administratoren oder dynamisch über Speicherklassen bereitgestellt wird.
 Ein \ac{pvc} ist eine Anfrage zur Nutzung von \acs{pv}-Ressourcen in einem Kubernetes-Cluster.
-Im Folgenden werden die Persistent-Volumes der MongoDB Kubernetes-Ressourcenobjekte erläutert.
+Im Folgenden werden die Persistent-Volumes der MongoDB-Kubernetes-Ressourcenobjekte erläutert.
 
 
 \subsubsection{PersistentVolumeClaim}
 
-Ähnlich wie ein Pod, Systemressourcen wie CPU und Hauptspeicher nutzt.
-Benötigt ein \acs{pvc} Systemressourcen in Form von Festplattenspeicher.
+Ein \acs{pvc} benötigt Systemressourcen in Form von Festplattenspeicher.
 Bei fehlenden \acs{pv} wird durch dynamische Provisionierung für die Anfrage ein \acs{pv} erstellt.
 
 Die YAML-Datei für die MongoDB liegt in einem Unterverzeichnis mit den dazugehörigen Ressourcenobjekten.
-Unter \textit{annotations} wird eine IF-Bedingung gestellt, die das Löschen nach der Nutzung des \acs{pvc} erlaubt, wenn der Wert wahr ist wird es nicht gelöscht.
+Unter \textit{annotations} wird eine IF-Bedingung gestellt, die das Löschen nach der Nutzung des \acs{pvc} erlaubt. 
+Wenn der Wert wahr ist, wird es nicht gelöscht.
 Die \textit{annotations: }\textit{"helm.sh/resource-policy": keep} verhindert die Löschung einer Kubernetes-Ressource, wenn ein Helm-Chart deinstalliert wird \cite{helmtipsandtricks}.
 Der \textit{spec} beschreibt die Speicherklassen des \acs{pvc}, dieser ist in dem Test-Cluster standardmäßig local-path.
-Die \textit{accessModes} definieren die Zugriffsmodi des \acs{pv} wie Beispielsweise die Lese- und Schreibrechte mehrerer Clients.
+Die \textit{accessModes} definieren die Zugriffsmodi des \acs{pv} wie beispielsweise die Lese- und Schreibrechte mehrerer Clients.
 Für die MongoDB wird der Modus \textit{ReadWriteOnce} verwendet.
-Dieser erlaubt Lese- und Schreibrechte für Pods die sich auf derselben Node befinden.
+Dieser erlaubt Lese- und Schreibrechte für Pods, die sich auf derselben Node befinden.
 \textit{Resources} definiert mit \textit{storage} die Menge an benötigten Speicherplatzes (vgl. Quellcode \ref{lst:pvc}).
 
-\begin{lstlisting}[caption={pvc-claim.yaml },captionpos=b,label={lst:pvc},language=yaml]
+\begin{lstlisting}[caption={mongodb-pvc.yaml },captionpos=b,label={lst:pvc},language=yaml]
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -507,9 +520,6 @@ spec:
     requests:
       storage: {{ .Values.mongodbvolume.persistence.storage }}
 \end{lstlisting}
-
-
-\subsubsection{PersistentVolume}
 
 Der \acs{pvc} kann dann von dem MongoDB-Deployment referenziert werden 
 und als Speicher in den Pod eingebunden werden. 

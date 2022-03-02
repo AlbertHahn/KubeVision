@@ -1,40 +1,37 @@
 \chapter{Zusammenfassung und Ausblick}
 \section{Zusammenfassung}
-Das Ziel dieser Arbeit war die Konzeption und Implementierung einer Microservice-Architektur auf einem hybriden-Kubernetes-Cluster für Anwendungen mit Bezug zur künstlichen Intelligenz.
-Die Vorgehensweisen bei der Implementierung und Entwicklung der Architektur soll als Blaupause für zukünftige Konzepte der Krones AG dienen.
+Das Ziel dieser Arbeit war die Konzeption und Implementierung einer Microservice-Architektur auf einem hybriden Kubernetes-Cluster für Anwendungen im Bereich der künstlichen Intelligenz.
+Die Vorgehensweisen bei der Implementierung und Entwicklung der Architektur soll als Blaupause für weitere Konzepte der Krones AG dienen.
 Die Entwicklung der Microservices basierte auf Containervirtualisierung und der Containerplattform-Kubernetes.
 Der \acs{poc} beschreibt die Modernisierung der Infrastruktur durch Virtual-Edge-Devices.
-Auf den Industrierechnern in Produktionsanlagen soll das Betriebssystem Windows 10 und SUSE Linux Enterprise Micro auf einem Hypervisor gleichzeitg ausgeführt werden.
+Auf den Industrierechnern in Produktionsanlagen soll das Betriebssystem \textit{Windows 10} und \textit{SUSE Linux Enterprise Micro} auf einem Hypervisor gleichzeitg ausgeführt werden.
 Dabei stellt das Linux-System ein Virtual-Edge-Device dar, dass als Knotenpunkt im Kubernetes-Cluster fungiert.
 Im \acs{poc} wurde festgestellt, dass On-Premise und Cloud-Technologien in Verbindung mit \ac{gpu}s für Anwendungsfälle im Bereich der künstlichen Intelligenz eine Verwendung finden.
 
-Für diese Umsetzung erfolgt die Verwaltung und Überwachung des Kubernetes-Cluster mit der Orchestierungsplattform Rancher.
+
+Für diese Umsetzung erfolgt die Verwaltung und Überwachung des Kubernetes-Clusters mit der Orchestierungsplattform Rancher.
 Außerdem wird zur Installation der Microservices auf dem Kubernetes-Cluster der Package-Manager Helm verwendet.
 Das Anwendungsszenario war eine Webanwendung aus losen Diensten die miteinander kommunizieren und unabhängig eingesetzt werden können.
 Der hauptsächliche Anwendungsfall wurde durch ein Authentifierzungsverfahren mit Gesichtserkennung realisiert.
+Die Softwarekomponenten der Webanwendung können erfolgreich miteinander kommunizieren.
 Dazu gehört die Entwicklung der Anwendung, als Docker-Container und das Schreiben der Helm-Charts, sowie dessen Vorkonfiguration.
-
 Anforderungen wie automatische Tests der Dienste konnte wegen Zeitmangel und Fokus auf die Implmentierung der Anwendung nicht mehr realisiert werden.
-Auch konnte die Anwendung nicht für die Nutzung einer \acs{gpu} konzipiert werden,
-da die Einrichtung eines solchen Docker-Containers zu zeitintensiv und komplex war.
+Die Anwendung für die Nutzung einer \acs{gpu} zu entwicklen konnte wegen der komplexen Architektur eines solchen Docker-Containers nicht realisiert werden.
 Die Installation und Organisation von containerisierten Arbeitslasten durch die Rancher-Plattform erleichterte die Überwachung der Anwendungen.
 Durch die Benutzeroberfläche wurde die Komplextität zur Verwaltung des Kubernetes-Clusters reduziert.
 
 \newpage
-
 \section{Einschränkungen}\label{Einschraenkungen}
-Hardware wie Industrierechner die später in Produktionsanlagen eingesetzt werden standen nicht zur Verfügung.
-Die Installation des Kubernetes-Cluster mit k3s wurde auf virtuellen privaten Server realisiert (siehe Abschnitt~\ref{konfig}).
+Hardware, wie Industrierechner, die später in Produktionsanlagen eingesetzt werden standen nicht zur Verfügung.
+Die Installation des Kubernetes-Cluster mit k3s wurde auf virtuellen privaten Servern realisiert (siehe Abschnitt~\ref{konfig}).
 Die Implementierung der Microservices konnte deshalb nicht in einem Produktionsumfeld eingesetzt werden.
-Der Anwendungsfall der Webanwendung ist deshalb nur bedingt der Realität entsprechend, da Computer-Vision im Bereich der Anlagentechnik genutzt wird und nicht zur Authorisation von Personal.
-Jedoch sind viele der Schritte ähnlich ausführbar wie auf einem Kubernetes-Cluster mit On-Premise Geräten anstatt von cloudbasierter Hardware.
+Der Anwendungsfall der Webanwendung ist deshalb nur bedingt der Realität entsprechend, da Computer-Vision nur im Bereich der Anlagentechnik genutzt wird und nicht zur Authentifizierung von Personal.
+Jedoch sind viele der Schritte ähnlich ausführbar wie auf einem Kubernetes-Cluster mit On-Premise Geräten anstatt cloudbasierter Hardware.
 Der blaupausenartige Aufbau der Entwicklungsschritte gilt auch für den Aufbau von Microservices im Produktionsumfeld.
 
 \section{Ausblick}
 Mit der Implementierung aus Kapitel \ref{Umsetzung} wäre es lohnenswert Microservices auf Industrierechnern in einem echten Kundenumfeld zu testen.
 Dafür muss auch geprüft werden, ob das Kubernetes-Cluster sich mit On-Premise-Hardware gleich verhält wie mit Servern aus der Cloud.
-Auch die Verwaltung eines hybriden-Kubernetes-Clusters, welches zwischen dem Standort von Hardware unterscheidet benötigt eine nähere Untersuchung.
+Auch die Verwaltung eines hybriden-Kubernetes-Clusters, welches zwischen dem Standort von Hardware unterscheidet, benötigt eine nähere Untersuchung.
 Die Umsetzung aus Abschnitt \ref{helmcharts} kann dabei für die Installation der Dienste mit Helm verwendet werden.
 Mit den erzeugten Daten der Produktionsanlage kann dann eine prototypische Anwendung zur Auswertung von realen Anwendungsfällen mit Bezug zur künstlichen Intelligenz realisiert werden.
-
-

@@ -6,13 +6,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from .helper import successful_redirect_user, error_entry_exists
 
-
+# Environmental variables for defining the endpoints
 homeEndpoint = os.environ['homeEndpoint']
 trainEndpoint = os.environ['trainEndpoint']
 mongoEndpoint = os.environ['mongoEndpoint']
+
 try:
     # try to instantiate a client instance
-    #client = MongoClient("mongodb://admin:password@mongodbservice:27017/?authSource=admin")
     client = MongoClient(str(mongoEndpoint))
 
     # print the version of MongoDB server if connection successful
@@ -21,7 +21,7 @@ try:
     # get the database_names from the MongoClient()
     database_names = client.list_database_names()
 
-    db = client.get_database('total_records')
+    db = client.get_database('user_db')
     records = db.register
 
 except errors.ServerSelectionTimeoutError as err:
@@ -30,8 +30,12 @@ except errors.ServerSelectionTimeoutError as err:
 
 @auth.route('/auth/login', methods=['POST'])
 def login():
+    """
+    login function for authentication with http post
+    """
 
-    user = request.form.get("fullname")
+    # get form variables
+    user = request.form.get("username")
     password = request.form.get("password")
     user_exists = records.find_one({"name": user})
 
@@ -50,8 +54,12 @@ def login():
 
 @auth.route('/auth/register', methods=['POST'])
 def register():
-
-    user = request.form.get("fullname")
+    """
+    register function for authentication with http post
+    """
+    
+    # get form variables
+    user = request.form.get("username")
     password = request.form.get("password")
 
     user_exists = records.find_one({"name": user})
@@ -65,8 +73,11 @@ def register():
 
         return successful_redirect_user(homeEndpoint, user)
 
-@auth.route('/auth/logout', methods=['POST'])
+@auth.route('/auth/logout', methods=['GET','POST'])
 def logout():
+    """
+    logout function for authentication with http get
+    """
 
     if "session_user" in request.cookies:
         response = redirect(homeEndpoint)

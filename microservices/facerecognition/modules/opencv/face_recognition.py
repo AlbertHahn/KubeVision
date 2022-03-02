@@ -10,7 +10,8 @@ from .mongodb import mongodb
 
 class face_recognition:
     """
-    
+    Class for detecting faces with the pretrained cascade classifier
+    also for recognizing faces with a pretrained model
     """
 
     def __init__(self):
@@ -18,76 +19,90 @@ class face_recognition:
 
     def detect_face(self, image):
 
-        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")    
+        # Declares paths
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        recognizer_dir = os.path.join(base_dir, "recognizer/face-data.yml")
+        haar_dir = f"{cv2.data.haarcascades}haarcascade_frontalface_default.xml"
+
+        # Create classifier and recognizer objects for the face prediction
+        face_cascade = cv2.CascadeClassifier(haar_dir)    
         recognizer = cv2.face.LBPHFaceRecognizer_create(radius = 1,neighbors = 12, grid_x = 8,grid_y = 8)   
-        recognizer.read("modules/opencv/recognizer/face-data.yml")   
+        recognizer.read(recognizer_dir)   
 
         user = "unknown"
 
         frame_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        #frame_gray = cv2.equalizeHist(frame_gray)
-
+        # Resize picture with pillow and numpy arrays
         pil_image = fromarray(frame_gray)
         size = (550, 550)
         final_image = pil_image.resize(size, Image.ANTIALIAS)
         frame_gray = np.array(final_image, "uint8")
+
+        # try to detect faces on the picture
         faces = face_cascade.detectMultiScale(frame_gray, scaleFactor=1.5, minNeighbors=5)
 
-        print("looping")
+        print("calculating ...")
         for (x, y, w, h) in faces:
-            #image = cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            roi_gray = frame_gray[y:y+h, x:x+w] #(ycord_start, ycord_end)
+
+            # Get region of interest
+            roi_gray = frame_gray[y:y+h, x:x+w]
+            # Predict the face accordingly to the trained face model
             id_, conf = recognizer.predict(roi_gray)
 
+            # Create mongodb object
             mongo = mongodb()
 
-            print("gefunden"+ str(id_))
-
+            # Get userdb records
             records = mongo.erstablish_connnection()
             id_exists = records.find_one({"faceid": id_})
             print("exist?" + str(id_exists.get('name')))
             mongoName = id_exists.get('name')
 
-            cv2.imwrite('modules/opencv/predicted/not.webp', roi_gray)
-            print(str(mongoName) + " detected conf: " +str(conf))
-
-            if conf>=0 and conf <= 60:
+            # If the confidence ist higher or equal than 50
+            # the recognizer takes reversed confidence levels
+            if conf>=0 and conf <= 50:
                 print("predicted: " + str(id_))
-                cv2.imwrite('modules/opencv/predicted/' + str(mongoName) + '_' + str(int(conf))  + '.webp', image)
                 user = mongoName
-
-
+        # return username if predicted if not unkown
         return user
 
-    def prepareImage(self , image):
-        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-        faces = face_cascade.detectMultiScale(image, scaleFactor=1.5, minNeighbors=5 )
-
-        for (x, y, w, h) in faces:
-            roi = image[y:y+h, x:x+w ]
-            cv2.imshow("ROI", roi)
-
-    def encode_webp(self, buf_str):
-        dirname, counter = self.createDir(buf_str)
-        encoded_data = buf_str.split(',')[3]
-        buf_decode = base64.b64decode(encoded_data)
+    def format_webp(self, buf_str):
+        """
+        Function to format .webp pictures on the socket.io stream event
+        and save them in a directory user directories    
+        """
+        # Create directory for the user pictures
+        image_dir, dirname, counter = self.createDir(buf_str)
+        # Object on third position is the webp picture
+        formatted_data = buf_str.split(',')[3]
+        buf_decode = base64.b64decode(formatted_data)
         buf_arr = np.fromstring(buf_decode, dtype=np.uint8)
         img_decoded = cv2.imdecode(buf_arr, cv2.IMREAD_COLOR)
-        cv2.imwrite('modules/opencv/images/' + dirname + '/' + counter + '.webp', img_decoded)      
+        cv2.imwrite(f"{image_dir}{dirname}/{counter}.webp", img_decoded)      
         return img_decoded
 
-    def encode_login(self, buf_str):
-        encoded_data = buf_str.split(',')[3]
-        buf_decode = base64.b64decode(encoded_data)
+    def format_login(self, buf_str):
+        """
+        Function to format webp pictures on the socket.io predict event
+        returns picture as a cv2 compatible variable
+        """
+        # Object on third position is the webp picture
+        formatted_data = buf_str.split(',')[3]
+        buf_decode = base64.b64decode(formatted_data)
         buf_arr = np.fromstring(buf_decode, dtype=np.uint8)
         img_decoded = cv2.imdecode(buf_arr, cv2.IMREAD_COLOR)   
-        #cv2.imwrite('modules/opencv/incoming/test.webp', img_decoded)
         return img_decoded
 
     def createDir(self, buf_str):
+        """
+        Method for directory creation
+        """
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        image_dir = os.path.join(base_dir, "images/")
+
         dirname = buf_str.split(',')[0]
         counter = buf_str.split(',')[1]
-        if not os.path.exists('modules/opencv/images/' + dirname + '/'):
-            os.makedirs('modules/opencv/images/' + dirname + '/')
-        return dirname, counter
+        if not os.path.exists(f"{image_dir}{dirname}/"):
+            os.makedirs(f"{image_dir}{dirname}/")
+        return image_dir, dirname, counter
 

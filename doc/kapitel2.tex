@@ -184,7 +184,7 @@ Im Folgenden ist eine kurze Aufschlüsselung der einzelnen Instruktionen \cite{k
     \item \textbf{spec}: gewünschter Ausgangszustand des Objekts.
 \end{itemize}
 
-\begin{lstlisting}[caption={deployment.yaml \cite{kubernetesdeployment} },captionpos=b,label={lst:deployment},language=yaml]
+\begin{lstlisting}[caption={deployment.yaml \cite{kubernetesdeployment} },captionpos=b,label={lst:deployment},language=yaml,float,floatplacement=H]
     apiVersion: apps/v1
     kind: Deployment
     metadata:
@@ -440,12 +440,12 @@ Microservice-Entwicklungen tendieren dazu, den kompletten Lebenszyklus einer Sof
 Der inspirierende Leitspruch bei Amazon dazu ist \begin{quote}
   \glqq  you build it, you run it \grqq{} \cite{amazon}.\end{quote} 
 Dem Gedanken nach übernimmt das Entwicklungsteam die vollständige Produktion der Software und übergibt diese nicht an ein Wartungsteam. 
-Dadurch stehen die Entwickler im direkten Kontakt mit dem Endnutzer und erfahren wie sich die Software im Betrieb verhält, da diese auch Zuständigkeiten des Supports übernehmen \cite{FowlerMicroservice}.
+Dadurch stehen die Entwickler im direkten Kontakt mit dem Endnutzer und erfahren, wie sich die Software im Betrieb verhält, da sie auch Zuständigkeiten des Supports übernehmen \cite{FowlerMicroservice}.
 
 \subsubsection{Intelligente Endpunkte statt komplexer Infrastruktur}
-Die Kommunikation von Diensten über Endpunkte soll so weit wie möglich entkoppelt und kohäsiv sein.  
+Die Kommunikation von Diensten über Endpunkte soll soweit möglich entkoppelt und kohäsiv sein.  
 Anwendungen im Microservice-Stil enthalten ihre eigene Logik und agieren als Filter für das Empfangen, Verarbeiten und Beantworten einer Anfrage. 
-Die Umsetzung erfolgt dabei mit \acs{rest}ful-Protokollen für die Kommunikation über \acs{http} oder der leichtgewichtigen Kommunikation mit Messaging\footnote{Kommunikation über Binäre Protokolle wie Protocol-Buffers \cite{ProtoBuf}.}.
+Die Umsetzung erfolgt dabei mit \acs{rest}ful-Protokollen für die Kommunikation über \acs{http} oder der leichtgewichtigen Kommunikation mit Messaging\footnote{Kommunikation über binäre Protokolle wie Protocol-Buffers \cite{ProtoBuf}.}.
 Ein weiterer Ansatz ist der Nachrichtenaustausch über leichtgewichtige Bussysteme.
 Die gewählte Infrastruktur muss hier nicht mehr als einen rudimentären Informationsaustausch gewährleisten. 
 Die Dienste sind so konzipiert, den größten Mehrwert über Endpunkte zu erreichen und Redundanz beim Nachrichtenaustausch zu vermeiden.
@@ -458,14 +458,10 @@ Entwicklerteams gewinnen so an Handlungsspielraum und können bessere Werkzeuge 
 \subsubsection{Dezentrales Datenmanagement}
 Die Dezentralisierung von Daten geschieht auf höchster Ebene und abstrahiert diese für kontextbasierende Modelle. 
 Die Integration solcher Modelle wird durch die unterschiedliche Auffassung verschiedener System erschwert. 
-Dabei besteht die Gefahr das Abteilungen innerhalb eines Unternehmens Attribute unterschiedlich interpretiert und zu Inkonsistenz in Datensätze führt.
+Dabei besteht die Gefahr, dass Abteilungen innerhalb eines Unternehmens Attribute unterschiedlich interpretiert und dies zu Inkonsistenz in Datensätzen führt.
 Eine Anwendung mit getrennten Softwarekomponenten erhöht diese Komplexität weiter \cite{FowlerMicroservice}. 
-Weshalb es sinnvoll ist, einen \glqq Bounded Context\grqq{} zu definieren, welcher zur Darstellung von Wechselwirkungen eines Modells innerhalb größerer Teams dient \cite{FowlerBoundedContext}. 
+Deshalb ist es sinnvoll, einen \glqq Bounded Context\grqq{} zu definieren, welcher innerhalb größerer Teams zur Darstellung von Wechselwirkungen eines Modells dient \cite{FowlerBoundedContext}. 
 
-%\subsubsection{Automatisierung von Infrastruktur}
-%Das testen, ausliefern und bereitstellen von Microservices erfolgt automatisch \cite{FowlerMicroservice}. 
-%Dieses Thema fällt in den Bereich Continuous Delivery und wird in dieser Arbeit nicht weiter behandelt. 
-
-\subsubsection{\glqq Design for failure\grqq{}}
+\subsubsection{Design for failure}
 Softwarekomponenten müssen den Ausfall von anderen Diensten tolerieren. 
 Event-basierte Kommunikation führt oft zu Fehlverhalten und kann durch Überwachungstools präventiv verhindert werden \cite{FowlerMicroservice}. 

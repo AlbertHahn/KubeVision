@@ -1,7 +1,7 @@
 \chapter{Lösungsansatz}
 Auf der Grundlage von Kapitel \ref{Analyse} wird ein Lösungsansatz für die Konzeption eines Softwareprojekts erabeitet.
 Zuerst wird das Fachkonzept mit den nötigen Anforderungen formuliert.
-Darauf aufbauend die Grobkonzeption von der grundlegenden Idee bis zum Entwicklungsprozess.
+Darauf aufbauend erfolgt die Grobkonzeption der grundlegenden Idee zum Entwicklungsprozess.
 
 \section{Fachkonzept}
 
@@ -9,19 +9,19 @@ Darauf aufbauend die Grobkonzeption von der grundlegenden Idee bis zum Entwicklu
 Die zu entwickelnde Anwendung soll ein Anwendungszenario für die neu erschlossenen Anwendungsgebiete des \ac{poc}s umsetzen.
 Dabei muss die Anwendung eine Vielzahl an Anforderungen erfüllen.
 Die Software muss einfach auslieferbar, unabhängig und isoliert testbar sein.
-Dieser Prozess muss vor inbetriebnahme automatisch verlaufen und eine individuelle Konfiguration anbieten.
-Weiterhin muss bestimmtbar sein auf welchen Ressourcentyp die Anwendung bereitgestellt wird.
-Die Anwendung muss Skalierbar sein und mit der Infrastruktur wachsen können.
+Dieser Prozess muss vor Inbetriebnahme automatisch ablaufen und eine individuelle Konfiguration bieten.
+Weiterhin muss bestimmbar sein auf welchen Ressourcentyp die Anwendung bereitgestellt wird.
+Die Anwendung muss skalierbar sein, und mit der Infrastruktur wachsen können.
 Sie muss auch die Verwaltung und Speicherung von Daten ermöglichen.
 Die Kommunikation muss zwischen anderen Anwendungen auf der Infrastruktur stattfinden können.
 Die Software muss auch Testprozesse unterlaufen, um die Funktionalität sicherzustellen.
 
 
 \subsubsection{Blaupause}
-Ein weiterer Schwerpunkt ist die Blaupausenartige Umsetzung der Software Architektur für die moderne Infrastruktur.
-Die Entwicklung der Anwendung muss so gestaltet werden, dass zukünftige Projekte auf diese aufbauen können.
+Ein weiterer Schwerpunkt ist die blaupausenartige Umsetzung der Software-Architek\-tur für die moderne Infrastruktur.
+Die Entwicklung der Anwendung muss so gestaltet werden, dass zukünftige Projekte auf dieser aufbauen können.
 Ansätze bei der Entwicklung müssen austauschbar sein und in Teilschritte zerlegt werden.
-Die Schnittstellen der Anwendung muss eine plattformübergreifende Kommunikation ermöglichen.
+Die Schnittstellen der Anwendung müssen eine plattformübergreifende Kommunikation ermöglichen.
 
 
 \section{Grobkonzeption}
@@ -29,45 +29,45 @@ In diesem Abschnitt wird die grundlegende Idee anhand des Fachkonzepts formulier
 Danach folgen die groben Teilschritte zur Realisierung der Testanwendung.
 
 
-\subsection{Grundlegende Idee}\label{idee}
+\subsubsection{Grundlegende Idee}\label{idee}
 
 Die prototypische Anwendung wird containerisiert und über eine Container-Registry verfügbar sein. 
-Weiterhin muss die Anwendung unter den Berücksichtigungen der Aspekte einer Microservice-Architektur, wie in Abschnitt \ref{Microservice} beschrieben, konzipiert und entwickelt werden. 
+Weiterhin muss die Anwendung unter der Berücksichtigung der Aspekte einer Microservice-Architektur, wie in Abschnitt \ref{Microservice} beschrieben, konzipiert und entwickelt werden. 
 Die einzelnen Dienste der Anwendung müssen auf einem Kubernetes-fähigen Cluster ausgeliefert und in Betrieb genommen werden.
 Bevor die Anwendung verwendet wird, muss ein fester Testprozess die Funktionalität gewährleisten.
 
 Für die mögliche Auslieferung bei einem Kunden der Krones AG soll die Nutzung bereits vorhandener Hardware mit Grafikkarten möglich sein. 
 Es ist vorgesehen, dass die Anwendung in einem hybriden Cloud-Szenario die vordefinierte Hardware nutzen kann. 
 Folglich soll die Verwendung der Hardware zu einer verbesserten Leistungsauswertung von Modellen im Bereich der künstlichen Intelligenz führen. 
-Arbeitslasten, wie dem Auswerten von Computer-Vision-Modellen wie im Falle der Linatronic AI \cite{linatronic}, sollen beispielhaft dargestellt werden. 
+Arbeitslasten, wie dem Auswerten von Computer-Vision-Modellen, etwa im Fall der Linatronic AI \cite{linatronic}, sollen beispielhaft dargestellt werden. 
 Dafür muss die Kommunikation von Diensten in Echtzeit stattfinden, um Informationen am Zielort schnell zu verarbeiten und eine Verarbeitung großer Daten zu ermöglichen.
-Für die prototypische Entwicklung der Anwendung sind die keine strengen Kriterien für die Echtzeitkommunikation angedacht.
+Für die prototypische Entwicklung der Anwendung sind keine strengen Kriterien für die Echtzeitkommunikation angedacht.
 Das Überschreiten von Zeitanforderungen stellt kein Versagen der Kommunikation dar.
 
 
 \subsubsection{Anwendungsszenario}\label{Anwendungsszenario}
 
 Der Schwerpunkt der zu entwickelnden Anwendung soll ein Dashboard mit Authentifizierungsmechanismus sein. 
-Dieser soll Benutzern ermöglichen sich mit ihrem Passwort in ihr Profil einzuloggen. 
-Dabei besteht auch die Möglichkeit eine Zwei-Faktor-Authentifizierung zu aktivieren und sich per Gesichtserkennung einzuloggen.
-Die Daten sollen persistent gespeichert werden und können bei erneutem Aufruf der Website wieder verwendet werden. 
+Dieses soll Benutzern ermöglichen, sich mit ihrem Passwort in ihr Profil einzuloggen. 
+Dabei besteht auch die Möglichkeit, eine Zwei-Faktor-Authentifizierung zu aktivieren und sich per Gesichtserkennung einzuloggen.
+Die Daten sollen persistent gespeichert werden und sollen bei erneutem Aufruf der Website wieder verwendet werden. 
 
 \subsubsection{Blaupause}
 
-Anhand der Grundlagen aus dem Abschnitt \ref{Microservice} können die wichtigsten Eigenschaften der Blaupausenartigen Umsetzung einer Microservice-Architektur definiert werden.
+Anhand der Grundlagen aus dem Abschnitt \ref{Microservice} können die wichtigsten Eigenschaften der blaupausenartigen Umsetzung einer Microservice-Architektur definiert werden.
 Die Anwendung soll nachvollziehbar entwickelt werden und als Fundament für spätere Entwicklungen dienen.
 Es ist wichtig, dass die Softwarekomponenten funktionsübergreifend entwickelt werden.
 Die Anwendung soll mit dem Entwicklungsteam wachsen und in agiler Vorgehensweise mittels Nutzerinformationen verbessert werden.
-Softwarekomponenten der Anwendung müssen austauschbar sein und mit unterschiedlichen Technologien ersetzt werden können.
+Softwarekomponenten der Anwendung müssen austauschbar sein und durch unterschiedliche Technologien ersetzt werden können.
 Anwendungsschnittstellen müssen für gängige Kommunikationsprotokolle entwickelt werden.
-Diese müssen über leichtgewichtige Kommunikationsmechanismen verfügen, wie die Unterstützung von \acs{rest}ful-Protokollen über HTTP.
+Diese müssen über leichtgewichtige Kommunikationsmechanismen verfügen, wie die Unterstützung von \acs{rest}ful-Protokollen über \acs{http}.
 Der Ausfall von Diensten muss bei Abhängigkeit anderer Softwarekomponenten tolerierbar sein.
 
 \section{Grobentwürfe}
 
 Auf der Grundlage von Abschnitt \ref{idee} werden die Grobentwürfe erstellt.
-Zunächst die Vorgehensweise bei der Entwicklung auf einer Kubernetes-Infrastruktur.
-Anschließend die Anwendungsentwicklung und der allgemeine Entwicklungsprozess.
+Zunächst wird die Vorgehensweise bei der Entwicklung auf einer Kubernetes-Infrastruktur entworfen.
+Anschließend folgt die Anwendungsentwicklung und der allgemeine Entwicklungsprozess.
 
 \subsection{Infrastruktur}
 Die Abbildung \ref{fig:GrobentwurfInfrastruktur} stellt das Zielsystem dar.
@@ -78,7 +78,7 @@ Die Abbildung \ref{fig:GrobentwurfInfrastruktur} stellt das Zielsystem dar.
   \label{fig:GrobentwurfInfrastruktur}
 \end{figure}
 
-\textbf{Lokale Entwicklungsumgebung}: Die Entwicklung der Anwendung verläuft lokal und wird durch ein Versionsverwaltungssystem verwaltet.
+\textbf{Lokale Entwicklungsumgebung}: Die Entwicklung der Anwendung verläuft lokal und wird durch ein Versionsverwaltungssystem unterstützt.
 Ein Befehl an das Kubernetes-Cluster initialisiert die Auslieferung und Bereitstellung der einzelnen Dienste. 
 
 \textbf{Container-Registry}: Für die Auslieferung und Bereitstellung von Images wird ein Container-Registry verwendet.
@@ -102,13 +102,13 @@ Die Anwendung aus dem Szenario wird in drei Dienste aufgeteilt.
 Darüber kann ein Benutzer die Funktionalitäten der anderen Dienste nutzen.
 
 \textbf{Authentication-Service}: Die Anmeldung und Registrierung eines Nutzerkontos erfolgt über den Authentication-Service.
-Dieser ermöglicht die persistente Speicherung der Nutzerdaten.
+Dieser ermöglicht zudem die persistente Speicherung der Nutzerdaten in einer Datenbank.
 
 \textbf{Facerecognition-Service}: Der Facerecognition-Service bietet eine Anmeldung mithilfe von Gesichtserkennung an.
 Die relevanten Daten zur Gesichtserkennung werden in einer Datenbank persistent gespeichert.
 
 \subsection{Anwendungsentwicklung}
-Die Entwicklung der Anwendung wird in drei auf sich aufbauende Schichten eingeteilt (vgl. Abbildung~\ref{fig:Schichtenentwurf}).
+Die Entwicklung der Anwendung wird in drei aufeinander Schichten eingeteilt (vgl. Abbildung~\ref{fig:Schichtenentwurf}).
 
 \begin{figure}[!htb]
     \centering
@@ -118,7 +118,7 @@ Die Entwicklung der Anwendung wird in drei auf sich aufbauende Schichten eingete
   \end{figure}
 
 \textbf{Anwendungsentwicklung}: 
-Ein zentrales Repository beeinhaltet Verzeichnisse für die einzelnen Dienste.
+Ein zentrales Repository beeinhaltet Dateiordner für die einzelnen Dienste.
 Diese werden lokal entwickelt, getestet und ausgeführt.
 
 \textbf{Containervirtualisierung}: 
@@ -128,9 +128,8 @@ Schließlich wird das Image auf ein öffentliches Registry hochgeladen.
 Jeder Dienst hat dabei einen eigenen Speicherort in Form eines Images.
 
 \textbf{Helm-Charts}: 
-Die Auslieferung der Dienste erfolgt über das Container-Registry und werden von dem Kubernetes-Cluster heruntergeladen.
+Die Auslieferung der Dienste erfolgt über das Container-Registry.
+Images werden von dem Kubernetes-Cluster heruntergeladen.
 Das zentrale Repository beinhaltet ein weiteres Verzeichnis für die Kubernetes-Ressourcenobjekte in Form von Helm-Charts.
-Bei Zugang der Entwicklungsumgebung zu einem Kubernetes-Cluster können diese über den Helm-Package-Manager installiert und ausgeführt werden.
-
-
+Falls die Entwicklungsumgebung Zugang zu einem Kubernetes-Cluster hat, können die Helm-Charts über den Helm-Package-Manager installiert und ausgeführt werden.
 

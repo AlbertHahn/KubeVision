@@ -68,7 +68,7 @@
             position=bottom]{caption}
 
 \usepackage{graphicx}							% Einbinden von Graphiken
-\usepackage[svgnames,table,hyperref]{xcolor} 	% Verwendung von Farben
+\usepackage[svgnames,table,hyperref, cmyk]{xcolor} 	% Verwendung von Farben
 \usepackage{svg}
 \usepackage{amsmath}
 \usepackage{tikz}								% Erstellen von Grafiken
@@ -222,10 +222,10 @@ Das Ziel dieser Arbeit ist die Konzeption und Implementierung einer prototypisch
 Die Software soll dabei einen Anwendungsfall im Bereich der künstlichen Intelligenz abdecken.
 Die Auslieferung und Bereitstellung der Anwendung soll auf einer hybriden-Umgebung in Kubernetes stattfinden.
 
-Das erste Kapitel widmet sich mit der Motivation und Zielsetzung für die Entwicklung der Software.
+Das erste Kapitel widmet sich der Zielsetzung für die Entwicklung der Software.
 Im zweiten Kapitel werden die Grundlagen zum Verständnis der folgenden Kapitel erklärt.
 Danach werden im dritten Kapitel die derzeitigen Bestrebungen der Krones AG im Bereich der Modernisierung von Infrastrukturen durch Cloud-Technologien analysiert.
-Darauf aufbauend folgt das vierte Kapitel, welche einen Lösungsansatz in Form von Konzepten und Entwürfen formuliert.
+Darauf aufbauend folgt das vierte Kapitel, welches einen Lösungsansatz in Form von Konzepten und Entwürfen formuliert.
 Im fünften Kapitel wird dann das Lösungskonzept ausgearbeitet und die Vorgehensweisen hinsichtlich Design, Entwicklung und der Architektur definiert.
 Das sechste Kapitel ist die technische Umsetzung des Konzepts und beschreibt den Aufbau der Implementierung.
 Abschließend werden die Vorgehensweisen und Ergebnisse in Kapitel sieben zusammgefasst und ein Ausblick für die Zukunft artikuliert. 
@@ -238,7 +238,7 @@ The goal of this thesis is the design and implementation of a prototypical appli
 This prototype has to cover a use case in the area of artificial intelligence.
 The appliaction will be deployed and delivered on a hybrid Kubernetes cluster.
 
-The first chapter is dedicated with the motivation and objective for the development of the software.
+The first chapter is dedicated to the objective for the development of the software.
 The second chapter explains the basics to understand the following chapters.
 Chapter three analyzes Krones AG's current efforts in the area of infrastructure modernization through cloud technologies.
 This is followed by the fourth chapter, which formulates a solution approach in the form of concepts and designs.
@@ -378,6 +378,11 @@ Finally, chapter seven summarizes the procedures and results and articulates an 
   \addcontentsline{toc}{chapter}{Quellcodeverzeichnis}
   \lstlistoflistings
   \newpage
+
+  %\phantomsection
+  %\addcontentsline{toc}{chapter}{Anhang}
+  %\appendix
+  %\newpage
 
   
   %\include{anhang}

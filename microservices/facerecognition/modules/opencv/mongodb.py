@@ -8,12 +8,17 @@ class mongodb:
         self
     
     def erstablish_connnection(self):
+        """
+        Pymongo function to establish a connection to a MongoDB-Server
+        try to receive db and return as object
+        """
+
         try:
             client = MongoClient(mongoEndpoint)
 
             # print the version of MongoDB server if connection successful
             print ("server version:", client.server_info()["version"])
-            db = client.get_database('total_records')
+            db = client.get_database('user_db')
 
             return db.register  
 
