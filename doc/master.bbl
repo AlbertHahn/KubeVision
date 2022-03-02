@@ -29,8 +29,8 @@ M.~Villamizar, O.~Garcés, H.~Castro, M.~Verano, L.~Salamanca, R.~Casallas, and
 
 \bibitem{linatronic}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{de}{Krones linatronic 735},'' Feb. 2022. [Online].
-  Available:
+``\BIBforeignlanguage{de}{Krones linatronic 735},'' (Zugriff am 1. Januar
+  2022). [Online]. Available:
   \url{https://www.krones.com/de/produkte/maschinen/leerflaschen-inspektionsmaschine-linatronic-735.php}
 \BIBentrySTDinterwordspacing
 
@@ -46,20 +46,21 @@ N.~Poulton, \emph{Docker deep dive : zero to Docker in a single book},
 
 \bibitem{dockergetstarted}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Docker overview},'' Jan. 2022. [Online]. Available:
-  \url{https://docs.docker.com/get-started/overview/}
+``\BIBforeignlanguage{en}{Docker overview},'' (Zugriff am 5. Januar 2022).
+  [Online]. Available: \url{https://docs.docker.com/get-started/overview/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{dockerstoragedriver}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{About storage drivers},'' Jan. 2022. [Online].
-  Available: \url{https://docs.docker.com/storage/storagedriver/}
+``\BIBforeignlanguage{en}{About storage drivers},'' (Zugriff am 20. Januar
+  2022). [Online]. Available:
+  \url{https://docs.docker.com/storage/storagedriver/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{dockerbestpracticedockerfile}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Best practices for writing dockerfiles},'' Jan. 2022.
-  [Online]. Available:
+``\BIBforeignlanguage{en}{Best practices for writing dockerfiles},'' (Zugriff
+  am 20. Januar 2022). [Online]. Available:
   \url{https://docs.docker.com/develop/develop-images/dockerfile_best-practices/}
 \BIBentrySTDinterwordspacing
 
@@ -71,48 +72,48 @@ R.~Morabito, J.~Kjällman, and M.~Komu, ``Hypervisors vs. lightweight
 \bibitem{containervsvm}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en-US}{Are {Containers} {Replacing} {Virtual}
-  {Machines}?}'' Aug. 2018. [Online]. Available:
+  {Machines}?}'' Aug. 2018, (Zugriff am 15. Februar 2022). [Online]. Available:
   \url{https://www.docker.com/blog/containers-replacing-virtual-machines/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetes}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{de}{Was ist kubernetes?}'' Feb. 2022, section: docs.
-  [Online]. Available:
+``\BIBforeignlanguage{de}{Was ist kubernetes?}'' May 2020, (Zugriff am 21.
+  Januar 2022). [Online]. Available:
   \url{https://kubernetes.io/de/docs/concepts/overview/what-is-kubernetes/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kuberneteskomponenten}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Kubernetes components},'' Feb. 2022, section: docs.
-  [Online]. Available:
+``\BIBforeignlanguage{en}{Kubernetes components},'' Oct. 2021, section: docs.
+  (Zugriff am 11. Februar 2022). [Online]. Available:
   \url{https://kubernetes.io/docs/concepts/overview/components/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{Kuberneteschangemaster}
 \BIBentryALTinterwordspacing
-``Kubernetes (k8s),'' Feb. 2022, original-date: 2014-06-06T22:56:04Z. [Online].
-  Available:
+``Kubernetes (k8s),'' (Zugriff am 11. Februar 2022). [Online]. Available:
   \url{https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.20.md/#urgent-upgrade-notes}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetesnodes}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Nodes},'' Feb. 2022, section: docs. [Online].
-  Available: \url{https://kubernetes.io/docs/concepts/architecture/nodes/}
+``\BIBforeignlanguage{en}{Nodes},'' Jan. 2022, section: docs. (Zugriff am 11.
+  Februar 2022). [Online]. Available:
+  \url{https://kubernetes.io/docs/concepts/architecture/nodes/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetesobjects}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Understanding kubernetes objects},'' Feb. 2022,
-  section: docs. [Online]. Available:
+``\BIBforeignlanguage{en}{Understanding kubernetes objects},'' Aug. 2021,
+  section: docs. (Zugriff am 11. Februar 2022). [Online]. Available:
   \url{https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetesdeployment}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Deployments},'' Feb. 2022, section: docs. [Online].
-  Available:
+``\BIBforeignlanguage{en}{Deployments},'' Jan. 2022, section: docs. (Zugriff am
+  11. Februar 2022). [Online]. Available:
   \url{https://kubernetes.io/docs/concepts/workloads/controllers/deployment/}
 \BIBentrySTDinterwordspacing
 
@@ -122,82 +123,81 @@ N.~Poulton, \emph{The Kubernetes Book}, 2021st~ed.\hskip 1em plus 0.5em minus
 
 \bibitem{kubernetesservice}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Service},'' Feb. 2022, section: docs. [Online].
-  Available:
+``\BIBforeignlanguage{en}{Service},'' Feb. 2022, section: docs. (Zugriff am 11.
+  Februar 2022). [Online]. Available:
   \url{https://kubernetes.io/docs/concepts/services-networking/service/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetesingress}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Ingress},'' Feb. 2022, section: docs. [Online].
-  Available:
+``\BIBforeignlanguage{en}{Ingress},'' Jan. 2022, section: docs. (Zugriff am 07.
+  Februar 2022). [Online]. Available:
   \url{https://kubernetes.io/docs/concepts/services-networking/ingress/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetesingresscontroller}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Ingress controllers},'' Feb. 2022, section: docs.
-  [Online]. Available:
+``\BIBforeignlanguage{en}{Ingress controllers},'' Jan. 2022, section: docs.
+  (Zugriff am 07. Februar 2022). [Online]. Available:
   \url{https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetesingresscontrollerlayer}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en-US}{Layer 4 and {Layer} 7 {Load} {Balancing}},'' Feb.
-  2022. [Online]. Available:
+``\BIBforeignlanguage{en-US}{Layer 4 and {Layer} 7 {Load} {Balancing}},''
+  (Zugriff am 11. Februar 2022). [Online]. Available:
   \url{https://rancher.com/docs/rancher/v2.5/en/k8s-in-rancher/load-balancers-and-ingress/load-balancers/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{kubernetesingressibm}
 \BIBentryALTinterwordspacing
-``What is kubernetes ingress?'' Feb. 2022. [Online]. Available:
-  \url{https://www.ibm.com/cloud/blog/kubernetes-ingress}
+``What is kubernetes ingress?'' Apr. 2020, (Zugriff am 11. Februar 2022).
+  [Online]. Available: \url{https://www.ibm.com/cloud/blog/kubernetes-ingress}
 \BIBentrySTDinterwordspacing
 
 \bibitem{pi4}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Raspberry pi documentation - processors},'' Feb.
-  2022. [Online]. Available:
+``\BIBforeignlanguage{en}{Raspberry pi documentation - processors},'' (Zugriff
+  am 11. Februar 2022). [Online]. Available:
   \url{https://www.raspberrypi.com/documentation/computers/processors.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{k3sAnforderung}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en-US}{K3s resource profiling},'' Feb. 2022. [Online].
-  Available:
+``\BIBforeignlanguage{en-US}{K3s resource profiling},'' (Zugriff am 11. Februar
+  2022). [Online]. Available:
   \url{https://rancher.com/docs/k3s/latest/en/installation/installation-requirements/resource-profiling/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{k3s}
 \BIBentryALTinterwordspacing
-``K3s: Lightweight kubernetes,'' Jul. 2021. [Online]. Available:
-  \url{https://k3s.io/}
+``K3s: Lightweight kubernetes.'' [Online]. Available: \url{https://k3s.io/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{k3sgit}
 \BIBentryALTinterwordspacing
-``K3s - lightweight kubernetes,'' Feb. 2022, original-date:
-  2018-05-31T01:37:46Z. [Online]. Available:
-  \url{https://github.com/k3s-io/k3s}
+``K3s - lightweight kubernetes,'' May 2018, (Zugriff am 11. Februar 2022).
+  [Online]. Available: \url{https://github.com/k3s-io/k3s}
 \BIBentrySTDinterwordspacing
 
 \bibitem{k3sServerAgent}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Possible to run k3s on one node (server and agent
-  together)? · {Issue} \#1279 · k3s-io/k3s},'' Jan. 2020. [Online].
-  Available: \url{https://github.com/k3s-io/k3s/issues/1279}
+  together)? · {Issue} \#1279 · k3s-io/k3s},'' Jan. 2020, (Zugriff am 7.
+  Februar 2022). [Online]. Available:
+  \url{https://github.com/k3s-io/k3s/issues/1279}
 \BIBentrySTDinterwordspacing
 
 \bibitem{flannel}
 \BIBentryALTinterwordspacing
-``flannel,'' Feb. 2022, original-date: 2014-07-10T17:45:29Z. [Online].
-  Available: \url{https://github.com/flannel-io/flannel}
+``flannel,'' Jul. 2014, (Zugriff am 11. Februar 2022). [Online]. Available:
+  \url{https://github.com/flannel-io/flannel}
 \BIBentrySTDinterwordspacing
 
 \bibitem{rancher}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en-US}{Overview},'' Feb. 2022. [Online]. Available:
-  \url{https://rancher.com/docs/rancher/v2.5/en/overview/}
+``\BIBforeignlanguage{en-US}{Overview},'' (Zugriff am 16. Februar 2022).
+  [Online]. Available: \url{https://rancher.com/docs/rancher/v2.5/en/overview/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{AzureKubernetesService}
@@ -214,53 +214,54 @@ S.~Buchanan, J.~Rangama, and N.~Bellavance, ``\BIBforeignlanguage{en}{Deploying
 \bibitem{rancherKubeconfig}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en-US}{Access a {Cluster} with {Kubectl} and
-  kubeconfig},'' Feb. 2022. [Online]. Available:
+  kubeconfig},'' (Zugriff am 16. Februar 2022). [Online]. Available:
   \url{https://rancher.com/docs/rancher/v2.5/en/cluster-admin/cluster-access/kubectl/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{rancherArchitecture}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en-US}{Overview},'' Feb. 2022. [Online]. Available:
-  \url{https://rancher.com/docs/rancher/v2.5/en/overview/}
+``\BIBforeignlanguage{en-US}{Overview},'' (Zugriff am 11. Februar 2022).
+  [Online]. Available: \url{https://rancher.com/docs/rancher/v2.5/en/overview/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{rancherArchitectureRecommendations}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en-US}{Architecture {Recommendations}}.'' [Online].
-  Available:
+``\BIBforeignlanguage{en-US}{Architecture {Recommendations}},'' (Zugriff am 10.
+  Februar 2022). [Online]. Available:
   \url{https://rancher.com/docs/rancher/v2.5/en/overview/architecture-recommendations/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{rancherAgents}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en-US}{Rancher {Agents}},'' Feb. 2022. [Online].
-  Available:
+``\BIBforeignlanguage{en-US}{Rancher {Agents}},'' (Zugriff am 10. Februar
+  2022). [Online]. Available:
   \url{https://rancher.com/docs/rancher/v2.5/en/cluster-provisioning/rke-clusters/rancher-agents/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{ibmHybrid}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{de-de}{hybrid-cloud},'' May 2021. [Online]. Available:
+``\BIBforeignlanguage{de-de}{hybrid-cloud},'' Oct. 2019, (Zugriff am 11.
+  Februar 2022). [Online]. Available:
   \url{https://www.ibm.com/de-de/cloud/learn/hybrid-cloud}
 \BIBentrySTDinterwordspacing
 
 \bibitem{FowlerMicroservice}
 \BIBentryALTinterwordspacing
-``Microservices,'' Mar. 2014. [Online]. Available:
-  \url{https://martinfowler.com/articles/microservices.html}
+``Microservices,'' Mar. 2014, (Zugriff am 16. Februar 2022). [Online].
+  Available: \url{https://martinfowler.com/articles/microservices.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{MicroservicePattern}
 \BIBentryALTinterwordspacing
-``Microservices {Pattern}: {Decompose} by business capability,'' Feb. 2022.
-  [Online]. Available:
+``Microservices {Pattern}: {Decompose} by business capability,'' (Zugriff am
+  16. Februar 2022). [Online]. Available:
   \url{http://microservices.io/patterns/decomposition/decompose-by-business-capability.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{FowlerSoftwareComponent}
 \BIBentryALTinterwordspacing
-``Softwarecomponent,'' Sep. 2015. [Online]. Available:
-  \url{https://martinfowler.com/bliki/SoftwareComponent.html}
+``Softwarecomponent,'' Sep. 2015, (Zugriff am 16. Februar 2022). [Online].
+  Available: \url{https://martinfowler.com/bliki/SoftwareComponent.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{BuildingMicroservicesNewmanChapter5}
@@ -278,54 +279,57 @@ S.~Newman, \emph{Building microservices}, 2nd~ed.\hskip 1em plus 0.5em minus
 
 \bibitem{amazon}
 \BIBentryALTinterwordspacing
-``A {Conversation} with {Werner} {Vogels} - {ACM} {Queue},'' Jun. 2006.
-  [Online]. Available: \url{https://queue.acm.org/detail.cfm?id=1142065}
+``A {Conversation} with {Werner} {Vogels} - {ACM} {Queue},'' Jun. 2006,
+  (Zugriff am 16. Februar 2022). [Online]. Available:
+  \url{https://queue.acm.org/detail.cfm?id=1142065}
 \BIBentrySTDinterwordspacing
 
 \bibitem{ProtoBuf}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Protocol {Buffers} {\textbar} {Google}
-  {Developers}},'' Feb. 2022. [Online]. Available:
+  {Developers}},'' (Zugriff am 16. Februar 2022). [Online]. Available:
   \url{https://developers.google.com/protocol-buffers}
 \BIBentrySTDinterwordspacing
 
 \bibitem{FowlerBoundedContext}
 \BIBentryALTinterwordspacing
-``Boundedcontext,'' Jan. 2015. [Online]. Available:
-  \url{https://martinfowler.com/bliki/BoundedContext.html}
+``Boundedcontext,'' Jan. 2015, (Zugriff am 16. Februar 2022). [Online].
+  Available: \url{https://martinfowler.com/bliki/BoundedContext.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{rtosandbundr}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{de-DE}{Zwei {Betriebssysteme} auf einem {Gerät}
-  {\textbar} {B}\&{R} {Industrial} {Automation}}.'' [Online]. Available:
-  \url{https://www.br-automation.com/}
+  {\textbar} {B}\&{R} {Industrial} {Automation}},'' (Zugriff am 19. Februar
+  2022). [Online]. Available: \url{https://www.br-automation.com/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{rtos}
 \BIBentryALTinterwordspacing
 ``{RTS} {Hypervisor} - {Hardware} partitioning - {Real}-{Time} {Systems},''
-  Feb. 2022. [Online]. Available:
+  (Zugriff am 19. Februar 2022). [Online]. Available:
   \url{https://www.real-time-systems.com/de/use-cases/rts-hypervisor-hardware-partitioning.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{hmi}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{de}{Connected {HMI}: die neue {Generation} der
-  {Maschinenvisualisierung} - {Krones}},'' Feb. 2022. [Online]. Available:
+  {Maschinenvisualisierung} - {Krones}},'' (Zugriff am 19. Februar 2022).
+  [Online]. Available:
   \url{https://www.krones.com/de/produkte/innovationen/maschinenvisualisierung-connected-hmi.php}
 \BIBentrySTDinterwordspacing
 
 \bibitem{helm}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en-us}{Helm {Architecture}},'' Feb. 2022. [Online].
-  Available: \url{https://helm.sh/docs/topics/architecture/}
+``\BIBforeignlanguage{en-us}{Helm {Architecture}},'' (Zugriff am 19. Februar
+  2022). [Online]. Available: \url{https://helm.sh/docs/topics/architecture/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{flaskdocu}
 \BIBentryALTinterwordspacing
-``Welcome to {Flask} — {Flask} {Documentation} (2.0.x),'' Feb. 2022.
-  [Online]. Available: \url{https://flask.palletsprojects.com/en/2.0.x/}
+``Welcome to {Flask} — {Flask} {Documentation} (2.0.x),'' (Zugriff am 21.
+  Februar 2022). [Online]. Available:
+  \url{https://flask.palletsprojects.com/en/2.0.x/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{restfulpython}
@@ -335,14 +339,14 @@ G.~C. Hillar, \emph{{Hands-On} {RESTful} Python Web Services}, 2nd~ed.\hskip
 
 \bibitem{gunciorndocs}
 \BIBentryALTinterwordspacing
-``Design — {Gunicorn} 20.1.0 documentation,'' Feb. 2022. [Online]. Available:
-  \url{https://docs.gunicorn.org/en/latest/design.html}
+``Design — {Gunicorn} 20.1.0 documentation,'' (Zugriff am 21. Februar 2022).
+  [Online]. Available: \url{https://docs.gunicorn.org/en/latest/design.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{opencvintro}
 \BIBentryALTinterwordspacing
-``{OpenCV}: {Introduction},'' Feb. 2022. [Online]. Available:
-  \url{https://docs.opencv.org/3.4/d1/dfb/intro.html}
+``{OpenCV}: {Introduction},'' (Zugriff am 21. Februar 2022). [Online].
+  Available: \url{https://docs.opencv.org/3.4/d1/dfb/intro.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{ansari_core_2020}
@@ -358,8 +362,8 @@ S.~Ansari, ``\BIBforeignlanguage{en}{Core {Concepts} of {Image} and {Video}
 
 \bibitem{opencvpython}
 \BIBentryALTinterwordspacing
-``{OpenCV}: {Introduction} to {OpenCV}-{Python} {Tutorials},'' Feb. 2022.
-  [Online]. Available:
+``{OpenCV}: {Introduction} to {OpenCV}-{Python} {Tutorials},'' (Zugriff am 21.
+  Februar 2022). [Online]. Available:
   \url{https://docs.opencv.org/4.x/d0/de3/tutorial_py_intro.html}
 \BIBentrySTDinterwordspacing
 
@@ -371,14 +375,15 @@ E.~F. de~Souza~Soares, R.~Melo~Thiago, L.~G. Azevedo, M.~de~Bayser,
 
 \bibitem{socketio}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Introduction {\textbar} {Socket}.{IO}},'' Feb. 2022.
-  [Online]. Available: \url{https://socket.io/docs/v4/}
+``\BIBforeignlanguage{en}{Introduction {\textbar} {Socket}.{IO}},'' (Zugriff am
+  21. Februar 2022). [Online]. Available: \url{https://socket.io/docs/v4/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{python-socketio}
 \BIBentryALTinterwordspacing
-``python-socketio — python-socketio documentation,'' Feb. 2022. [Online].
-  Available: \url{https://python-socketio.readthedocs.io/en/latest/}
+``python-socketio — python-socketio documentation,'' (Zugriff am 21. Februar
+  2022). [Online]. Available:
+  \url{https://python-socketio.readthedocs.io/en/latest/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{fundamentalsRestfulAPI}
@@ -400,14 +405,15 @@ E.~B. . K.~C. Shannon~Bradshaw, \emph{\BIBforeignlanguage{en}{{MongoDB}: {The}
 
 \bibitem{githubpricing}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Pricing · {Plans} for every developer},'' Feb. 2022.
-  [Online]. Available: \url{https://github.com/pricing}
+``\BIBforeignlanguage{en}{Pricing · {Plans} for every developer},'' (Zugriff
+  am 25. Februar 2022). [Online]. Available: \url{https://github.com/pricing}
 \BIBentrySTDinterwordspacing
 
 \bibitem{dockerappsworkflow}
 \BIBentryALTinterwordspacing
 nishanil, ``\BIBforeignlanguage{de-de}{Entwicklungsworkflow für
-  {Docker}-{Apps}},'' Jan. 2022. [Online]. Available:
+  {Docker}-{Apps}},'' Jan. 2022, (Zugriff am 19. Februar 2022). [Online].
+  Available:
   \url{https://docs.microsoft.com/de-de/dotnet/architecture/microservices/docker-application-development-process/docker-app-development-workflow}
 \BIBentrySTDinterwordspacing
 
@@ -418,53 +424,57 @@ J.~Belamaric and C.~Liu, \emph{Learning coredns}.\hskip 1em plus 0.5em minus
 \bibitem{MediaDevicesgetUserMedia}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en-US}{{MediaDevices}.{getUserMedia}() - {Web} {APIs}
-  {\textbar} {MDN}},'' Mar. 2022. [Online]. Available:
+  {\textbar} {MDN}},'' Jan. 2022, (Zugriff am 2. März 2022). [Online].
+  Available:
   \url{https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia}
 \BIBentrySTDinterwordspacing
 
 \bibitem{certmanager}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Issuer},'' Feb. 2022, section: docs. [Online].
-  Available: \url{https://cert-manager.io/docs/concepts/issuer/}
+``\BIBforeignlanguage{en}{Issuer},'' Aug. 2020, section: docs. (Zugriff am 23.
+  Februar 2022). [Online]. Available:
+  \url{https://cert-manager.io/docs/concepts/issuer/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{certmanageracme}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{{ACME}},'' Feb. 2022. [Online]. Available:
+``\BIBforeignlanguage{en}{{ACME}},'' Dec. 2021, section: docs. (Zugriff am 23.
+  Februar 2022). [Online]. Available:
   \url{https://cert-manager.io/docs/configuration/acme/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{letsencrypt}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{de-DE}{Über {Let}'s {Encrypt} - {Let}'s {Encrypt} -
-  {Freie} {SSL}/{TLS} {Zertifikate}},'' Feb. 2022. [Online]. Available:
-  \url{https://letsencrypt.org/de/about/}
+  {Freie} {SSL}/{TLS} {Zertifikate}},'' (Zugriff am 28. Februar 2022).
+  [Online]. Available: \url{https://letsencrypt.org/de/about/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{nodeaffinity}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Assign {Pods} to {Nodes} using {Node} {Affinity}},''
-  Feb. 2022, section: docs. [Online]. Available:
+  May 2020, section: docs. (Zugriff am 28. Februar 2022). [Online]. Available:
   \url{https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{taintstolerations}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en}{Taints and {Tolerations}},'' Feb. 2022, section:
-  docs. [Online]. Available:
+``\BIBforeignlanguage{en}{Taints and {Tolerations}},'' Jul. 2021, section:
+  docs. (Zugriff am 28. Februar 2022). [Online]. Available:
   \url{https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{opencvcascade}
 \BIBentryALTinterwordspacing
-``{OpenCV}: {Cascade} {Classifier},'' Mar. 2022. [Online]. Available:
+``{OpenCV}: {Cascade} {Classifier},'' (Zugriff am 1. März 2022). [Online].
+  Available:
   \url{https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{opencvlbp}
 \BIBentryALTinterwordspacing
-``{OpenCV}: {Face} {Recognition} with {OpenCV},'' Mar. 2022. [Online].
-  Available:
+``{OpenCV}: {Face} {Recognition} with {OpenCV},'' (Zugriff am 1. März 2022).
+  [Online]. Available:
   \url{https://docs.opencv.org/3.4/da/d60/tutorial_face_main.html#tutorial_face_lbph_algo}
 \BIBentrySTDinterwordspacing
 
@@ -475,15 +485,15 @@ X.~Zhao and C.~Wei, ``A real-time face recognition system based on the improved
 
 \bibitem{helmtipsandtricks}
 \BIBentryALTinterwordspacing
-``\BIBforeignlanguage{en-us}{Chart {Development} {Tips} and {Tricks}},'' Feb.
-  2022. [Online]. Available:
+``\BIBforeignlanguage{en-us}{Chart {Development} {Tips} and {Tricks}},''
+  (Zugriff am 28. Februar 2022). [Online]. Available:
   \url{https://helm.sh/docs/howto/charts_tips_and_tricks/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{mongodbpath}
 \BIBentryALTinterwordspacing
 ``\BIBforeignlanguage{en}{Manage mongod {Processes} — {MongoDB} {Manual}},''
-  Feb. 2022. [Online]. Available:
+  Feb. 2022, (Zugriff am 28. Februar 2022). [Online]. Available:
   \url{https://docs.mongodb.com/manual/tutorial/manage-mongodb-processes/}
 \BIBentrySTDinterwordspacing
 

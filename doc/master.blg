@@ -24,37 +24,37 @@ Database file #1: bibliography.bib
 Done.
 You've used 72 entries,
             4087 wiz_defined-function locations,
-            1124 strings with 17088 characters,
-and the built_in function-call counts, 28544 in all, are:
-= -- 2051
+            1139 strings with 17568 characters,
+and the built_in function-call counts, 29386 in all, are:
+= -- 2164
 > -- 288
 < -- 69
 + -- 168
 - -- 41
-* -- 1378
-:= -- 4660
+* -- 1414
+:= -- 4809
 add.period$ -- 147
 call.type$ -- 72
-change.case$ -- 89
+change.case$ -- 130
 chr.to.int$ -- 183
 cite$ -- 72
-duplicate$ -- 2436
-empty$ -- 3007
+duplicate$ -- 2501
+empty$ -- 2990
 format.name$ -- 49
-if$ -- 6435
+if$ -- 6613
 int.to.chr$ -- 0
 int.to.str$ -- 72
-missing$ -- 481
+missing$ -- 522
 newline$ -- 359
 num.names$ -- 23
-pop$ -- 1549
+pop$ -- 1636
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 2065
+skip$ -- 2142
 stack$ -- 0
-substring$ -- 447
-swap$ -- 1507
+substring$ -- 529
+swap$ -- 1485
 text.length$ -- 8
 text.prefix$ -- 0
 top$ -- 5
@@ -62,4 +62,4 @@ type$ -- 72
 warning$ -- 0
 while$ -- 52
 width$ -- 74
-write$ -- 682
+write$ -- 694
