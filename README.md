@@ -49,18 +49,22 @@ e.g. flaskStartupFrontend.sh
 `cd frontend`\
 `source flaskStartupFrontend.sh`\
 `flask run --port=8000`
-`docker-compose up`
 
 ### Facerecognition
 `cd microservices`\
 `cd facerecognition`\
 `source flaskStartupfacerecognition.sh`\
 `gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -b 0.0.0.0:5000 run:app`
-`docker-compose up`
 
 ### Authentication
 `cd microservices`\
 `cd authentication`\
 `source flaskStartupAuth.sh`\
 `flask run --port=5001`
-`docker-compose up`
+
+### MongoDB needs to be started with docker!
+`docker run -p 27017:27017 --name mongodb mongo:4.1.7 `\
+`docker exec -it mongodb bash`\
+`mongo`\
+`use admin`\
+`db.createUser({user: 'admin',pwd: 'password',roles: [ { role: 'root', db: 'admin' } ]})`
